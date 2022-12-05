@@ -16,21 +16,35 @@
 
 package de.fhws.fiw.fds.sutton.server.database;
 
-import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
-import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
-import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
-import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
+public class SearchParameter {
+    private int offset;
 
-import java.util.function.Predicate;
+    private int size;
 
-public interface IDatabaseAccessObject<T extends AbstractModel> {
-	NoContentResult create(final T model);
+    private String orderByAttribute;
 
-	SingleModelResult<T> readById(final long id);
+    public int getOffset() {
+        return this.offset;
+    }
 
-	CollectionModelResult<T> readAll(SearchParameter... searchParameter);
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 
-	NoContentResult update(final T model);
+    public int getSize() {
+        return this.size;
+    }
 
-	NoContentResult delete(final long id);
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getOrderByAttribute() {
+        return this.orderByAttribute;
+    }
+
+    public void setOrderByAttribute(String orderByAttribute) {
+        this.orderByAttribute = orderByAttribute;
+    }
+
 }

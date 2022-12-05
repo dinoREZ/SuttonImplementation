@@ -17,11 +17,22 @@
 package de.fhws.fiw.fds.sutton.server.database;
 
 public class SearchParameter {
-    private int offset;
 
-    private int size;
+    public static final SearchParameter DEFAULT = new SearchParameter();
 
-    private String orderByAttribute;
+    public static SearchParameter getOrDefault(SearchParameter... searchParameters) {
+        if (searchParameters != null && searchParameters.length == 1) {
+            return searchParameters[0];
+        } else {
+            return DEFAULT;
+        }
+    }
+
+    private int offset = 0;
+
+    private int size = Integer.MAX_VALUE;
+
+    private String orderByAttribute = "";
 
     public int getOffset() {
         return this.offset;

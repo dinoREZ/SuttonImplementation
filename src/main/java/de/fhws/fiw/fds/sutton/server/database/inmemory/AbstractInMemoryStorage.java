@@ -16,18 +16,20 @@
 
 package de.fhws.fiw.fds.sutton.server.database.inmemory;
 
-import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
-import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
-import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
-import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
-import org.apache.commons.lang.ObjectUtils;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang.ObjectUtils;
+
+import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
+import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
+import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 
 public abstract class AbstractInMemoryStorage<T extends AbstractModel> {
 	protected Map<Long, T> storage;
@@ -53,8 +55,22 @@ public abstract class AbstractInMemoryStorage<T extends AbstractModel> {
 		}
 	}
 
-	protected CollectionModelResult<T> readByPredicate(final Predicate<T> predicate) {
-		return new CollectionModelResult<>(clone(filterBy(predicate)));
+	public CollectionModelResult<T> readAll(SearchParameter... searchParameter) {
+		return this.readByPredicate(all(), SearchParameter.getOrDefault(searchParameter));
+	}
+
+	protected CollectionModelResult<T> readByPredicate(final Predicate<T> predicate,
+			final SearchParameter searchParameter) {
+		final CollectionModelResult<T> filteredResult = new CollectionModelResult<>(filterBy(predicate));
+		final CollectionModelResult<T> page = InMemoryPaging.page(
+				filteredResult,
+				searchParameter.getOffset(),
+				searchParameter.getSize());
+
+		final CollectionModelResult<T> returnValue = new CollectionModelResult<>(clone(page.getResult()));
+		returnValue.setTotalNumberOfResult(filteredResult.getTotalNumberOfResult());
+
+		return returnValue;
 	}
 
 	private Collection<T> filterBy(final Predicate<T> predicate) {
@@ -85,6 +101,10 @@ public abstract class AbstractInMemoryStorage<T extends AbstractModel> {
 	private T clone(final T result) {
 		final T clone = (T) ObjectUtils.cloneIfPossible(result);
 		return clone;
+	}
+
+	private Predicate<T> all() {
+		return p -> true;
 	}
 
 }

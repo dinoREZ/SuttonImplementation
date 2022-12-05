@@ -27,7 +27,11 @@ public class PersonDaoImpl implements PersonDao {
 	@Override
 	public CollectionModelResult<Person> readByFirstNameAndLastName(final String firstName, final String lastName,
 			SearchParameter searchParameter) {
-		return new LoadPersonsByFirstNameAndLastName().execute(new FirstAndLastName(firstName, lastName));
+		return new LoadPersonsByFirstNameAndLastName().execute(new FirstAndLastName(
+				firstName,
+				lastName,
+				searchParameter.getOffset(),
+				searchParameter.getSize()));
 	}
 
 	@Override

@@ -2,25 +2,24 @@ package de.fhws.fiw.fds.suttondemo.database.dbms.operations;
 
 import org.apache.commons.lang.StringUtils;
 
-public class FirstAndLastName
-{
+import de.fhws.fiw.fds.sutton.server.database.dbms.operations.AbstractDatabaseSearchParameters;
+
+public class FirstAndLastName extends AbstractDatabaseSearchParameters {
 	private final String firstName;
 
 	private final String lastName;
 
-	public FirstAndLastName( final String firstName, final String lastName )
-	{
-		this.firstName = StringUtils.defaultIfEmpty( firstName, "" );
-		this.lastName = StringUtils.defaultIfEmpty( lastName, "" );
+	public FirstAndLastName(final String firstName, final String lastName, int offset, int size) {
+		super(offset, size);
+		this.firstName = StringUtils.defaultIfEmpty(firstName, "");
+		this.lastName = StringUtils.defaultIfEmpty(lastName, "");
 	}
 
-	public String getFirstName( )
-	{
+	public String getFirstName() {
 		return firstName;
 	}
 
-	public String getLastName( )
-	{
+	public String getLastName() {
 		return lastName;
 	}
 }

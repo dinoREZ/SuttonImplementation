@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestGetDispatcher {
+public class TestGetDispatcherIT {
     @Test
     public void get_dispatcher_200() {
         assertTrue(true);

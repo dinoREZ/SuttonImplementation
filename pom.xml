@@ -52,7 +52,7 @@
                         </goals>
                         <configuration>
                             <target name="Copy app to Docker directory">
-                                <copy todir="${project.basedir}/src/main/docker">
+                                <copy todir="${project.basedir}/src/test/docker">
                                     <fileset dir="${project.basedir}/target/" includes="*.war"></fileset>
                                     <mapper type="regexp" from=".*" to="${tomcat.context.path}.war" />
                                 </copy>
@@ -80,8 +80,25 @@
                     </volumes>
                     <images>
                         <image>
-                            <name>mysql:8.0.31</name>
+                            <name>database</name>
                             <alias>mysql</alias>
+                            <build>
+                                <from>mysql:8.0.31</from>
+                                <assembly>
+                                    <mode>dir</mode>
+                                    <name>maven/</name>
+                                    <inline>
+                                        <id>populate-database</id>
+                                        <files>
+                                            <file>
+                                                <source>${project.basedir}/src/test/resources/data.sql</source>
+                                                <outputDirectory>/docker-entrypoint-initdb.d</outputDirectory>
+                                                <destName>data.sql</destName>
+                                            </file>
+                                        </files>
+                                    </inline>
+                                </assembly>
+                            </build>
                             <run>
                                 <ports>
                                     <port>3306:3306</port>
@@ -108,7 +125,7 @@
                             <alias>${fds.exam.name}</alias>
                             <name>fds-${fds.exam.name}-template:1.0</name>
                             <build>
-                                <dockerFile>${project.basedir}/src/main/docker/Dockerfile</dockerFile>
+                                <dockerFile>${project.basedir}/src/test/docker/Dockerfile</dockerFile>
                             </build>
                             <run>
                                 <namingStrategy>alias</namingStrategy>

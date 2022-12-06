@@ -2,7 +2,7 @@
 Todo:
   Remove all other paging behavior other than offset/size
   Queries are forwarded to the database layer
-  ☐ In the database layer, DB host must be a system property
+  In the database layer, DB host must be a system property
   ☐ Paging must be supported by the database layer
   Docker file for the database
   Change all readByPredicate Methoden in InMemoryStorage to protected

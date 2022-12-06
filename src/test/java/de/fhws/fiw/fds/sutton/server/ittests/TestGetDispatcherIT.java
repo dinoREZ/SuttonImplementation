@@ -50,5 +50,6 @@ public class TestGetDispatcherIT {
         final Response response = client.newCall(request).execute();
 
         assertEquals(200, response.code());
+        assertEquals("[\n]", response.body().string());
     }
 }

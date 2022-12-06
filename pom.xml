@@ -80,24 +80,10 @@
                     </volumes>
                     <images>
                         <image>
-                            <name>database</name>
+                            <name>database:1.0</name>
                             <alias>mysql</alias>
                             <build>
                                 <from>mysql:8.0.31</from>
-                                <assembly>
-                                    <mode>dir</mode>
-                                    <name>maven/</name>
-                                    <inline>
-                                        <id>populate-database</id>
-                                        <files>
-                                            <file>
-                                                <source>${project.basedir}/src/test/resources/data.sql</source>
-                                                <outputDirectory>/docker-entrypoint-initdb.d</outputDirectory>
-                                                <destName>data.sql</destName>
-                                            </file>
-                                        </files>
-                                    </inline>
-                                </assembly>
                             </build>
                             <run>
                                 <ports>

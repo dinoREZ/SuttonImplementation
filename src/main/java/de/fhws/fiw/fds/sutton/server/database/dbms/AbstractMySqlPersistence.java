@@ -21,56 +21,47 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public abstract class AbstractMySqlPersistence implements IPersistency
-{
+public abstract class AbstractMySqlPersistence implements IPersistency {
 	private ComboPooledDataSource cpds;
 
-	protected AbstractMySqlPersistence( )
-	{
-		createConnectionPool( );
-		createAllTables( );
+	protected AbstractMySqlPersistence() {
+		createConnectionPool();
+		createAllTables();
 	}
 
-	public void createConnectionPool( )
-	{
-		try
-		{
-			Class.forName( "com.mysql.jdbc.Driver" );
-			this.cpds = new ComboPooledDataSource( );
-			this.cpds.setDriverClass( "com.mysql.jdbc.Driver" );
-			this.cpds.setJdbcUrl( "jdbc:mysql://" + getHostNameAndPort( ) + "/" + getDatabaseName( ) );
-			this.cpds.setUser( getDatabaseUser( ) );
-			this.cpds.setPassword( getDatabasePassword( ) );
-			this.cpds.setMinPoolSize( 5 );
-			this.cpds.setAcquireIncrement( 5 );
-			this.cpds.setMaxPoolSize( 20 );
-		}
-		catch ( final Exception e )
-		{
-			e.printStackTrace( );
+	public void createConnectionPool() {
+		try {
+			this.cpds = new ComboPooledDataSource();
+			this.cpds.setDriverClass("com.mysql.cj.jdbc.Driver");
+			this.cpds.setJdbcUrl("jdbc:mysql://" + getHostNameAndPort() + "/" + getDatabaseName());
+			this.cpds.setUser(getDatabaseUser());
+			this.cpds.setPassword(getDatabasePassword());
+			this.cpds.setMinPoolSize(5);
+			this.cpds.setAcquireIncrement(5);
+			this.cpds.setMaxPoolSize(20);
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	@Override public void shutdown( )
-	{
-		this.cpds.close( );
+	@Override
+	public void shutdown() {
+		this.cpds.close();
 	}
 
-	protected String getHostNameAndPort( )
-	{
+	protected String getHostNameAndPort() {
 		return "localhost:3306";
 	}
 
-	protected abstract String getDatabaseName( );
+	protected abstract String getDatabaseName();
 
-	protected abstract String getDatabaseUser( );
+	protected abstract String getDatabaseUser();
 
-	protected abstract String getDatabasePassword( );
+	protected abstract String getDatabasePassword();
 
-	protected abstract void createAllTables( );
+	protected abstract void createAllTables();
 
-	public Connection getConnection( ) throws SQLException
-	{
-		return this.cpds.getConnection( );
+	public Connection getConnection() throws SQLException {
+		return this.cpds.getConnection();
 	}
 }

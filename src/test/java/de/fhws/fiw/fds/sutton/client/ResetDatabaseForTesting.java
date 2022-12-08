@@ -2,7 +2,7 @@ package de.fhws.fiw.fds.sutton.client;
 
 import java.io.IOException;
 
-import de.fhws.fiw.fds.sutton.client.web.EmptyResource;
+import de.fhws.fiw.fds.sutton.client.model.EmptyResource;
 import de.fhws.fiw.fds.sutton.client.web.GenericWebClient;
 
 public class ResetDatabaseForTesting {

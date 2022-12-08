@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.owlike.genson.GenericType;
 
-import de.fhws.fiw.fds.sutton.client.web.AbstractClientModel;
+import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
 
 public abstract class AbstractResourceRestClient<R extends AbstractClientModel> {

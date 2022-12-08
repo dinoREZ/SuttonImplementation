@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.owlike.genson.GenericType;
 
-import de.fhws.fiw.fds.sutton.client.web.EmptyResource;
+import de.fhws.fiw.fds.sutton.client.model.EmptyResource;
 import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
 
 public class EmptyResourceRestClient extends AbstractResourceRestClient<EmptyResource> {

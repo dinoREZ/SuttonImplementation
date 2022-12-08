@@ -11,7 +11,7 @@ import com.owlike.genson.GenericType;
 
 import de.fhws.fiw.fds.sutton.client.Link;
 import de.fhws.fiw.fds.sutton.client.auth.ClientUser;
-import de.fhws.fiw.fds.sutton.client.web.AbstractClientModel;
+import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import de.fhws.fiw.fds.sutton.client.web.GenericWebClient;
 import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
 import de.fhws.fiw.fds.sutton.client.web.WebApiResponse;

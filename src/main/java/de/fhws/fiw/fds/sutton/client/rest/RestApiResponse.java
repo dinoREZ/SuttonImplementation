@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.fhws.fiw.fds.sutton.client.Link;
-import de.fhws.fiw.fds.sutton.client.web.AbstractClientModel;
+import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import okhttp3.Headers;
 
 public class RestApiResponse<M extends AbstractClientModel> {

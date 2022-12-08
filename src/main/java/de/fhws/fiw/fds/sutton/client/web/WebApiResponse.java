@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
+
 public class WebApiResponse<T extends AbstractClientModel> {
 	private final Collection<T> responseData;
 

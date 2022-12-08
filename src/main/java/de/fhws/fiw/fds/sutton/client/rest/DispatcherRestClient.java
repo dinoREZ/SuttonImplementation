@@ -3,7 +3,7 @@ package de.fhws.fiw.fds.sutton.client.rest;
 import java.io.IOException;
 
 import de.fhws.fiw.fds.sutton.client.IBaseUrl;
-import de.fhws.fiw.fds.sutton.client.web.EmptyResource;
+import de.fhws.fiw.fds.sutton.client.model.EmptyResource;
 import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
 
 public class DispatcherRestClient {

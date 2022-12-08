@@ -9,9 +9,9 @@ import java.io.IOException;
 
 import org.junit.Before;
 
+import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import de.fhws.fiw.fds.sutton.client.rest.AbstractResourceRestClient;
 import de.fhws.fiw.fds.sutton.client.rest.RestApiResponse;
-import de.fhws.fiw.fds.sutton.client.web.AbstractClientModel;
 import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
 
 public abstract class AbstractTest<R extends AbstractClientModel, C extends AbstractResourceRestClient<R>> {

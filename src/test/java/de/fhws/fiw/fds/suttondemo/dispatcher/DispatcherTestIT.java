@@ -8,10 +8,10 @@ import java.io.IOException;
 import org.junit.Test;
 
 import de.fhws.fiw.fds.sutton.client.AbstractTest;
+import de.fhws.fiw.fds.sutton.client.model.EmptyResource;
 import de.fhws.fiw.fds.sutton.client.rest.DispatcherRestClient;
 import de.fhws.fiw.fds.sutton.client.rest.EmptyResourceRestClient;
 import de.fhws.fiw.fds.sutton.client.rest.RestApiResponse;
-import de.fhws.fiw.fds.sutton.client.web.EmptyResource;
 import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
 import de.fhws.fiw.fds.sutton.client.web.HeaderMapUtils;
 

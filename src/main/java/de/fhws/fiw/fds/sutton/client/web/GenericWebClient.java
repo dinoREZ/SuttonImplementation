@@ -24,6 +24,7 @@ import com.owlike.genson.GenericType;
 import com.owlike.genson.Genson;
 
 import de.fhws.fiw.fds.sutton.client.auth.BasicAuthInterceptor;
+import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

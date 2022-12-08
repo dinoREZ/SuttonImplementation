@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package de.fhws.fiw.fds.sutton.client.web;
+package de.fhws.fiw.fds.sutton.client.model;
 
 public abstract class AbstractClientModel {
 	protected long id;

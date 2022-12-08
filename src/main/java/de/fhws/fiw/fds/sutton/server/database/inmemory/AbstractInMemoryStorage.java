@@ -16,12 +16,6 @@
 
 package de.fhws.fiw.fds.sutton.server.database.inmemory;
 
-import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
-import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
-import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
-import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
-import org.apache.commons.lang.ObjectUtils;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,76 +23,88 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class AbstractInMemoryStorage<T extends AbstractModel>
-{
+import org.apache.commons.lang.ObjectUtils;
+
+import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
+import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
+import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
+
+public abstract class AbstractInMemoryStorage<T extends AbstractModel> {
 	protected Map<Long, T> storage;
 
 	private final AtomicLong nextId;
 
-	protected AbstractInMemoryStorage( )
-	{
-		this.storage = new HashMap<>( );
-		this.nextId = new AtomicLong( 1l );
+	protected AbstractInMemoryStorage() {
+		this.storage = new HashMap<>();
+		this.nextId = new AtomicLong(1l);
 	}
 
-	public NoContentResult create( final T model )
-	{
-		model.setId( nextId( ) );
-		this.storage.put( model.getId( ), model );
-		return new NoContentResult( );
+	public NoContentResult create(final T model) {
+		model.setId(nextId());
+		this.storage.put(model.getId(), model);
+		return new NoContentResult();
 	}
 
-	public SingleModelResult<T> readById( final long id )
-	{
-		if ( this.storage.containsKey( id ) )
-		{
-			return new SingleModelResult<>( clone( this.storage.get( id ) ) );
-		}
-		else
-		{
-			return new SingleModelResult<>( );
+	public SingleModelResult<T> readById(final long id) {
+		if (this.storage.containsKey(id)) {
+			return new SingleModelResult<>(clone(this.storage.get(id)));
+		} else {
+			return new SingleModelResult<>();
 		}
 	}
 
-	public CollectionModelResult<T> readByPredicate( final Predicate<T> predicate )
-	{
-		return new CollectionModelResult( clone( filterBy( predicate ) ) );
+	public CollectionModelResult<T> readAll(SearchParameter... searchParameter) {
+		return this.readByPredicate(all(), SearchParameter.getOrDefault(searchParameter));
 	}
 
-	private Collection<T> filterBy( final Predicate<T> predicate )
-	{
-		return this.storage.values( )
-						   .stream( )
-						   .filter( predicate )
-						   .collect( Collectors.toList( ) );
+	protected CollectionModelResult<T> readByPredicate(final Predicate<T> predicate,
+			final SearchParameter searchParameter) {
+		final CollectionModelResult<T> filteredResult = new CollectionModelResult<>(filterBy(predicate));
+		final CollectionModelResult<T> page = InMemoryPaging.page(
+				filteredResult,
+				searchParameter.getOffset(),
+				searchParameter.getSize());
+
+		final CollectionModelResult<T> returnValue = new CollectionModelResult<>(clone(page.getResult()));
+		returnValue.setTotalNumberOfResult(filteredResult.getTotalNumberOfResult());
+
+		return returnValue;
 	}
 
-	public NoContentResult update( final T model )
-	{
-		this.storage.put( model.getId( ), model );
-		return new NoContentResult( );
+	private Collection<T> filterBy(final Predicate<T> predicate) {
+		return this.storage.values()
+				.stream()
+				.filter(predicate)
+				.collect(Collectors.toList());
 	}
 
-	public NoContentResult delete( final long id )
-	{
-		this.storage.remove( id );
-		return new NoContentResult( );
+	public NoContentResult update(final T model) {
+		this.storage.put(model.getId(), model);
+		return new NoContentResult();
 	}
 
-	private final long nextId( )
-	{
-		return this.nextId.getAndIncrement( );
+	public NoContentResult delete(final long id) {
+		this.storage.remove(id);
+		return new NoContentResult();
 	}
 
-	private Collection<T> clone( final Collection<T> result )
-	{
-		return result.stream( ).map( e -> clone( e ) ).collect( Collectors.toList( ) );
+	private final long nextId() {
+		return this.nextId.getAndIncrement();
 	}
 
-	private T clone( final T result )
-	{
-		final T clone = ( T ) ObjectUtils.cloneIfPossible( result );
+	private Collection<T> clone(final Collection<T> result) {
+		return result.stream().map(e -> clone(e)).collect(Collectors.toList());
+	}
+
+	private T clone(final T result) {
+		final T clone = (T) ObjectUtils.cloneIfPossible(result);
 		return clone;
+	}
+
+	private Predicate<T> all() {
+		return p -> true;
 	}
 
 }

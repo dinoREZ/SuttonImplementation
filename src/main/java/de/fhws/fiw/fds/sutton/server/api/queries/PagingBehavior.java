@@ -16,65 +16,52 @@
 
 package de.fhws.fiw.fds.sutton.server.api.queries;
 
+import java.net.URI;
+
+import javax.ws.rs.core.UriInfo;
+
 import de.fhws.fiw.fds.sutton.server.api.hyperlinks.Hyperlinks;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
+public abstract class PagingBehavior<T extends AbstractModel> {
+	public abstract int getOffset();
 
-public abstract class PagingBehavior<T extends AbstractModel>
-{
-	public final CollectionModelResult<T> page( final CollectionModelResult<T> fullResult )
-	{
-		final CollectionModelResult<T> returnValue = new CollectionModelResult<>( );
-		returnValue.getResult( ).addAll( page( fullResult.getResult( ) ) );
-		returnValue.setTotalNumberOfResult( fullResult.getTotalNumberOfResult( ) );
-		return returnValue;
+	public abstract int getSize();
+
+	public final void addSelfLink(final PagingContext pagingContext) {
+		Hyperlinks.addLink(pagingContext.getResponseBuilder(),
+				getSelfUri(pagingContext.getUriInfo()),
+				"self",
+				pagingContext.getMediaType());
 	}
 
-	public final void addSelfLink( final PagingContext pagingContext )
-	{
-		Hyperlinks.addLink( pagingContext.getResponseBuilder( ),
-			getSelfUri( pagingContext.getUriInfo( ) ),
-			"self",
-			pagingContext.getMediaType( ) );
-	}
-
-	public final void addPrevPageLink( final PagingContext pagingContext )
-	{
-		if ( hasPrevLink( ) )
-		{
-			Hyperlinks.addLink( pagingContext.getResponseBuilder( ),
-				getPrevUri( pagingContext.getUriInfo( ) ),
-				"prev",
-				pagingContext.getMediaType( ) );
+	public final void addPrevPageLink(final PagingContext pagingContext) {
+		if (hasPrevLink()) {
+			Hyperlinks.addLink(pagingContext.getResponseBuilder(),
+					getPrevUri(pagingContext.getUriInfo()),
+					"prev",
+					pagingContext.getMediaType());
 		}
 	}
 
-	public final void addNextPageLink( final PagingContext pagingContext,
-		final CollectionModelResult<?> databaseResult )
-	{
-		if ( hasNextLink( databaseResult ) )
-		{
-			Hyperlinks.addLink( pagingContext.getResponseBuilder( ),
-				getNextUri( pagingContext.getUriInfo( ), databaseResult ),
-				"next",
-				pagingContext.getMediaType( ) );
+	public final void addNextPageLink(final PagingContext pagingContext,
+			final CollectionModelResult<?> databaseResult) {
+		if (hasNextLink(databaseResult)) {
+			Hyperlinks.addLink(pagingContext.getResponseBuilder(),
+					getNextUri(pagingContext.getUriInfo(), databaseResult),
+					"next",
+					pagingContext.getMediaType());
 		}
 	}
 
-	protected abstract List<T> page( final Collection<T> result );
+	protected abstract boolean hasNextLink(final CollectionModelResult<?> result);
 
-	protected abstract boolean hasNextLink( final CollectionModelResult<?> result );
+	protected abstract boolean hasPrevLink();
 
-	protected abstract boolean hasPrevLink( );
+	protected abstract URI getSelfUri(final UriInfo uriInfo);
 
-	protected abstract URI getSelfUri( final UriInfo uriInfo );
+	protected abstract URI getPrevUri(final UriInfo uriInfo);
 
-	protected abstract URI getPrevUri( final UriInfo uriInfo );
-
-	protected abstract URI getNextUri( final UriInfo uriInfo, final CollectionModelResult<?> result );
+	protected abstract URI getNextUri(final UriInfo uriInfo, final CollectionModelResult<?> result);
 }

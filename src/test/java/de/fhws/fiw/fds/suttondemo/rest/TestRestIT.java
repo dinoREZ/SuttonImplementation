@@ -16,21 +16,51 @@ package de.fhws.fiw.fds.suttondemo.rest;
 
 import static org.junit.Assert.assertEquals;
 import java.io.IOException;
+import java.util.List;
 import org.junit.Test;
+import com.owlike.genson.GenericType;
 import de.fhws.fiw.fds.sutton.client.rest2.SuttonRequest;
 import de.fhws.fiw.fds.sutton.client.rest2.SuttonRequest.HttpVerb;
 import de.fhws.fiw.fds.sutton.client.rest2.SuttonResponse;
+import de.fhws.fiw.fds.suttondemo.models.PersonClientModel;
+import de.fhws.fiw.fds.suttondemo.server.api.states.persons.PersonRelTypes;
 
 public class TestRestIT {
+
+    private static final String BASE_URL = "http://localhost:8080/suttondemo/api/";
 
     @Test
     public void test_get_dispatcher() throws IOException {
         final SuttonRequest request = new SuttonRequest();
-        request.setUriTemplate("http://localhost:8080/suttondemo/api/");
+        request.setUriTemplate(BASE_URL);
         request.setHttpVerb(HttpVerb.GET);
         final SuttonResponse response = request.execute();
 
         assertEquals(200, response.getStatusCode());
+        assertEquals(BASE_URL, response.getLink("self").getUrl());
+    }
+
+    @Test
+    public void test_get_all_persons_via_dispatcher() throws IOException {
+        final SuttonRequest request = new SuttonRequest();
+        request.setUriTemplate(BASE_URL);
+        request.setHttpVerb(HttpVerb.GET);
+        final SuttonResponse response = request.execute();
+
+        final SuttonRequest personRequest =
+                response.createRequestFromHeaderLink(PersonRelTypes.GET_ALL_PERSONS);
+
+        personRequest.setHttpVerb(HttpVerb.GET);
+        final SuttonResponse personResponse = personRequest.execute();
+        assertEquals(200, personResponse.getStatusCode());
+
+        final List<PersonClientModel> persons =
+                personResponse.readEntities(new GenericType<List<PersonClientModel>>() {
+
+                });
+
+
+        assertEquals(0, persons.size());
     }
 
 }

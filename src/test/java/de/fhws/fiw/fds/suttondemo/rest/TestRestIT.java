@@ -27,35 +27,35 @@ import de.fhws.fiw.fds.suttondemo.server.api.states.persons.PersonRelTypes;
 
 public class TestRestIT {
 
-    private static final String BASE_URL = "http://localhost:8080/suttondemo/api/";
+        private static final String BASE_URL = "http://localhost:8080/sd/api/";
 
-    @Test
-    public void test_get_dispatcher() throws IOException {
-        final SuttonResponse response =
-                new SuttonRequest().setUriTemplate(BASE_URL).setHttpVerb(HttpVerb.GET).execute();
+        @Test
+        public void test_get_dispatcher() throws IOException {
+                final SuttonResponse response = new SuttonRequest().setUriTemplate(BASE_URL)
+                                .setHttpVerb(HttpVerb.GET).execute();
 
-        assertEquals(200, response.getStatusCode());
-        assertEquals(BASE_URL, response.getLink("self").getUrl());
-    }
+                assertEquals(200, response.getStatusCode());
+                assertEquals(BASE_URL, response.getLink("self").getUrl());
+        }
 
-    @Test
-    public void test_get_all_persons_via_dispatcher() throws IOException {
-        final SuttonResponse dispatcherResponse =
-                new SuttonRequest().setUriTemplate(BASE_URL).setHttpVerb(HttpVerb.GET).execute();
+        @Test
+        public void test_get_all_persons_via_dispatcher() throws IOException {
+                final SuttonResponse dispatcherResponse = new SuttonRequest()
+                                .setUriTemplate(BASE_URL).setHttpVerb(HttpVerb.GET).execute();
 
-        final SuttonResponse personResponse =
-                dispatcherResponse.createRequestFromHeaderLink(PersonRelTypes.GET_ALL_PERSONS)
-                        .setHttpVerb(HttpVerb.GET).execute();
+                final SuttonResponse personResponse = dispatcherResponse
+                                .createRequestFromHeaderLink(PersonRelTypes.GET_ALL_PERSONS)
+                                .setHttpVerb(HttpVerb.GET).execute();
 
-        assertEquals(200, personResponse.getStatusCode());
+                assertEquals(200, personResponse.getStatusCode());
 
-        final List<PersonClientModel> persons =
-                personResponse.readEntities(new GenericType<List<PersonClientModel>>() {
+                final List<PersonClientModel> persons = personResponse
+                                .readEntities(new GenericType<List<PersonClientModel>>() {
 
-                });
+                                });
 
 
-        assertEquals(0, persons.size());
-    }
+                assertEquals(0, persons.size());
+        }
 
 }

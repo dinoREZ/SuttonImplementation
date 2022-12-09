@@ -50,8 +50,70 @@ public class SuttonRequest {
 		this.mediaType = "application/json";
 	}
 
-	public final void setRequestModel(final AbstractClientModel requestModel) {
+	public final SuttonRequest setRequestModel(final AbstractClientModel requestModel) {
 		this.requestModel = requestModel;
+		return this;
+	}
+
+	public final SuttonRequest setUriTemplate(final String uriTemplate) {
+		this.uriTemplate = uriTemplate;
+		return this;
+	}
+
+	public final SuttonRequest setMediaType(final String mediaType) {
+		this.mediaType = mediaType;
+		return this;
+	}
+
+	public final SuttonRequest setHttpVerb(final HttpVerb httpVerb) {
+		this.httpVerb = httpVerb;
+		return this;
+	}
+
+	public final SuttonRequest setRequestImage(final byte[] requestImage) {
+		this.requestImage = requestImage;
+		return this;
+	}
+
+	public final SuttonRequest setAuthentication(final Authentication authentication) {
+		this.authentication = authentication;
+		return this;
+	}
+
+	public final SuttonRequest setApiKey(final ApiKey apiKey) {
+		this.apiKey = apiKey;
+		return this;
+	}
+
+	public final SuttonRequest setJwtTokenName(String jwtTokenName) {
+		this.jwtTokenName = jwtTokenName;
+		return this;
+	}
+
+	public final SuttonRequest addHeader(String header, String value) {
+		this.headers.add(new Header(header, value));
+		return this;
+	}
+
+	public final SuttonRequest addHeader(Header header) {
+		this.headers.add(header);
+		return this;
+	}
+
+	public SuttonRequest replace(final String template, final long value) {
+		replace(template, Long.toString(value));
+		return this;
+	}
+
+	public SuttonRequest replace(final String template, String value) {
+		try {
+			value = URLEncoder.encode(value, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		this.uriTemplate = this.uriTemplate.replace(template, value);
+		return this;
 	}
 
 	public SuttonResponse execute() {
@@ -75,57 +137,7 @@ public class SuttonRequest {
 		}
 	}
 
-	public final void setUriTemplate(final String uriTemplate) {
-		this.uriTemplate = uriTemplate;
-	}
-
-	public final void setMediaType(final String mediaType) {
-		this.mediaType = mediaType;
-	}
-
-	public final void setHttpVerb(final HttpVerb httpVerb) {
-		this.httpVerb = httpVerb;
-	}
-
-	public final void setRequestImage(final byte[] requestImage) {
-		this.requestImage = requestImage;
-	}
-
-	public final void setAuthentication(final Authentication authentication) {
-		this.authentication = authentication;
-	}
-
-	public final void setApiKey(final ApiKey apiKey) {
-		this.apiKey = apiKey;
-	}
-
-	public final void setJwtTokenName(String jwtTokenName) {
-		this.jwtTokenName = jwtTokenName;
-	}
-
-	public final void addHeader(String header, String value) {
-		this.headers.add(new Header(header, value));
-	}
-
-	public final void addHeader(Header header) {
-		this.headers.add(header);
-	}
-
-	public void replace(final String template, final long value) {
-		replace(template, Long.toString(value));
-	}
-
-	public void replace(final String template, String value) {
-		try {
-			value = URLEncoder.encode(value, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		this.uriTemplate = this.uriTemplate.replace(template, value);
-	}
-
-	protected final String serializeRequestModel() {
+	private final String serializeRequestModel() {
 		if (this.requestModel != null) {
 			final Genson genson = new Genson();
 			return genson.serialize(this.requestModel);
@@ -135,7 +147,7 @@ public class SuttonRequest {
 		}
 	}
 
-	protected final void setAllUnsetQueryParameterToEmptyString() {
+	private final void setAllUnsetQueryParameterToEmptyString() {
 
 		String[] splitedUri =
 				this.uriTemplate == null ? new String[0] : this.uriTemplate.split("\\?");

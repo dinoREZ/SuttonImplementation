@@ -31,10 +31,8 @@ public class TestRestIT {
 
     @Test
     public void test_get_dispatcher() throws IOException {
-        final SuttonRequest request = new SuttonRequest();
-        request.setUriTemplate(BASE_URL);
-        request.setHttpVerb(HttpVerb.GET);
-        final SuttonResponse response = request.execute();
+        final SuttonResponse response =
+                new SuttonRequest().setUriTemplate(BASE_URL).setHttpVerb(HttpVerb.GET).execute();
 
         assertEquals(200, response.getStatusCode());
         assertEquals(BASE_URL, response.getLink("self").getUrl());
@@ -42,16 +40,13 @@ public class TestRestIT {
 
     @Test
     public void test_get_all_persons_via_dispatcher() throws IOException {
-        final SuttonRequest request = new SuttonRequest();
-        request.setUriTemplate(BASE_URL);
-        request.setHttpVerb(HttpVerb.GET);
-        final SuttonResponse response = request.execute();
+        final SuttonResponse dispatcherResponse =
+                new SuttonRequest().setUriTemplate(BASE_URL).setHttpVerb(HttpVerb.GET).execute();
 
-        final SuttonRequest personRequest =
-                response.createRequestFromHeaderLink(PersonRelTypes.GET_ALL_PERSONS);
+        final SuttonResponse personResponse =
+                dispatcherResponse.createRequestFromHeaderLink(PersonRelTypes.GET_ALL_PERSONS)
+                        .setHttpVerb(HttpVerb.GET).execute();
 
-        personRequest.setHttpVerb(HttpVerb.GET);
-        final SuttonResponse personResponse = personRequest.execute();
         assertEquals(200, personResponse.getStatusCode());
 
         final List<PersonClientModel> persons =

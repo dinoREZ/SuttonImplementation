@@ -1,4 +1,4 @@
-package de.fhws.fiw.fds.sutton.client.web;
+package de.fhws.fiw.fds.sutton.client.utils;
 
 import java.util.HashMap;
 import java.util.Map;

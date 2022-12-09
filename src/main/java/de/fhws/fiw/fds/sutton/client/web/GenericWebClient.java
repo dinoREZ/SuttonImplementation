@@ -1,17 +1,15 @@
 /*
  * Copyright 2021 University of Applied Sciences Würzburg-Schweinfurt, Germany
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package de.fhws.fiw.fds.sutton.client.web;
@@ -19,10 +17,8 @@ package de.fhws.fiw.fds.sutton.client.web;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
 import com.owlike.genson.GenericType;
 import com.owlike.genson.Genson;
-
 import de.fhws.fiw.fds.sutton.client.auth.BasicAuthInterceptor;
 import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import okhttp3.MediaType;
@@ -31,10 +27,18 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * This class defines a very simple generic Web client that always uses content type JSON and does
+ * not allow for any additional HTTP headers in requests or responses other than Accept,
+ * Content-Type and Authorization, which are all set automatically and cannot be changed by the
+ * user)
+ * 
+ * @param <T>
+ */
 public class GenericWebClient<T extends AbstractClientModel> {
-	private final static String CONTENT_TYPE = "Content-Type";
 
-	private final HeaderMap headers;
+	private static final String APPLICATION_JSON = javax.ws.rs.core.MediaType.APPLICATION_JSON;
+	private static final String HEADER_ACCEPT = javax.ws.rs.core.HttpHeaders.ACCEPT;
 
 	private final OkHttpClient client;
 
@@ -44,21 +48,9 @@ public class GenericWebClient<T extends AbstractClientModel> {
 		this("", "");
 	}
 
-	public GenericWebClient(
-			final String userName,
-			final String password) {
-		this(userName, password, new HeaderMap());
-	}
-
-	public GenericWebClient(
-			final String userName,
-			final String password,
-			final HeaderMap headers) {
-		this.headers = headers;
-
+	public GenericWebClient(final String userName, final String password) {
 		this.client = new OkHttpClient.Builder()
-				.addInterceptor(new BasicAuthInterceptor(userName, password))
-				.build();
+				.addInterceptor(new BasicAuthInterceptor(userName, password)).build();
 
 		this.genson = new Genson();
 	}
@@ -69,84 +61,57 @@ public class GenericWebClient<T extends AbstractClientModel> {
 		final int statusCodeOfLastRequest = response.code();
 
 		if (statusCodeOfLastRequest == 200) {
-			return new WebApiResponse<>(
-					Optional.empty(),
-					response.headers(),
-					response.code());
-		} else {
+			return new WebApiResponse<>(Optional.empty(), response.headers(), response.code());
+		}
+		else {
 			return new WebApiResponse<>(statusCodeOfLastRequest);
 		}
 	}
 
 	private Response executeGetRequest(final String url) throws IOException {
-		final Request request = newBuilder(url).get().build();
+		final Request request = new Request.Builder().url(url)
+				.header(HEADER_ACCEPT, APPLICATION_JSON).get().build();
 
 		return this.client.newCall(request).execute();
 	}
 
-	private Request.Builder newBuilder(final String url) {
-		final Request.Builder builder = new Request.Builder().url(url);
-
-		addHeaders(builder);
-
-		return builder;
-	}
-
-	private void addHeaders(final Request.Builder builder) {
-		for (String headerName : this.headers.getHeaderMap().keySet()) {
-			final String headerValue = this.headers.getHeaderMap().get(headerName);
-
-			builder.addHeader(headerName, headerValue);
-		}
-	}
-
-	public WebApiResponse<T> sendGetSingleRequest(
-			final String url,
-			final Class<T> clazz)
+	public WebApiResponse<T> sendGetSingleRequest(final String url, final Class<T> clazz)
 			throws IOException {
 		final Response response = executeGetRequest(url);
 
 		final int statusCodeOfLastRequest = response.code();
 
 		if (statusCodeOfLastRequest == 200) {
-			return new WebApiResponse<>(
-					deserialize(response, clazz),
-					response.headers(),
+			return new WebApiResponse<>(deserialize(response, clazz), response.headers(),
 					response.code());
-		} else {
+		}
+		else {
 			return new WebApiResponse<>(statusCodeOfLastRequest);
 		}
 	}
 
-	public WebApiResponse<T> sendGetCollectionRequest(
-			final String url,
-			final GenericType<List<T>> genericType)
-			throws IOException {
-		final Request request = newBuilder(url).get().build();
+	public WebApiResponse<T> sendGetCollectionRequest(final String url,
+			final GenericType<List<T>> genericType) throws IOException {
+		final Request request = new Request.Builder().url(url).get().build();
 
 		final Response response = this.client.newCall(request).execute();
 
 		final int statusCodeOfLastRequest = response.code();
 
 		if (statusCodeOfLastRequest == 200) {
-			return new WebApiResponse<>(
-					deserializeToCollection(response, genericType),
-					response.headers(),
-					response.code());
-		} else {
+			return new WebApiResponse<>(deserializeToCollection(response, genericType),
+					response.headers(), response.code());
+		}
+		else {
 			return new WebApiResponse<>(statusCodeOfLastRequest);
 		}
 	}
 
 	public WebApiResponse<T> sendPostRequest(final String url, final T object) throws IOException {
-		final String contentType = this.headers.getHeader(CONTENT_TYPE);
+		final RequestBody body =
+				RequestBody.create(MediaType.parse(APPLICATION_JSON), serialize(object));
 
-		final RequestBody body = RequestBody.create(MediaType.parse(contentType), serialize(object));
-
-		final Request request = new Request.Builder()
-				.url(url)
-				.post(body)
-				.build();
+		final Request request = new Request.Builder().url(url).post(body).build();
 
 		final Response response = this.client.newCall(request).execute();
 
@@ -156,13 +121,10 @@ public class GenericWebClient<T extends AbstractClientModel> {
 	}
 
 	public WebApiResponse<T> sendPutRequest(final String url, final T object) throws IOException {
-		final String contentType = this.headers.getHeader(CONTENT_TYPE);
+		final RequestBody body =
+				RequestBody.create(MediaType.parse(APPLICATION_JSON), serialize(object));
 
-		final RequestBody body = RequestBody.create(MediaType.parse(contentType), serialize(object));
-
-		final Request request = newBuilder(url)
-				.put(body)
-				.build();
+		final Request request = new Request.Builder().url(url).put(body).build();
 
 		final Response response = this.client.newCall(request).execute();
 
@@ -170,10 +132,7 @@ public class GenericWebClient<T extends AbstractClientModel> {
 	}
 
 	public WebApiResponse<T> sendDeleteRequest(final String url) throws IOException {
-		final Request request = new Request.Builder()
-				.url(url)
-				.delete()
-				.build();
+		final Request request = new Request.Builder().url(url).delete().build();
 
 		final Response response = this.client.newCall(request).execute();
 
@@ -184,14 +143,15 @@ public class GenericWebClient<T extends AbstractClientModel> {
 		return this.genson.serialize(object);
 	}
 
-	private List<T> deserializeToCollection(final Response response, final GenericType<List<T>> genericType)
-			throws IOException {
+	private List<T> deserializeToCollection(final Response response,
+			final GenericType<List<T>> genericType) throws IOException {
 		final String data = response.body().string();
 
 		return genson.deserialize(data, genericType);
 	}
 
-	private Optional<T> deserialize(final Response response, final Class<T> clazz) throws IOException {
+	private Optional<T> deserialize(final Response response, final Class<T> clazz)
+			throws IOException {
 		final String data = response.body().string();
 
 		return Optional.ofNullable(genson.deserialize(data, clazz));

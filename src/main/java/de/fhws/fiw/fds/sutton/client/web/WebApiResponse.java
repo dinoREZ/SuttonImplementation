@@ -1,12 +1,10 @@
 package de.fhws.fiw.fds.sutton.client.web;
 
-import okhttp3.Headers;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
-
 import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
+import okhttp3.Headers;
 
 public class WebApiResponse<T extends AbstractClientModel> {
 	private final Collection<T> responseData;
@@ -27,11 +25,13 @@ public class WebApiResponse<T extends AbstractClientModel> {
 		this(Optional.of(responseData), headers, lastStatusCode);
 	}
 
-	public WebApiResponse(final Optional<T> responseData, final Headers headers, final int lastStatusCode) {
+	public WebApiResponse(final Optional<T> responseData, final Headers headers,
+			final int lastStatusCode) {
 		this(convertToList(responseData), headers, lastStatusCode);
 	}
 
-	public WebApiResponse(final Collection<T> responseData, final Headers headers, final int lastStatusCode) {
+	public WebApiResponse(final Collection<T> responseData, final Headers headers,
+			final int lastStatusCode) {
 		this.responseData = responseData;
 		this.responseHeaders = headers;
 		this.lastStatusCode = lastStatusCode;
@@ -54,6 +54,7 @@ public class WebApiResponse<T extends AbstractClientModel> {
 	}
 
 	private static <T> Collection<T> convertToList(final Optional<T> object) {
-		return object.isPresent() ? Collections.singletonList(object.get()) : Collections.emptyList();
+		return object.isPresent() ? Collections.singletonList(object.get())
+				: Collections.emptyList();
 	}
 }

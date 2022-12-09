@@ -10,8 +10,8 @@ import de.fhws.fiw.fds.sutton.client.model.EmptyResource;
 import de.fhws.fiw.fds.sutton.client.rest.DispatcherRestClient;
 import de.fhws.fiw.fds.sutton.client.rest.EmptyResourceRestClient;
 import de.fhws.fiw.fds.sutton.client.rest.RestApiResponse;
-import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
-import de.fhws.fiw.fds.sutton.client.web.HeaderMapUtils;
+import de.fhws.fiw.fds.sutton.client.utils.HeaderMap;
+import de.fhws.fiw.fds.sutton.client.utils.HeaderMapUtils;
 
 @Ignore
 public class DispatcherTestIT extends AbstractTest<EmptyResource, EmptyResourceRestClient> {

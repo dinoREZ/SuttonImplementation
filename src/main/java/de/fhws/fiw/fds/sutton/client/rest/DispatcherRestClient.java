@@ -1,10 +1,9 @@
 package de.fhws.fiw.fds.sutton.client.rest;
 
 import java.io.IOException;
-
 import de.fhws.fiw.fds.sutton.client.IBaseUrl;
 import de.fhws.fiw.fds.sutton.client.model.EmptyResource;
-import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
+import de.fhws.fiw.fds.sutton.client.utils.HeaderMap;
 
 public class DispatcherRestClient {
 	private final String dispatcherUrl = IBaseUrl.BASE_URL;

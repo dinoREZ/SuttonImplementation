@@ -2,11 +2,9 @@ package de.fhws.fiw.fds.sutton.client.rest;
 
 import java.io.IOException;
 import java.util.List;
-
 import com.owlike.genson.GenericType;
-
 import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
-import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
+import de.fhws.fiw.fds.sutton.client.utils.HeaderMap;
 
 public abstract class AbstractResourceRestClient<R extends AbstractClientModel> {
 	private final GenericRestClient<R> restClient;
@@ -24,7 +22,8 @@ public abstract class AbstractResourceRestClient<R extends AbstractClientModel> 
 	protected abstract Class<R> defineClassTypeForSingleResource();
 
 	public RestApiResponse<R> loadSingleResourceById(final long id) throws IOException {
-		return this.restClient.sendGetSingleRequest(appendIdToUrl(id), defineClassTypeForSingleResource());
+		return this.restClient.sendGetSingleRequest(appendIdToUrl(id),
+				defineClassTypeForSingleResource());
 	}
 
 	private String appendIdToUrl(final long id) {
@@ -36,19 +35,15 @@ public abstract class AbstractResourceRestClient<R extends AbstractClientModel> 
 	}
 
 	public RestApiResponse<R> loadAllResourcesByUrl(final String url) throws IOException {
-		return this.restClient.sendGetCollectionRequest(url, defineClassTypeForCollectionResource());
+		return this.restClient.sendGetCollectionRequest(url,
+				defineClassTypeForCollectionResource());
 	}
 
 	protected abstract GenericType<List<R>> defineClassTypeForCollectionResource();
 
-	public RestApiResponse<R> loadAllResourcesByParameters(
-			final int offset,
-			final int size)
+	public RestApiResponse<R> loadAllResourcesByParameters(final int offset, final int size)
 			throws IOException {
-		final String url = String.format("%s?offset=%d&size=%d",
-				defineUrl(),
-				offset,
-				size);
+		final String url = String.format("%s?offset=%d&size=%d", defineUrl(), offset, size);
 
 		return loadAllResourcesByUrl(url);
 	}

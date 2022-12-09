@@ -4,15 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
-
 import org.junit.Before;
-
 import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import de.fhws.fiw.fds.sutton.client.rest.AbstractResourceRestClient;
 import de.fhws.fiw.fds.sutton.client.rest.RestApiResponse;
-import de.fhws.fiw.fds.sutton.client.web.HeaderMap;
+import de.fhws.fiw.fds.sutton.client.utils.HeaderMap;
 
 public abstract class AbstractTest<R extends AbstractClientModel, C extends AbstractResourceRestClient<R>> {
 	protected final static String BASE_URL = IBaseUrl.BASE_URL;
@@ -40,115 +37,84 @@ public abstract class AbstractTest<R extends AbstractClientModel, C extends Abst
 
 	protected abstract C newRestClient(final HeaderMap headers);
 
-	protected RestApiResponse<R> getCollectionRequest(
-			final HeaderMap headers)
-			throws IOException {
+	protected RestApiResponse<R> getCollectionRequest(final HeaderMap headers) throws IOException {
 		return newRestClient(headers).loadAllResources();
 	}
 
-	protected RestApiResponse<R> getCollectionRequestByUrl(
-			final HeaderMap headers,
-			final String url)
-			throws IOException {
+	protected RestApiResponse<R> getCollectionRequestByUrl(final HeaderMap headers,
+			final String url) throws IOException {
 		return newRestClient(headers).loadAllResourcesByUrl(url);
 	}
 
-	protected RestApiResponse<R> getSingleRequestByUrl(
-			final HeaderMap headers,
-			final String url)
+	protected RestApiResponse<R> getSingleRequestByUrl(final HeaderMap headers, final String url)
 			throws IOException {
 		return newRestClient(headers).loadSingleResourceByUrl(url);
 	}
 
-	protected RestApiResponse<R> getSingleRequestById(
-			final HeaderMap headers,
-			final long id)
+	protected RestApiResponse<R> getSingleRequestById(final HeaderMap headers, final long id)
 			throws IOException {
 		return newRestClient(headers).loadSingleResourceById(id);
 	}
 
-	protected RestApiResponse<R> postRequest(
-			final HeaderMap headers,
-			final R resource)
+	protected RestApiResponse<R> postRequest(final HeaderMap headers, final R resource)
 			throws IOException {
 		return newRestClient(headers).create(resource);
 	}
 
-	protected RestApiResponse<R> postRequestByUrl(
-			final HeaderMap headers,
-			final R resource,
-			final String url)
-			throws IOException {
+	protected RestApiResponse<R> postRequestByUrl(final HeaderMap headers, final R resource,
+			final String url) throws IOException {
 		return newRestClient(headers).createByUrl(url, resource);
 	}
 
-	protected RestApiResponse<R> putRequest(
-			final HeaderMap headerMap,
-			final R resource)
+	protected RestApiResponse<R> putRequest(final HeaderMap headerMap, final R resource)
 			throws IOException {
 		return newRestClient(headerMap).update(resource);
 	}
 
-	protected RestApiResponse<R> putRequestByUrl(
-			final HeaderMap headerMap,
-			final R resource,
-			final String url)
-			throws IOException {
+	protected RestApiResponse<R> putRequestByUrl(final HeaderMap headerMap, final R resource,
+			final String url) throws IOException {
 		return newRestClient(headerMap).updateByUrl(resource, url);
 	}
 
-	protected RestApiResponse<R> deleteRequest(
-			final HeaderMap headers,
-			final R resource)
+	protected RestApiResponse<R> deleteRequest(final HeaderMap headers, final R resource)
 			throws IOException {
 		return newRestClient(headers).delete(resource);
 	}
 
-	protected RestApiResponse<R> deleteRequestById(
-			final HeaderMap headers,
-			final long id)
+	protected RestApiResponse<R> deleteRequestById(final HeaderMap headers, final long id)
 			throws IOException {
 		final R resource = getSingleRequestById(headers, id).getResponseSingleData();
 
 		return deleteRequest(headers, resource);
 	}
 
-	protected RestApiResponse<R> deleteRequestByUrl(
-			final HeaderMap headers,
-			final String url)
+	protected RestApiResponse<R> deleteRequestByUrl(final HeaderMap headers, final String url)
 			throws IOException {
 		return newRestClient(headers).deleteByUrl(url);
 	}
 
-	protected void assertLinkHeaderExists(
-			final RestApiResponse<R> response,
+	protected void assertLinkHeaderExists(final RestApiResponse<R> response,
 			final String relationType) {
 		assertTrue(doesLinkHeaderExist(response, relationType));
 	}
 
-	private boolean doesLinkHeaderExist(
-			final RestApiResponse<R> response,
+	private boolean doesLinkHeaderExist(final RestApiResponse<R> response,
 			final String relationType) {
 		return response.getParsedLinkHeader(relationType) != null;
 	}
 
-	protected void assertLinkHeaderDoesNotExist(
-			final RestApiResponse<R> response,
+	protected void assertLinkHeaderDoesNotExist(final RestApiResponse<R> response,
 			final String relationType) {
 		assertFalse(doesLinkHeaderExist(response, relationType));
 	}
 
-	protected void assertLinkHeaderStartsWith(
-			final RestApiResponse<R> response,
-			final String relationType,
-			final String startsWith) {
+	protected void assertLinkHeaderStartsWith(final RestApiResponse<R> response,
+			final String relationType, final String startsWith) {
 		assertTrue(response.getLinkHeader(relationType).startsWith(startsWith));
 	}
 
-	protected void assertLinkHeaderEquals(
-			final RestApiResponse<R> response,
-			final String relationType,
-			final String equalString) {
+	protected void assertLinkHeaderEquals(final RestApiResponse<R> response,
+			final String relationType, final String equalString) {
 		assertEquals(equalString, response.getLinkHeader(relationType));
 	}
 

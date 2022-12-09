@@ -28,6 +28,10 @@ public class SimplePersonWebClientUsingIds {
         return this.client.putPerson(this.baseUrl + person.getId(), person);
     }
 
+    public SimplePersonResponse resetDatabaseOnServer() throws IOException {
+        return this.client.resetDatabaseOnServer(this.baseUrl);
+    }
+
     private String addTrailingSlashIfNeeded(String url) {
         final String urlWithoutTrailingSlash = url.replaceFirst("/*$", "");
         return String.format("%s/", urlWithoutTrailingSlash);

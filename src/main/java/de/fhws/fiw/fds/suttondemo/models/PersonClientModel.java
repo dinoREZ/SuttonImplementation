@@ -26,7 +26,7 @@ public class PersonClientModel extends AbstractClientModel {
     private String lastName;
 
     @XmlJavaTypeAdapter(XmlDateTimeConverter.class)
-    private LocalDate birthDate;
+    private LocalDate birthDate = LocalDate.of(1970, 1, 1);
     private String emailAddress;
 
     public PersonClientModel() {}

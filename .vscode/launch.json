@@ -14,7 +14,7 @@
             "type": "java",
             "name": "Launch Start",
             "request": "launch",
-            "mainClass": "de.fhws.fiw.fds.suttondemo.Start",
+            "mainClass": "de.fhws.fiw.fds.suttondemo.server.Start",
             "projectName": "sutton",
             "env":{
                 "SUTTON_DB_HOST_PORT": "localhost:3306"

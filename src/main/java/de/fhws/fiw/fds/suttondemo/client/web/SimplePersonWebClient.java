@@ -39,6 +39,10 @@ public class SimplePersonWebClient {
         return createResponse(this.client.sendDeleteRequest(url));
     }
 
+    public SimplePersonResponse resetDatabaseOnServer(String url) throws IOException {
+        return createResponse(this.client.sendGetSingleRequest(url + "resetdatabase"));
+    }
+
     private SimplePersonResponse createResponse(WebApiResponse<PersonClientModel> response) {
         return new SimplePersonResponse(response.getResponseData(), response.getResponseHeaders(),
                 response.getLastStatusCode());

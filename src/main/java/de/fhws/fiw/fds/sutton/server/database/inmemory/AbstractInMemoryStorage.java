@@ -52,8 +52,8 @@ public abstract class AbstractInMemoryStorage<T extends AbstractModel> {
 		}
 	}
 
-	public CollectionModelResult<T> readAll(SearchParameter... searchParameter) {
-		return this.readByPredicate(all(), SearchParameter.getOrDefault(searchParameter));
+	public CollectionModelResult<T> readAll(SearchParameter searchParameter) {
+		return this.readByPredicate(all(), searchParameter);
 	}
 
 	protected CollectionModelResult<T> readByPredicate(final Predicate<T> predicate,
@@ -62,6 +62,8 @@ public abstract class AbstractInMemoryStorage<T extends AbstractModel> {
 				new CollectionModelResult<>(filterBy(predicate));
 		final CollectionModelResult<T> page = InMemoryPaging.page(filteredResult,
 				searchParameter.getOffset(), searchParameter.getSize());
+
+		// TODO: add sorting
 
 		final CollectionModelResult<T> returnValue =
 				new CollectionModelResult<>(clone(page.getResult()));

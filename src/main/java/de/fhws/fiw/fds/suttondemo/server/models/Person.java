@@ -1,33 +1,28 @@
 /*
  * Copyright 2021 University of Applied Sciences Würzburg-Schweinfurt, Germany
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package de.fhws.fiw.fds.suttondemo.server.models;
 
 import java.time.LocalDate;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import com.owlike.genson.annotation.JsonConverter;
-
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
-import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
-import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
+import de.fhws.fiw.fds.sutton.server.utils.JsonDateTimeConverter;
+import de.fhws.fiw.fds.sutton.server.utils.XmlDateTimeConverter;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -39,8 +34,7 @@ public class Person extends AbstractModel {
 	private LocalDate birthDate;
 	private String emailAddress;
 
-	public Person() {
-	}
+	public Person() {}
 
 	public Person(final String firstname, final String lastname, final String emailAddress,
 			final LocalDate birthdate) {
@@ -86,12 +80,8 @@ public class Person extends AbstractModel {
 
 	@Override
 	public String toString() {
-		return "Person{" +
-				"id=" + id +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", birthDate=" + birthDate +
-				", emailAddress='" + emailAddress + '\'' +
-				'}';
+		return "Person{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='"
+				+ lastName + '\'' + ", birthDate=" + birthDate + ", emailAddress='" + emailAddress
+				+ '\'' + '}';
 	}
 }

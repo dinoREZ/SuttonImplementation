@@ -18,8 +18,8 @@ import java.time.LocalDate;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.owlike.genson.annotation.JsonConverter;
 import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
-import de.fhws.fiw.fds.sutton.utils.JsonDateTimeConverter;
-import de.fhws.fiw.fds.sutton.utils.XmlDateTimeConverter;
+import de.fhws.fiw.fds.sutton.server.utils.JsonDateTimeConverter;
+import de.fhws.fiw.fds.sutton.server.utils.XmlDateTimeConverter;
 
 public class PersonClientModel extends AbstractClientModel {
     private String firstName;

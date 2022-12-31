@@ -27,7 +27,7 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	@Override
-	public CollectionModelResult<Person> readAll(SearchParameter... searchParameters) {
+	public CollectionModelResult<Person> readAll(SearchParameter searchParameters) {
 		return new LoadAllPersons().execute((Void) null);
 	}
 

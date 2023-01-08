@@ -16,6 +16,8 @@ package de.fhws.fiw.fds.suttondemo.server.database.inmemory;
 
 import java.time.LocalDate;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
+
 import org.apache.commons.lang.StringUtils;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.inmemory.AbstractInMemoryStorage;
@@ -40,7 +42,11 @@ public class PersonInMemoryStorage extends AbstractInMemoryStorage<Person> imple
 	}
 
 	private void populateData() {
-		create(new Person("Felix", "Leiter", "felix.leiter@cia.com", LocalDate.of(1960, 2, 9)));
+//		create(new Person("Felix", "Leiter", "felix.leiter@cia.com", LocalDate.of(1960, 2, 9)));
+		IntStream.range(1,101)
+				.forEach(ind -> create(new Person("Felix" + ind, "Leiter",
+						"felix.leiter" + ind +"@cia.com",
+						LocalDate.of(1960 + ind, 2, 9))));
 	}
 
 	private Predicate<Person> byFirstNameAndLastName(final String firstName,

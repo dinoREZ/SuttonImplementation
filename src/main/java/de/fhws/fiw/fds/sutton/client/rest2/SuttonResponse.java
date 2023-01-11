@@ -15,15 +15,14 @@
 package de.fhws.fiw.fds.sutton.client.rest2;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import com.owlike.genson.GenericType;
 import com.owlike.genson.Genson;
 import com.owlike.genson.GensonBuilder;
 import de.fhws.fiw.fds.sutton.client.converters.ClientLinkConverter;
 import de.fhws.fiw.fds.sutton.client.converters.DateTimeConverter;
+import de.fhws.fiw.fds.sutton.client.model.AbstractClientModel;
 import de.fhws.fiw.fds.sutton.client.utils.Header;
 import de.fhws.fiw.fds.sutton.client.utils.Link;
 import okhttp3.Headers;
@@ -122,14 +121,13 @@ public class SuttonResponse {
 		return this.responseData;
 	}
 
-//	TODO: should T be <T extends AbstractClientModel>
 	/**
 	 * Reads the response body that contains a single model and returns it
 	 * @param clazz {@link Class} the class of the model in the response body to use it for the deserialization
 	 *                           process
 	 * @return a single {@link T}
 	 * */
-	public final <T> T readEntity(final Class<T> clazz) {
+	public final <T extends AbstractClientModel> T readEntity(final Class<T> clazz) {
 		final Genson genson = new GensonBuilder()
 				.withConverters(new ClientLinkConverter(), new DateTimeConverter()).create();
 		return genson.deserialize(this.responseData, clazz);
@@ -216,7 +214,6 @@ public class SuttonResponse {
 		return createRequest(getLink(headerRelationType));
 	}
 
-//	TODO: does support also a response body with a collection of models?
 	/**
 	 * Creates a SuttonRequest using the provided relation-type to extract the relation-type link from a model in the
 	 * response body. This method enables the client to utilize the HATEOAS concept of
@@ -257,7 +254,6 @@ public class SuttonResponse {
 		return nextRequest;
 	}
 
-//TODO: shouldn't this method be private?
 	/**
 	 * Processes the SuttonResponse by setting its status code, its headers, its relation-type links, and its
 	 * body according to the information of the response used to instantiate this SuttonResponse
@@ -310,16 +306,14 @@ public class SuttonResponse {
 		this.responseData = this.response.body().bytes();
 	}
 
-//	TODO: this produces a NullPointerException
 	private String getHeaderString(String headerName) {
 		List<String> allValues = this.responseHeaders.get(headerName);
-		String value = allValues.get(0);
+		String value = allValues.stream().findFirst().orElseGet(() -> null);
 		return value;
 	}
 
-//	TODO: what to do in case the value was null?
 	private int getHeaderInt(String headerName) {
 		String value = getHeaderString(headerName);
-		return Integer.parseInt(value);
+		return value != null ? Integer.parseInt(value) : -1;
 	}
 }

@@ -42,11 +42,7 @@ public class PersonInMemoryStorage extends AbstractInMemoryStorage<Person> imple
 	}
 
 	private void populateData() {
-//		create(new Person("Felix", "Leiter", "felix.leiter@cia.com", LocalDate.of(1960, 2, 9)));
-		IntStream.range(1,101)
-				.forEach(ind -> create(new Person("Felix" + ind, "Leiter",
-						"felix.leiter" + ind +"@cia.com",
-						LocalDate.of(1960 + ind, 2, 9))));
+		create(new Person("Felix", "Leiter", "felix.leiter@cia.com", LocalDate.of(1960, 2, 9)));
 	}
 
 	private Predicate<Person> byFirstNameAndLastName(final String firstName,

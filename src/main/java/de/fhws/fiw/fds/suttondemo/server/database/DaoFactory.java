@@ -14,8 +14,7 @@
 
 package de.fhws.fiw.fds.suttondemo.server.database;
 
-//import de.fhws.fiw.fds.suttondemo.server.database.dbms.PersonDaoImpl;
-import de.fhws.fiw.fds.suttondemo.server.database.inmemory.PersonInMemoryStorage;
+import de.fhws.fiw.fds.suttondemo.server.database.dbms.PersonDaoImpl;
 
 public class DaoFactory {
 	private static DaoFactory INSTANCE;
@@ -30,12 +29,8 @@ public class DaoFactory {
 
 	private final PersonDao personDao;
 
-//	private DaoFactory() {
-//		this.personDao = new PersonDaoImpl();
-//	}
-
 	private DaoFactory() {
-		this.personDao = new PersonInMemoryStorage();
+		this.personDao = new PersonDaoImpl();
 	}
 
 	public PersonDao getPersonDao() {

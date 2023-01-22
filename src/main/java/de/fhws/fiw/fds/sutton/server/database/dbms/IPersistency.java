@@ -19,9 +19,21 @@ package de.fhws.fiw.fds.sutton.server.database.dbms;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * The IPersistency interface provides a method to establish a connection to a DBMS
+ * and another method to shut down the created connection
+ * */
 public interface IPersistency
 {
+	/**
+	 * Attempts to establish a connection with a data source
+	 * @return a connection {@link Connection} to the data source
+	 * @throws SQLException
+	 * */
 	Connection getConnection( ) throws SQLException;
 
+	/**
+	 * Closes the connection to a data source
+	 * */
 	void shutdown( );
 }

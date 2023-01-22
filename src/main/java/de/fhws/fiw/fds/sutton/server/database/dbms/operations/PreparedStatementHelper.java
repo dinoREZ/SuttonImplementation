@@ -22,8 +22,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * The PreparedStatementHelper class is a utility class and helps by setting the values of the parameters within a
+ * PreparedStatement.
+ * */
 public class PreparedStatementHelper
 {
+	/**
+	 * Sets the designated parameter within a PreparedStatement by the given value. The method sets the
+	 * parameter in the PreparedStatement according to the type of the given value. The method defines the index
+	 * of the parameter in the PreparedStatement using the given index.
+	 * @param index the index {@link Integer} of the parameter in the PreparedStatement to set its value
+	 * @param value the value to set the parameter in the PreparedStatement by it
+	 * @throws    SQLException if parameterIndex does not correspond to a parameter marker in the SQL statement;
+	 * if a database access error occurs or this method is called on a closed PreparedStatement
+	 * */
 	public static void set( final PreparedStatement preparedStatement, final int index, final Object value )
 		throws SQLException
 	{
@@ -63,5 +76,10 @@ public class PreparedStatementHelper
 		{
 			preparedStatement.setFloat( index, ( Float ) value );
 		}
+//		TODO: this can solve the 500 issue caused by sending a model with incomplete
+//		else
+//		{
+//			preparedStatement.setString( index, null);
+//		}
 	}
 }

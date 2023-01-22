@@ -21,14 +21,28 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * The AbstractMySqlPersistence class provides the required functionality to establish a connection to a MySQL data
+ * source. The methods presented by this class should be used to define the name, username, and password of the MySQL
+ * database to be used to persist data for the Sutton framework. Additionally, the class is used to create all
+ * necessary tables
+ *
+ * */
 public abstract class AbstractMySqlPersistence implements IPersistency {
 	private ComboPooledDataSource cpds;
 
+	/**
+	 * Constructs an instance of AbstractMySqlPersistence. It also establishes a connection to a MySQL data source
+	 * and creates all the necessary tables.
+	 * */
 	protected AbstractMySqlPersistence() {
 		createConnectionPool();
 		createAllTables();
 	}
 
+	/**
+	 * Establishes the connection to a MySQL database
+	 * */
 	public void createConnectionPool() {
 		try {
 			this.cpds = new ComboPooledDataSource();
@@ -49,16 +63,32 @@ public abstract class AbstractMySqlPersistence implements IPersistency {
 		this.cpds.close();
 	}
 
+	/**
+	 * Returns a string describing the host name and the port of the MySQL database
+	 * @return the host name and the port, on which the MySQL database is running
+	 * */
 	protected String getHostNameAndPort() {
 		return "localhost:3306";
 	}
 
+	/**
+	 * @return the database name {@link String}
+	 * */
 	protected abstract String getDatabaseName();
 
+	/**
+	 * @return the database user's name {@link String}
+	 * */
 	protected abstract String getDatabaseUser();
 
+	/**
+	 * @return the password for the database {@link String}
+	 * */
 	protected abstract String getDatabasePassword();
 
+	/**
+	 * Creates all necessary database tables
+	 * */
 	protected abstract void createAllTables();
 
 	public Connection getConnection() throws SQLException {

@@ -56,8 +56,6 @@ public interface IDatabaseAccessObject<T extends AbstractModel> {
 	 * */
 	CollectionModelResult<T> readAll(SearchParameter searchParameter);
 
-//	TODO: readByPredicate method is not defined
-
 	/**
 	 * Updates a resource (an instance of {@link AbstractModel}) in the database <strong>if exists</strong>
 	 * by the given resources

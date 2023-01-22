@@ -14,20 +14,34 @@
 
 package de.fhws.fiw.fds.sutton.client.utils;
 
+/**
+ * The ApiKey class is a utility class. It is used to create immutable Api-keys to be used to authorize clients requests
+ * */
 public class ApiKey {
 	private final String apiKeyHeader;
 
 	private final String apiKeyValue;
 
+	/**
+	 * Constructs an Api-key and sets its header and its value according to the given values
+	 * @param apiKeyHeader the header name {@link String} of the Api-key
+	 * @param apiKeyValue the value {@link String} of the Api-key
+	 * */
 	public ApiKey(final String apiKeyHeader, final String apiKeyValue) {
 		this.apiKeyHeader = apiKeyHeader;
 		this.apiKeyValue = apiKeyValue;
 	}
 
+	/**
+	 * @return the header name {@link String} of the Api-key
+	 * */
 	public String getApiKeyHeader() {
 		return this.apiKeyHeader;
 	}
 
+	/**
+	 * @return the value {@link String} of the Api-key
+	 * */
 	public String getApiKeyValue() {
 		return this.apiKeyValue;
 	}

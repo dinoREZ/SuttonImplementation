@@ -76,10 +76,9 @@ public class PreparedStatementHelper
 		{
 			preparedStatement.setFloat( index, ( Float ) value );
 		}
-//		TODO: this can solve the 500 issue caused by sending a model with incomplete
-//		else
-//		{
-//			preparedStatement.setString( index, null);
-//		}
+		else
+		{
+			preparedStatement.setString( index, null);
+		}
 	}
 }

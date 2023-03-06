@@ -33,6 +33,7 @@ import de.fhws.fiw.fds.suttondemo.server.api.states.persons.GetAllPersons;
 import de.fhws.fiw.fds.suttondemo.server.api.states.persons.GetSinglePerson;
 import de.fhws.fiw.fds.suttondemo.server.api.states.persons.PostNewPerson;
 import de.fhws.fiw.fds.suttondemo.server.api.states.persons.PutSinglePerson;
+import de.fhws.fiw.fds.suttondemo.server.database.utils.InitializeDatabase;
 import de.fhws.fiw.fds.suttondemo.server.database.utils.ResetDatabase;
 import de.fhws.fiw.fds.suttondemo.server.models.Person;
 
@@ -91,6 +92,17 @@ public class PersonService extends AbstractService {
 		System.out.println("RESET DATABASE");
 
 		ResetDatabase.reset();
+
+		return Response.ok().build();
+	}
+
+	@GET
+	@Path("initializedatabase")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response initializeDatabase() {
+		System.out.println("INITIALIZE DATABASE");
+
+		InitializeDatabase.initialize();
 
 		return Response.ok().build();
 	}

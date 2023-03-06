@@ -26,20 +26,44 @@ import java.util.stream.Collectors;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
+/**
+ * The AbstractSaveOperation class optimizes the functionality of AbstractWriteOperation to insert a
+ * single data in a certain data table in the context of SQL databases used by a Sutton application.
+ *
+ * @param <P> the parameters to be used to create a single data in the database
+ * @see AbstractWriteOperation
+ * */
 public abstract class AbstractSaveOperation<P extends AbstractModel> extends
 	AbstractWriteOperation<P>
 {
+	/**
+	 * Constructs a save operation and assigns the given persistency instance as the database, in which
+	 * the insert operation should be executed
+	 * @param persistency the database instance to be used to persist data
+	 * */
 	public AbstractSaveOperation( final IPersistency persistency )
 	{
 		super( persistency );
 	}
 
+	/**
+	 * Creates a precompiled SQL statement to perform an insert operation and assigns it to
+	 * {@link AbstractSaveOperation#databaseStatement}
+	 * @throws SQLException if a database access error occurs, this method is called on a closed connection
+	 * or the given parameter is not a Statement constant indicating whether auto-generated keys should be returned
+	 * */
 	protected final void createDatabaseStatement( ) throws SQLException
 	{
 		this.databaseStatement =
 			this.databaseConnection.prepareStatement( this.databaseSQLStatement, RETURN_GENERATED_KEYS );
 	}
 
+	/**
+	 * Defines the SQL statement to perform an insert operation and assigns it to
+	 * {@link AbstractSaveOperation#databaseSQLStatement}
+	 * @throws SQLException if a database access error occurs, this method is called on a closed connection
+	 * or the given parameter is not a Statement constant indicating whether auto-generated keys should be returned
+	 * */
 	protected final void createDatabaseSqlStatement( ) throws SQLException
 	{
 		final StringBuffer sqlStmt = new StringBuffer( );
@@ -56,8 +80,18 @@ public abstract class AbstractSaveOperation<P extends AbstractModel> extends
 		this.databaseSQLStatement = sqlStmt.toString( );
 	}
 
+	/**
+	 * Specifies the columns' names of the data entity that should be inserted in the database
+	 * @return a list of columns' names
+	 * */
 	protected abstract List<String> columnNames( );
 
+	/**
+	 * Executes the insert operation
+	 * @throws SQLException if a database access error occurred, or if the insert operation
+	 * was called on a closed {@link AbstractSaveOperation#databaseStatement}, or if the execution of the insert
+	 * operation returned data
+	 * */
 	protected final void executeSQLStatement( ) throws SQLException
 	{
 		this.databaseStatement.executeUpdate( );

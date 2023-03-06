@@ -26,10 +26,23 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * The AbstractLoadCollectionOperation class optimizes the functionality of AbstractLoadOperation to load
+ * a data collection from a certain data table in the context of SQL databases used by a Sutton application.
+ *
+ * @param <P> the parameters to be used to load single data from the database
+ * @param <M> the collection of models loaded from the database after successfully executing the load collection operation
+ * @see AbstractLoadOperation
+ * */
 public abstract class AbstractLoadCollectionOperation<P, M extends AbstractModel>
 	extends
 	AbstractLoadOperation<P, CollectionModelResult<M>>
 {
+	/**
+	 * Constructs a load-collection operation and assigns the given persistency instance as the database, in which
+	 * the loading operation should be executed
+	 * @param persistency the database instance to be used to persist data
+	 * */
 	public AbstractLoadCollectionOperation( final IPersistency persistency )
 	{
 		super( persistency );
@@ -53,11 +66,21 @@ public abstract class AbstractLoadCollectionOperation<P, M extends AbstractModel
 		this.databaseSQLStatement = returnValue.toString( );
 	}
 
+	/**
+	 * Defines the columns' names in the SQL statement, by which the data should be loaded from the database
+	 * @return the columns' names {@link String} to be loaded from the database
+	 * */
 	protected String columns( )
 	{
 		return "*";
 	}
 
+	/**
+	 * Creates the part of the SQL statement that comes after the <strong>"SELECT * FROM "</strong> part. The method
+	 * specifies the table name and the criteria, by which the data should be loaded from the database
+	 * @return a {@link String} specifying the table name optionally the criteria to use it to load the data
+	 * from the database
+	 * */
 	protected abstract String createSQLStatementWithoutSelectStartingAfterFrom( );
 
 	private int getTotalNumberOfRows( ) throws SQLException
@@ -89,6 +112,14 @@ public abstract class AbstractLoadCollectionOperation<P, M extends AbstractModel
 		this.queryResult = new CollectionModelResult<>( returnValue );
 	}
 
+	/**
+	 * Creates an instance of {@link AbstractModel} from the values within the data table
+	 * {@link AbstractLoadCollectionOperation#resultSet} that was loaded from the database after performing the load
+	 * operation
+	 * @return a collection of {@link M} loaded from the database
+	 * @throws SQLException if an error occurs while trying to read the values of the columns from the
+	 * {@link AbstractLoadCollectionOperation#resultSet} or if this ResultSet was closed
+	 * */
 	protected abstract M createModel( ResultSet resultSet ) throws SQLException;
 
 	@Override protected CollectionModelResult<M> createDatabaseError( )

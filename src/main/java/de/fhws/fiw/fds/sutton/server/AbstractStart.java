@@ -34,7 +34,7 @@ public abstract class AbstractStart
 	protected void startTomcat( ) throws Exception
 	{
 		final Tomcat tomcat = new Tomcat( );
-		tomcat.setPort( 8088 );
+		tomcat.setPort( 8080 );
 
 		final Context context = tomcat.addWebapp( CONTEXT_PATH_PREFIX + contextPath( ),
 			new File( WEB_APP_LOCATION ).getAbsolutePath( ) );

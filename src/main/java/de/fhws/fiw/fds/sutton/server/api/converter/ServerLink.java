@@ -6,51 +6,44 @@ package de.fhws.fiw.fds.sutton.server.api.converter;
  * of the converters
  *
  * @see XmlServerLinkConverter
- * */
-public class ServerLink
-{
-	private String href;
-	private String rel;
-	private String type;
+ */
+public class ServerLink {
 
-	public ServerLink( )
-	{
-	}
+    private String href;
+    private String rel;
+    private String type;
 
-	public ServerLink( final String href, final String rel, final String type )
-	{
-		this.href = href;
-		this.rel = rel;
-		this.type = type;
-	}
+    public ServerLink() {
+    }
 
-	public String getHref( )
-	{
-		return href;
-	}
+    public ServerLink(final String href, final String rel, final String type) {
+        this.href = href;
+        this.rel = rel;
+        this.type = type;
+    }
 
-	public void setHref( final String href )
-	{
-		this.href = href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public String getRel( )
-	{
-		return rel;
-	}
+    public void setHref(final String href) {
+        this.href = href;
+    }
 
-	public void setRel( final String rel )
-	{
-		this.rel = rel;
-	}
+    public String getRel() {
+        return rel;
+    }
 
-	public String getType( )
-	{
-		return type;
-	}
+    public void setRel(final String rel) {
+        this.rel = rel;
+    }
 
-	public void setType( final String type )
-	{
-		this.type = type;
-	}
+    public String getType() {
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
+    }
+
 }

@@ -29,125 +29,117 @@ import javax.ws.rs.core.Response;
  *
  * <p>Each extending state class has to define a builder class, which must extend
  * {@link AbstractDeleteState.AbstractDeleteStateBuilder}.</p>
- * */
-public abstract class AbstractDeleteState<T extends AbstractModel> extends AbstractState
-{
-	/**
-	 * id {@link Long} of the model to be deleted
-	 * */
-	protected long modelIdToDelete;
+ */
+public abstract class AbstractDeleteState<T extends AbstractModel> extends AbstractState {
 
-	/**
-	 * the result {@link SingleModelResult} of searching the model to be deleted in the storage
-	 * */
-	protected SingleModelResult<T> modelToDelete;
+    /**
+     * id {@link Long} of the model to be deleted
+     */
+    protected long modelIdToDelete;
 
-	/**
-	 * the result {@link NoContentResult} to return to the client after deleting the model from the storage
-	 * */
-	protected NoContentResult resultAfterDelete;
+    /**
+     * the result {@link SingleModelResult} of searching the model to be deleted in the storage
+     */
+    protected SingleModelResult<T> modelToDelete;
 
-	public AbstractDeleteState( final AbstractDeleteStateBuilder builder )
-	{
-		super( builder );
-		this.modelIdToDelete = builder.requestedId;
-	}
+    /**
+     * the result {@link NoContentResult} to return to the client after deleting the model from the storage
+     */
+    protected NoContentResult resultAfterDelete;
 
-	@Override
-	protected Response buildInternal( )
-	{
-		configureState( );
+    public AbstractDeleteState(final AbstractDeleteStateBuilder builder) {
+        super(builder);
+        this.modelIdToDelete = builder.requestedId;
+    }
 
-		authorizeRequest( );
+    @Override
+    protected Response buildInternal() {
+        configureState();
 
-		this.modelToDelete = loadModel( );
+        authorizeRequest();
 
-		if ( this.modelToDelete.isEmpty( ) )
-		{
-			return Response.status( Response.Status.NOT_FOUND )
-						   .build( );
-		}
+        this.modelToDelete = loadModel();
 
-		if ( clientDoesNotKnowCurrentModelState( this.modelToDelete.getResult( ) ) )
-		{
-			return Response.status( Response.Status.PRECONDITION_FAILED ).build( );
-		}
+        if (this.modelToDelete.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .build();
+        }
 
-		this.resultAfterDelete = deleteModel( );
+        if (clientDoesNotKnowCurrentModelState(this.modelToDelete.getResult())) {
+            return Response.status(Response.Status.PRECONDITION_FAILED).build();
+        }
 
-		if ( this.resultAfterDelete.hasError( ) )
-		{
-			return Response.serverError( )
-						   .build( );
-		}
+        this.resultAfterDelete = deleteModel();
 
-		return createResponse( );
-	}
+        if (this.resultAfterDelete.hasError()) {
+            return Response.serverError()
+                    .build();
+        }
 
-	/**
-	 * This method should be used to prove if the user is allowed to perform the delete action
-	 * */
-	protected abstract void authorizeRequest( );
+        return createResponse();
+    }
 
-	/**
-	 * Extending classes should use this method to search for the model to be deleted in the storage
-	 * @return {@link SingleModelResult} - the result of searching the model in the database
-	 * */
-	protected abstract SingleModelResult<T> loadModel( );
+    /**
+     * This method should be used to prove if the user is allowed to perform the delete action
+     */
+    protected abstract void authorizeRequest();
 
-	/**
-	 * Returns true if the user doesn't have the most recent version of the model
-	 * @param modelFromDatabase the model from the database so that the user can compare it with
-	 *                          the model, the user knows about
-	 * */
-	protected boolean clientDoesNotKnowCurrentModelState( final AbstractModel modelFromDatabase )
-	{
-		return false;
-	}
+    /**
+     * Extending classes should use this method to search for the model to be deleted in the storage
+     *
+     * @return {@link SingleModelResult} - the result of searching the model in the database
+     */
+    protected abstract SingleModelResult<T> loadModel();
 
-	/**
-	 * Extending classes should use this method to implement the deletion of the model from the database
-	 * */
-	protected abstract NoContentResult deleteModel( );
+    /**
+     * Returns true if the user doesn't have the most recent version of the model
+     *
+     * @param modelFromDatabase the model from the database so that the user can compare it with
+     *                          the model, the user knows about
+     */
+    protected boolean clientDoesNotKnowCurrentModelState(final AbstractModel modelFromDatabase) {
+        return false;
+    }
 
-	protected Response createResponse( )
-	{
-		defineResponseStatus( );
+    /**
+     * Extending classes should use this method to implement the deletion of the model from the database
+     */
+    protected abstract NoContentResult deleteModel();
 
-		defineHttpResponseBody( );
+    protected Response createResponse() {
+        defineResponseStatus();
 
-		defineTransitionLinks( );
+        defineHttpResponseBody();
 
-		return this.responseBuilder.build( );
-	}
+        defineTransitionLinks();
 
-	private void defineResponseStatus( )
-	{
-		this.responseBuilder.status( Response.Status.NO_CONTENT );
-	}
+        return this.responseBuilder.build();
+    }
 
-	private void defineHttpResponseBody( )
-	{
-		this.responseBuilder.entity( this.modelToDelete.getResult( ) );
-	}
+    private void defineResponseStatus() {
+        this.responseBuilder.status(Response.Status.NO_CONTENT);
+    }
 
-	/**
-	 * This method is used to define all transition links based on the idea of a REST system as
-	 * a finite state machine.
-	 */
-	protected abstract void defineTransitionLinks( );
+    private void defineHttpResponseBody() {
+        this.responseBuilder.entity(this.modelToDelete.getResult());
+    }
 
-	public static abstract class AbstractDeleteStateBuilder extends AbstractState.AbstractStateBuilder
-	{
-		/**
-		 * id {@link Long} of the model to be searched in the database in order to be deleted
-		 * */
-		protected long requestedId;
+    /**
+     * This method is used to define all transition links based on the idea of a REST system as
+     * a finite state machine.
+     */
+    protected abstract void defineTransitionLinks();
 
-		public AbstractDeleteStateBuilder setRequestedId( final long requestedId )
-		{
-			this.requestedId = requestedId;
-			return this;
-		}
-	}
+    public static abstract class AbstractDeleteStateBuilder extends AbstractState.AbstractStateBuilder {
+        /**
+         * id {@link Long} of the model to be searched in the database in order to be deleted
+         */
+        protected long requestedId;
+
+        public AbstractDeleteStateBuilder setRequestedId(final long requestedId) {
+            this.requestedId = requestedId;
+            return this;
+        }
+    }
+
 }

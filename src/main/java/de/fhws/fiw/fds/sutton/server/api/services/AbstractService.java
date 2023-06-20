@@ -22,15 +22,21 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-public class AbstractService
-{
-	@Context protected ContainerRequestContext context;
+public class AbstractService {
 
-	@Context protected UriInfo uriInfo;
+    @Context
+    protected ContainerRequestContext context;
 
-	@Context protected ContainerRequestContext requestContext;
+    @Context
+    protected UriInfo uriInfo;
 
-	@Context protected Request request;
+    @Context
+    protected ContainerRequestContext requestContext;
 
-	@Context protected HttpServletRequest httpServletRequest;
+    @Context
+    protected Request request;
+
+    @Context
+    protected HttpServletRequest httpServletRequest;
+
 }

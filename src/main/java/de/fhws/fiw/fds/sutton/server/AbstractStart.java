@@ -24,30 +24,30 @@ import org.apache.catalina.webresources.StandardRoot;
 
 import java.io.File;
 
-public abstract class AbstractStart
-{
-	private static final String CONTEXT_PATH_PREFIX = "/";
-	private static final String WEB_APP_LOCATION = "src/main/webapp/";
-	private static final String WEB_APP_MOUNT = "/WEB-INF/classes";
-	private static final String WEB_APP_CLASSES = "target/classes";
+public abstract class AbstractStart {
 
-	protected void startTomcat( ) throws Exception
-	{
-		final Tomcat tomcat = new Tomcat( );
-		tomcat.setPort( 8080 );
+    private static final String CONTEXT_PATH_PREFIX = "/";
+    private static final String WEB_APP_LOCATION = "src/main/webapp/";
+    private static final String WEB_APP_MOUNT = "/WEB-INF/classes";
+    private static final String WEB_APP_CLASSES = "target/classes";
 
-		final Context context = tomcat.addWebapp( CONTEXT_PATH_PREFIX + contextPath( ),
-			new File( WEB_APP_LOCATION ).getAbsolutePath( ) );
-		final String pathToClasses = new File( WEB_APP_CLASSES ).getAbsolutePath( );
-		final WebResourceRoot resources = new StandardRoot( context );
-		final DirResourceSet dirResourceSet = new DirResourceSet( resources, WEB_APP_MOUNT, pathToClasses, "/" );
+    protected void startTomcat() throws Exception {
+        final Tomcat tomcat = new Tomcat();
+        tomcat.setPort(8080);
 
-		resources.addPreResources( dirResourceSet );
-		context.setResources( resources );
+        final Context context = tomcat.addWebapp(CONTEXT_PATH_PREFIX + contextPath(),
+                new File(WEB_APP_LOCATION).getAbsolutePath());
+        final String pathToClasses = new File(WEB_APP_CLASSES).getAbsolutePath();
+        final WebResourceRoot resources = new StandardRoot(context);
+        final DirResourceSet dirResourceSet = new DirResourceSet(resources, WEB_APP_MOUNT, pathToClasses, "/");
 
-		tomcat.start( );
-		tomcat.getServer( ).await( );
-	}
+        resources.addPreResources(dirResourceSet);
+        context.setResources(resources);
 
-	protected abstract String contextPath( );
+        tomcat.start();
+        tomcat.getServer().await();
+    }
+
+    protected abstract String contextPath();
+
 }

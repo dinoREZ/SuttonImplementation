@@ -29,56 +29,52 @@ import java.net.URI;
  * basic requirements to implement a dispatcher state as introduced in the REST architecture.</p>
  *
  * <p>Extending state class has to define a builder class, which must extend
- *  * {@link AbstractGetDispatcherState.AbstractDispatcherStateBuilder}.</p>
- * */
-public abstract class AbstractGetDispatcherState extends AbstractState
-{
-	protected AbstractGetDispatcherState( final AbstractDispatcherStateBuilder builder )
-	{
-		super( builder );
-	}
+ * * {@link AbstractGetDispatcherState.AbstractDispatcherStateBuilder}.</p>
+ */
+public abstract class AbstractGetDispatcherState extends AbstractState {
 
-	@Override
-	protected Response buildInternal( )
-	{
-		configureState( );
+    protected AbstractGetDispatcherState(final AbstractDispatcherStateBuilder builder) {
+        super(builder);
+    }
 
-		return createResponse( );
-	}
+    @Override
+    protected Response buildInternal() {
+        configureState();
 
-	protected Response createResponse( )
-	{
-		defineHttpResponseBody( );
+        return createResponse();
+    }
 
-		defineSelfLink( );
+    protected Response createResponse() {
+        defineHttpResponseBody();
 
-		defineTransitionLinks( );
+        defineSelfLink();
 
-		this.responseBuilder.cacheControl( CachingUtils.create60SecondsPublicCaching( ) );
+        defineTransitionLinks();
 
-		return this.responseBuilder.build( );
-	}
+        this.responseBuilder.cacheControl(CachingUtils.create60SecondsPublicCaching());
 
-	private void defineHttpResponseBody( )
-	{
-		this.responseBuilder.entity( "" );
-	}
+        return this.responseBuilder.build();
+    }
 
-	/**
-	 * This method is used to define all transition links based on the idea of a REST system as
-	 * a finite state machine.
-	 */
-	protected abstract void defineTransitionLinks( );
+    private void defineHttpResponseBody() {
+        this.responseBuilder.entity("");
+    }
 
-	protected void defineSelfLink( )
-	{
-		final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder( );
-		final URI self = builder.build( );
+    /**
+     * This method is used to define all transition links based on the idea of a REST system as
+     * a finite state machine.
+     */
+    protected abstract void defineTransitionLinks();
 
-		Hyperlinks.addLink( this.responseBuilder, self, "self", getAcceptRequestHeader( ) );
-	}
+    protected void defineSelfLink() {
+        final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder();
+        final URI self = builder.build();
 
-	public abstract static class AbstractDispatcherStateBuilder extends AbstractStateBuilder
-	{
-	}
+        Hyperlinks.addLink(this.responseBuilder, self, "self", getAcceptRequestHeader());
+    }
+
+    public abstract static class AbstractDispatcherStateBuilder extends AbstractStateBuilder {
+
+    }
+
 }

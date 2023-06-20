@@ -33,161 +33,162 @@ import java.util.stream.Collectors;
  *
  * @see PagingBehaviorUsingPage
  * @see OnePageWithAllResults
- * */
+ */
 public class PagingBehaviorUsingOffsetSize<T extends AbstractModel> extends PagingBehavior<T> {
 
-	/**
-	 * The default page size {@link Integer} to use when no size is provided
-	 * */
-	public static final int DEFAULT_PAGE_SIZE = 10;
+    /**
+     * The default page size {@link Integer} to use when no size is provided
+     */
+    public static final int DEFAULT_PAGE_SIZE = 10;
 
-	/**
-	 * The default page size {@link String} to use when no size is specified in the request
-	 * */
-	public static final String DEFAULT_PAGE_SIZE_STR = "" + DEFAULT_PAGE_SIZE;
+    /**
+     * The default page size {@link String} to use when no size is specified in the request
+     */
+    public static final String DEFAULT_PAGE_SIZE_STR = "" + DEFAULT_PAGE_SIZE;
 
-	/**
-	 * the highest allowed value {@link Integer} for the page size
-	 * */
-	public static final int DEFAULT_MAX_PAGE_SIZE = 20;
+    /**
+     * the highest allowed value {@link Integer} for the page size
+     */
+    public static final int DEFAULT_MAX_PAGE_SIZE = 20;
 
-	/**
-	 * Default name {@link String} of the size property to be used as query parameter
-	 * */
-	public static final String QUERY_PARAM_SIZE = "size";
+    /**
+     * Default name {@link String} of the size property to be used as query parameter
+     */
+    public static final String QUERY_PARAM_SIZE = "size";
 
-	/**
-	 * Default name {@link String} of the offset property to be used as query parameter
-	 * */
-	public static final String QUERY_PARAM_OFFSET = "offset";
+    /**
+     * Default name {@link String} of the offset property to be used as query parameter
+     */
+    public static final String QUERY_PARAM_OFFSET = "offset";
 
-	/**
-	 * The offset {@link Integer} from the collection of the full results where the page should start
-	 * */
-	protected int offset;
+    /**
+     * The offset {@link Integer} from the collection of the full results where the page should start
+     */
+    protected int offset;
 
-	/**
-	 * The size {@link Integer} of the page
-	 * */
-	protected int size;
+    /**
+     * The size {@link Integer} of the page
+     */
+    protected int size;
 
-	/**
-	 * Name {@link String} of the offset property to be used as query parameter
-	 * */
-	protected String offsetQueryParamName = QUERY_PARAM_OFFSET;
+    /**
+     * Name {@link String} of the offset property to be used as query parameter
+     */
+    protected String offsetQueryParamName = QUERY_PARAM_OFFSET;
 
-	/**
-	 * Name {@link String} of the offset property to be used as query parameter
-	 * */
-	protected String sizeQueryParamName = QUERY_PARAM_SIZE;
+    /**
+     * Name {@link String} of the offset property to be used as query parameter
+     */
+    protected String sizeQueryParamName = QUERY_PARAM_SIZE;
 
-	private PagingBehaviorUsingOffsetSize() {
-	}
+    private PagingBehaviorUsingOffsetSize() {
+    }
 
-	private PagingBehaviorUsingOffsetSize(final String offsetQueryParamName, final String sizeQueryParamName) {
-		this.offsetQueryParamName = offsetQueryParamName;
-		this.sizeQueryParamName = sizeQueryParamName;
-	}
+    private PagingBehaviorUsingOffsetSize(final String offsetQueryParamName, final String sizeQueryParamName) {
+        this.offsetQueryParamName = offsetQueryParamName;
+        this.sizeQueryParamName = sizeQueryParamName;
+    }
 
-	/**
-	 * This constructor instantiates a PagingBehaviorUsingOffsetSize and sets the offset and the size query parameters
-	 * names to the given values. It also checks if the given offset and size values are acceptable
-	 * */
-	public PagingBehaviorUsingOffsetSize(final String offsetQueryParamName, final String sizeQueryParamName,
-			final int offset, final int size) {
-		this(offsetQueryParamName, sizeQueryParamName);
-		setOffset(offset);
-		setSize(size);
-	}
+    /**
+     * This constructor instantiates a PagingBehaviorUsingOffsetSize and sets the offset and the size query parameters
+     * names to the given values. It also checks if the given offset and size values are acceptable
+     */
+    public PagingBehaviorUsingOffsetSize(final String offsetQueryParamName, final String sizeQueryParamName,
+                                         final int offset, final int size) {
+        this(offsetQueryParamName, sizeQueryParamName);
+        setOffset(offset);
+        setSize(size);
+    }
 
-	/**
-	 * This constructor instantiates a PagingBehaviorUsingOffsetSize and checks if the given offset and size
-	 * values are acceptable and sets the values accordingly
-	 * */
-	public PagingBehaviorUsingOffsetSize(final int offset, final int size) {
-		setOffset(offset);
-		setSize(size);
-	}
+    /**
+     * This constructor instantiates a PagingBehaviorUsingOffsetSize and checks if the given offset and size
+     * values are acceptable and sets the values accordingly
+     */
+    public PagingBehaviorUsingOffsetSize(final int offset, final int size) {
+        setOffset(offset);
+        setSize(size);
+    }
 
-	@Override
-	public int getOffset() {
-		return this.offset;
-	}
+    @Override
+    public int getOffset() {
+        return this.offset;
+    }
 
-	@Override
-	public int getSize() {
-		return this.size;
-	}
+    @Override
+    public int getSize() {
+        return this.size;
+    }
 
-	@Override
-	protected boolean hasNextLink(final CollectionModelResult<?> result) {
-		return this.offset + this.size < result.getTotalNumberOfResult();
-	}
+    @Override
+    protected boolean hasNextLink(final CollectionModelResult<?> result) {
+        return this.offset + this.size < result.getTotalNumberOfResult();
+    }
 
-	@Override
-	protected URI getNextUri(final UriInfo uriInfo, final CollectionModelResult<?> result) {
-		final UriBuilder uriBuilder = createUriBuilder(uriInfo);
-		final int newOffset = Math.min(this.offset + this.size, result.getTotalNumberOfResult() - 1);
+    @Override
+    protected URI getNextUri(final UriInfo uriInfo, final CollectionModelResult<?> result) {
+        final UriBuilder uriBuilder = createUriBuilder(uriInfo);
+        final int newOffset = Math.min(this.offset + this.size, result.getTotalNumberOfResult() - 1);
 
-		return uriBuilder.build(newOffset, this.size);
-	}
+        return uriBuilder.build(newOffset, this.size);
+    }
 
-	@Override
-	protected boolean hasPrevLink() {
-		return this.offset > 0;
-	}
+    @Override
+    protected boolean hasPrevLink() {
+        return this.offset > 0;
+    }
 
-	@Override
-	protected URI getPrevUri(final UriInfo uriInfo) {
-		final UriBuilder uriBuilder = createUriBuilder(uriInfo);
-		final int newOffset = Math.max(this.offset - this.size, 0);
+    @Override
+    protected URI getPrevUri(final UriInfo uriInfo) {
+        final UriBuilder uriBuilder = createUriBuilder(uriInfo);
+        final int newOffset = Math.max(this.offset - this.size, 0);
 
-		return uriBuilder.build(newOffset, this.size);
-	}
+        return uriBuilder.build(newOffset, this.size);
+    }
 
-	@Override
-	protected URI getSelfUri(final UriInfo uriInfo) {
-		final UriBuilder uriBuilder = createUriBuilder(uriInfo);
+    @Override
+    protected URI getSelfUri(final UriInfo uriInfo) {
+        final UriBuilder uriBuilder = createUriBuilder(uriInfo);
 
-		return uriBuilder.build(this.offset, this.size);
-	}
+        return uriBuilder.build(this.offset, this.size);
+    }
 
-	/**
-	 * This method sets the maximum size of the page
-	 * @return the maximum size {@link Integer} of the page
-	 * */
-	protected int getDefaultMaxPageSize() {
-		return DEFAULT_MAX_PAGE_SIZE;
-	}
+    /**
+     * This method sets the maximum size of the page
+     *
+     * @return the maximum size {@link Integer} of the page
+     */
+    protected int getDefaultMaxPageSize() {
+        return DEFAULT_MAX_PAGE_SIZE;
+    }
 
-	private void setOffset(final int offset) {
-		this.offset = Math.max(0, offset);
-	}
+    private void setOffset(final int offset) {
+        this.offset = Math.max(0, offset);
+    }
 
-	private void setSize(final int size) {
-		this.size = Math.max(1, Math.min(size, getDefaultMaxPageSize()));
-	}
+    private void setSize(final int size) {
+        this.size = Math.max(1, Math.min(size, getDefaultMaxPageSize()));
+    }
 
-	private UriBuilder createUriBuilder(final UriInfo uriInfo) {
-		return uriInfo.getRequestUriBuilder()
-				.replaceQueryParam(getOffsetParamName(), getQueryParamOffsetAsTemplate())
-				.replaceQueryParam(getSizeParamName(), getQueryParamSizeAsTemplate());
-	}
+    private UriBuilder createUriBuilder(final UriInfo uriInfo) {
+        return uriInfo.getRequestUriBuilder()
+                .replaceQueryParam(getOffsetParamName(), getQueryParamOffsetAsTemplate())
+                .replaceQueryParam(getSizeParamName(), getQueryParamSizeAsTemplate());
+    }
 
-	private String getOffsetParamName() {
-		return this.offsetQueryParamName;
-	}
+    private String getOffsetParamName() {
+        return this.offsetQueryParamName;
+    }
 
-	private String getSizeParamName() {
-		return this.sizeQueryParamName;
-	}
+    private String getSizeParamName() {
+        return this.sizeQueryParamName;
+    }
 
-	private final String getQueryParamOffsetAsTemplate() {
-		return "{" + getOffsetParamName() + "}";
-	}
+    private final String getQueryParamOffsetAsTemplate() {
+        return "{" + getOffsetParamName() + "}";
+    }
 
-	private final String getQueryParamSizeAsTemplate() {
-		return "{" + getSizeParamName() + "}";
-	}
+    private final String getQueryParamSizeAsTemplate() {
+        return "{" + getSizeParamName() + "}";
+    }
 
 }

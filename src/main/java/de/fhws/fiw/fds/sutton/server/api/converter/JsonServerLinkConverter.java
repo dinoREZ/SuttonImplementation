@@ -28,49 +28,45 @@ import javax.ws.rs.core.Link;
  * JSON format for {@link de.fhws.fiw.fds.sutton.server.models.AbstractModel} objects, which are
  * used as resources in Sutton framework, it is also responsible for the deserialization process in order to recreate
  * the {@link Link} from the JSON object sent in the response body
- * */
-public class JsonServerLinkConverter implements Converter<Link>
-{
-	public JsonServerLinkConverter( )
-	{
-	}
+ */
+public class JsonServerLinkConverter implements Converter<Link> {
 
-	@Override public void serialize( final Link link, final ObjectWriter objectWriter, final Context context )
-		throws Exception
-	{
-		objectWriter.writeName( link.getTitle( ) );
-		objectWriter.beginObject( );
-		objectWriter.writeString( "href", this.replaceCharacters( link.getUri( ).toASCIIString( ) ) );
-		objectWriter.writeString( "rel", link.getRel( ) );
-		if ( link.getType( ) != null && !link.getType( ).isEmpty( ) )
-		{
-			objectWriter.writeString( "type", link.getType( ) );
-		}
+    public JsonServerLinkConverter() {
+    }
 
-		objectWriter.endObject( );
-	}
+    @Override
+    public void serialize(final Link link, final ObjectWriter objectWriter, final Context context)
+            throws Exception {
+        objectWriter.writeName(link.getTitle());
+        objectWriter.beginObject();
+        objectWriter.writeString("href", this.replaceCharacters(link.getUri().toASCIIString()));
+        objectWriter.writeString("rel", link.getRel());
+        if (link.getType() != null && !link.getType().isEmpty()) {
+            objectWriter.writeString("type", link.getType());
+        }
 
-	@Override public Link deserialize( final ObjectReader objectReader, final Context context ) throws Exception
-	{
-		Link returnValue = null;
-		objectReader.beginObject( );
+        objectWriter.endObject();
+    }
 
-		while ( objectReader.hasNext( ) )
-		{
-			objectReader.next( );
-			if ( "href".equals( objectReader.name( ) ) )
-			{
-				final String link = objectReader.valueAsString( );
-				returnValue = Link.fromUri( link ).build( new Object[ 0 ] );
-			}
-		}
+    @Override
+    public Link deserialize(final ObjectReader objectReader, final Context context) throws Exception {
+        Link returnValue = null;
+        objectReader.beginObject();
 
-		objectReader.endObject( );
-		return returnValue;
-	}
+        while (objectReader.hasNext()) {
+            objectReader.next();
+            if ("href".equals(objectReader.name())) {
+                final String link = objectReader.valueAsString();
+                returnValue = Link.fromUri(link).build(new Object[0]);
+            }
+        }
 
-	private String replaceCharacters( final String body )
-	{
-		return body.replace( "%3F", "?" ).replaceAll( "%7B", "{" ).replaceAll( "%7D", "}" );
-	}
+        objectReader.endObject();
+        return returnValue;
+    }
+
+    private String replaceCharacters(final String body) {
+        return body.replace("%3F", "?").replaceAll("%7B", "{").replaceAll("%7D", "}");
+    }
+
 }

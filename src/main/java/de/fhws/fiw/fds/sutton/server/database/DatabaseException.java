@@ -18,20 +18,18 @@ package de.fhws.fiw.fds.sutton.server.database;
 
 /**
  * The DatabaseException is thrown when an error occurs while performing CRUD operations
- * */
-public class DatabaseException extends Exception
-{
-	public DatabaseException( )
-	{
-	}
+ */
+public class DatabaseException extends Exception {
 
-	public DatabaseException( final String message )
-	{
-		super( message );
-	}
+    public DatabaseException() {
+    }
 
-	public DatabaseException( final String message, final Throwable cause )
-	{
-		super( message, cause );
-	}
+    public DatabaseException(final String message) {
+        super(message);
+    }
+
+    public DatabaseException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
 }

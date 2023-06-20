@@ -24,48 +24,45 @@ import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
  *
  * @see CollectionModelResult
  * @see NoContentResult
- * */
-public class SingleModelResult<T extends AbstractModel> extends AbstractResult
-{
-	/**
-	 * an instance of {@link AbstractModel} to be returned within the response
-	 * */
-	protected T result;
+ */
+public class SingleModelResult<T extends AbstractModel> extends AbstractResult {
 
-	/**
-	 * Defines whether the searched instance of {@link AbstractModel} was found in the database
-	 * */
-	protected boolean found;
+    /**
+     * an instance of {@link AbstractModel} to be returned within the response
+     */
+    protected T result;
 
-	/**
-	 * Empty constructor and represents that the searched resource was not found
-	 * */
-	public SingleModelResult( )
-	{
-		this.found = false;
-	}
+    /**
+     * Defines whether the searched instance of {@link AbstractModel} was found in the database
+     */
+    protected boolean found;
 
-	/**
-	 * instantiates a SingleModelResult and sets its resource to be returned to the found one in the database
-	 * or to null if no resource was found in the database. It also sets the {@link SingleModelResult#found} property accordingly
-	 * */
-	public SingleModelResult( final T result )
-	{
-		this.result = result;
-		this.found = result != null;
-	}
+    /**
+     * Empty constructor and represents that the searched resource was not found
+     */
+    public SingleModelResult() {
+        this.found = false;
+    }
 
-	/**
-	 * @return {@link SingleModelResult#result}
-	 * */
-	public T getResult( )
-	{
-		return this.result;
-	}
+    /**
+     * instantiates a SingleModelResult and sets its resource to be returned to the found one in the database
+     * or to null if no resource was found in the database. It also sets the {@link SingleModelResult#found} property accordingly
+     */
+    public SingleModelResult(final T result) {
+        this.result = result;
+        this.found = result != null;
+    }
 
-	@Override
-	public boolean isEmpty( )
-	{
-		return !this.found;
-	}
+    /**
+     * @return {@link SingleModelResult#result}
+     */
+    public T getResult() {
+        return this.result;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return !this.found;
+    }
+
 }

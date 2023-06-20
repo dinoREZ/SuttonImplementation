@@ -10,31 +10,29 @@ import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
  * {@link AbstractDeleteRelationState.AbstractDeleteRelationStateBuilder}</p>
  *
  * @see AbstractDeleteState
- * */
-public abstract class AbstractDeleteRelationState<T extends AbstractModel> extends AbstractDeleteState<T>
-{
-	/**
-	 * id {@link Long} of the main resource
-	 * */
-	protected long primaryId;
+ */
+public abstract class AbstractDeleteRelationState<T extends AbstractModel> extends AbstractDeleteState<T> {
 
-	public AbstractDeleteRelationState( final AbstractDeleteRelationStateBuilder builder )
-	{
-		super( builder );
-		this.primaryId = builder.parentId;
-	}
+    /**
+     * id {@link Long} of the main resource
+     */
+    protected long primaryId;
 
-	public static abstract class AbstractDeleteRelationStateBuilder extends AbstractDeleteStateBuilder
-	{
-		/**
-		 * id {@link Long} of the main resource
-		 * */
-		protected long parentId;
+    public AbstractDeleteRelationState(final AbstractDeleteRelationStateBuilder builder) {
+        super(builder);
+        this.primaryId = builder.parentId;
+    }
 
-		public AbstractDeleteRelationStateBuilder setParentId( final long parentId )
-		{
-			this.parentId = parentId;
-			return this;
-		}
-	}
+    public static abstract class AbstractDeleteRelationStateBuilder extends AbstractDeleteStateBuilder {
+        /**
+         * id {@link Long} of the main resource
+         */
+        protected long parentId;
+
+        public AbstractDeleteRelationStateBuilder setParentId(final long parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+    }
+
 }

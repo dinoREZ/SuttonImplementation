@@ -27,58 +27,53 @@ import java.util.LinkedList;
  *
  * @see SingleModelResult
  * @see NoContentResult
- * */
-public class CollectionModelResult<T extends AbstractModel> extends AbstractResult
-{
-	/**
-	 * a collection of the found resources, that descend from {@link AbstractModel} in the database
-	 * */
-	protected Collection<T> result;
+ */
+public class CollectionModelResult<T extends AbstractModel> extends AbstractResult {
 
-	/**
-	 * The total number {@link Integer} of all found results in the database. This property is handy to distinguish
-	 * between the total number of the found results and the number of results sent in a single response
-	 * while applying pagination
-	 * */
-	protected int totalNumberOfResult;
+    /**
+     * a collection of the found resources, that descend from {@link AbstractModel} in the database
+     */
+    protected Collection<T> result;
 
-	/**
-	 * Empty Constructor, which indicates that no results were found in the database
-	 * */
-	public CollectionModelResult( )
-	{
-		this.result = new LinkedList<>( );
-		this.totalNumberOfResult = 0;
-	}
+    /**
+     * The total number {@link Integer} of all found results in the database. This property is handy to distinguish
+     * between the total number of the found results and the number of results sent in a single response
+     * while applying pagination
+     */
+    protected int totalNumberOfResult;
 
-	/**
-	 * Constructor to instantiate a {@link CollectionModelResult} ,to set the result to the given collection
-	 * and to set the number of the found results accordingly
-	 * */
-	public CollectionModelResult( final Collection<T> result )
-	{
-		this.result = result != null ? result : new LinkedList<>( );
-		this.totalNumberOfResult = result.size( );
-	}
+    /**
+     * Empty Constructor, which indicates that no results were found in the database
+     */
+    public CollectionModelResult() {
+        this.result = new LinkedList<>();
+        this.totalNumberOfResult = 0;
+    }
 
-	@Override
-	public boolean isEmpty( )
-	{
-		return this.result.isEmpty( );
-	}
+    /**
+     * Constructor to instantiate a {@link CollectionModelResult} ,to set the result to the given collection
+     * and to set the number of the found results accordingly
+     */
+    public CollectionModelResult(final Collection<T> result) {
+        this.result = result != null ? result : new LinkedList<>();
+        this.totalNumberOfResult = result.size();
+    }
 
-	public Collection<T> getResult( )
-	{
-		return this.result;
-	}
+    @Override
+    public boolean isEmpty() {
+        return this.result.isEmpty();
+    }
 
-	public int getTotalNumberOfResult( )
-	{
-		return this.totalNumberOfResult;
-	}
+    public Collection<T> getResult() {
+        return this.result;
+    }
 
-	public void setTotalNumberOfResult( final int totalNumberOfResult )
-	{
-		this.totalNumberOfResult = totalNumberOfResult;
-	}
+    public int getTotalNumberOfResult() {
+        return this.totalNumberOfResult;
+    }
+
+    public void setTotalNumberOfResult(final int totalNumberOfResult) {
+        this.totalNumberOfResult = totalNumberOfResult;
+    }
+
 }

@@ -15,6 +15,7 @@
 package de.fhws.fiw.fds.sutton.server.api;
 
 import java.util.Set;
+
 import org.apache.catalina.filters.CorsFilter;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -23,19 +24,21 @@ import com.owlike.genson.GensonBuilder;
 import com.owlike.genson.ext.jaxrs.GensonJaxRSFeature;
 
 public abstract class AbstractApplication extends ResourceConfig {
-	protected AbstractApplication() {
-		super();
-		registerClasses(getServiceClasses());
-		packages("org.glassfish.jersey.examples.linking");
-		register(DeclarativeLinkingFeature.class);
-		register(MultiPartFeature.class);
-		register(CorsFilter.class);
-		register(new GensonJaxRSFeature().use(new GensonBuilder().setSkipNull(true).useFields(false)
-				.useIndentation(true).create()));
-	}
 
-	/**
-	 * this method should be used to register the services to be used in the webapp
-	 * */
-	protected abstract Set<Class<?>> getServiceClasses();
+    protected AbstractApplication() {
+        super();
+        registerClasses(getServiceClasses());
+        packages("org.glassfish.jersey.examples.linking");
+        register(DeclarativeLinkingFeature.class);
+        register(MultiPartFeature.class);
+        register(CorsFilter.class);
+        register(new GensonJaxRSFeature().use(new GensonBuilder().setSkipNull(true).useFields(false)
+                .useIndentation(true).create()));
+    }
+
+    /**
+     * this method should be used to register the services to be used in the webapp
+     */
+    protected abstract Set<Class<?>> getServiceClasses();
+
 }

@@ -1,7 +1,9 @@
 package de.fhws.fiw.fds.sutton.server.api.converter;
 
+
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
 import javax.ws.rs.core.Link;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * The XmlServerLinkConverter class provides the required functionality to serialize the {@link Link} property to the

@@ -1,0 +1,129 @@
+package de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate;
+
+import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
+import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
+import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
+import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+import de.fhws.fiw.fds.suttondemoHibernate.server.PersonLocationDao;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Location;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonDaoHibernate;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonDaoHibernateImpl;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonLocationDaoHibernate;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonLocationDaoHibernateImpl;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.datafaker.LocationDataFaker;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.datafaker.PersonDataFaker;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.LocationDB;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.PersonDB;
+
+import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class PersonLocationDaoAdapter implements PersonLocationDao {
+
+    private PersonLocationDaoHibernate dao = new PersonLocationDaoHibernateImpl();
+    private final PersonDataFaker personFaker = new PersonDataFaker();
+    private final LocationDataFaker locationFaker = new LocationDataFaker();
+
+    @Override
+    public NoContentResult create(long primaryId, Location model) {
+        LocationDB dbModel = createFrom(model);
+        NoContentResult returnValue = this.dao.create(primaryId, dbModel);
+        model.setId(dbModel.getId());
+        return returnValue;
+    }
+
+    @Override
+    public CollectionModelResult<Location> readByPredicate(long primaryId, Predicate<Location> predicate) {
+        return new CollectionModelResult<>(
+                createFrom(this.dao.readByPredicate(primaryId, locationDB -> predicate.test(createFrom(locationDB))).getResult())
+        );
+    }
+
+    // FIXME: Wo ist der Unterschied zu oben?
+    @Override
+    public CollectionModelResult<Location> readAllByPredicate(long primaryId, Predicate<Location> predicate) {
+        return new CollectionModelResult<>(
+                createFrom(this.dao.readAllByPredicate(primaryId, locationDB -> predicate.test(createFrom(locationDB))).getResult())
+        );
+    }
+
+
+    @Override
+    public void resetDatabase() {
+        // TODO
+    }
+
+    @Override
+    public void initializeDatabase() {
+        populateDatabase();
+    }
+
+    private Collection<Location> createFrom(Collection<LocationDB> models) {
+        return models.stream().map(m -> createFrom(m)).collect(Collectors.toList());
+    }
+
+    private Location createFrom(LocationDB model) {
+        final Location returnValue = new Location();
+        returnValue.setId(model.getId());
+        returnValue.setCityName(model.getCityName());
+        returnValue.setLongitude(model.getLongitude());
+        returnValue.setLatitude(model.getLatitude());
+        returnValue.setVisitedOn(model.getVisitedOn());
+        return returnValue;
+    }
+
+    private LocationDB createFrom(Location model) {
+        final LocationDB returnValue = new LocationDB();
+        returnValue.setId(model.getId());
+        returnValue.setCityName(model.getCityName());
+        returnValue.setLongitude(model.getLongitude());
+        returnValue.setLatitude(model.getLatitude());
+        returnValue.setVisitedOn(model.getVisitedOn());
+        return returnValue;
+    }
+
+    private SingleModelResult<Location> createResult(SingleModelHibernateResult<LocationDB> result) {
+        if (result.isEmpty()) {
+            return new SingleModelResult<>();
+        }
+        if (result.hasError()) {
+            final SingleModelResult<Location> returnValue = new SingleModelResult<>();
+            returnValue.setError();
+            return returnValue;
+        } else {
+            return new SingleModelResult<>(createFrom(result.getResult()));
+        }
+    }
+
+    private CollectionModelResult<Location> createResult(CollectionModelHibernateResult<LocationDB> result) {
+        if (result.hasError()) {
+            final CollectionModelResult<Location> returnValue = new CollectionModelResult<>();
+            returnValue.setError();
+            return returnValue;
+        } else {
+            final CollectionModelResult returnValue = new CollectionModelResult<>(createFrom(result.getResult()));
+            returnValue.setTotalNumberOfResult(result.getTotalNumberOfResult());
+            return returnValue;
+        }
+    }
+
+    private void populateDatabase() {
+        IntStream.range(0, 50).forEach(i -> {
+            PersonDaoHibernate personDaoHibernate = new PersonDaoHibernateImpl();
+            PersonDB personDB = createPerson();
+            personDaoHibernate.create(personDB);
+            IntStream.range(0, 25).forEach(j -> this.dao.create(personDB.getId(), createLocation()));
+        });
+    }
+
+    private PersonDB createPerson() {
+        return this.personFaker.createPerson();
+    }
+
+    private LocationDB createLocation() {
+        return this.locationFaker.createLocation();
+    }
+}

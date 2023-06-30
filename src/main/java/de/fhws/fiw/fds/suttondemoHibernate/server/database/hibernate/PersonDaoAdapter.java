@@ -129,13 +129,7 @@ public class PersonDaoAdapter implements PersonDao {
     }
 
     private void populateDatabase() {
-        /*
-         * ATTENTION:
-         *
-         * The second parameter when calling method range defines how many
-         * person resources are created at server start.
-         */
-        IntStream.range(0, 50000).forEach(i -> this.dao.create(createPerson()));
+        IntStream.range(0, 2).forEach(i -> this.dao.create(createPerson()));
     }
 
     private PersonDB createPerson() {

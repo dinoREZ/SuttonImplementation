@@ -17,6 +17,7 @@ package de.fhws.fiw.fds.suttondemoHibernate.server.api.services;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Person;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.queries.QueryByFirstAndLastName;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.person_locations.GetAllLocationsOfPerson;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.persons.*;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.utils.InitializeDatabase;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.utils.ResetDatabase;
@@ -97,6 +98,24 @@ public class PersonService extends AbstractService {
     }
 
     @GET
+    @Path( "{personId: \\d+}/locations" )
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    public Response getLocationsOfPerson( @PathParam( "personId" ) final long personId,
+                                          @DefaultValue( "" ) @QueryParam( "cityname" ) final String cityName,
+                                          @DefaultValue( "false" ) @QueryParam( "showAll" ) final boolean showAll )
+    {
+        return new GetAllLocationsOfPerson.Builder( )
+                .setParentId( personId )
+                .setQuery( new GetAllLocationsOfPerson.FilterLocationsByName( personId, showAll, cityName ) )
+                .setUriInfo( this.uriInfo )
+                .setRequest( this.request )
+                .setHttpServletRequest( this.httpServletRequest )
+                .setContext( this.context )
+                .build( )
+                .execute( );
+    }
+
+    @GET
     @Path("resetdatabase")
     @Produces({MediaType.APPLICATION_JSON})
     public Response resetDatabase() {
@@ -113,7 +132,7 @@ public class PersonService extends AbstractService {
     public Response fillDatabase() {
         System.out.println("FILL DATABASE");
 
-        InitializeDatabase.initialize();
+        InitializeDatabase.initializePersonDB();
 
         return Response.ok().build();
     }

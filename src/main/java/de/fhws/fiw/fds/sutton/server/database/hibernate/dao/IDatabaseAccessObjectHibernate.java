@@ -6,7 +6,7 @@ import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelH
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 
-public interface IDataAccessObjectHibernate<T extends AbstractDBModel> {
+public interface IDatabaseAccessObjectHibernate<T extends AbstractDBModel> {
 
     NoContentResult create(final T model);
 

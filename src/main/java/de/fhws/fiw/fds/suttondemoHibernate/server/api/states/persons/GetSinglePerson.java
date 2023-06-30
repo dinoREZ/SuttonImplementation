@@ -21,6 +21,8 @@ import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetState;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 import de.fhws.fiw.fds.suttondemoHibernate.server.DaoFactory;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Person;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.person_locations.PersonLocationRelTypes;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.person_locations.PersonLocationUri;
 
 public class GetSinglePerson extends AbstractGetState<Person> {
 
@@ -39,6 +41,12 @@ public class GetSinglePerson extends AbstractGetState<Person> {
 
     @Override
     protected void defineTransitionLinks() {
+        addLink( PersonUri.REL_PATH_ID, PersonRelTypes.UPDATE_SINGLE_PERSON, getAcceptRequestHeader( ),
+                this.requestedId );
+        addLink( PersonUri.REL_PATH_ID, PersonRelTypes.DELETE_SINGLE_PERSON, getAcceptRequestHeader( ),
+                this.requestedId );
+        addLink( PersonLocationUri.REL_PATH, PersonLocationRelTypes.CREATE_LOCATION, getAcceptRequestHeader( ),
+                this.requestedId );
     }
 
     public static class Builder extends AbstractGetStateBuilder {

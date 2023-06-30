@@ -1,19 +1,20 @@
-package de.fhws.fiw.fds.sutton.server.database.hibernate.operations;
+package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.model;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.Root;
 
-public class AbstractDeleteOperationById<T extends AbstractDBModel>
+public abstract class AbstractDeleteByIdOperation<T extends AbstractDBModel>
         extends AbstractDatabaseOperation<T, NoContentResult> {
 
     private long idToDelete;
     private Class<T> clazz;
 
-    public AbstractDeleteOperationById(EntityManagerFactory emf, Class<T> clazz, long idToDelete) {
+    public AbstractDeleteByIdOperation(EntityManagerFactory emf, Class<T> clazz, long idToDelete) {
         super(emf);
         this.clazz = clazz;
         this.idToDelete = idToDelete;

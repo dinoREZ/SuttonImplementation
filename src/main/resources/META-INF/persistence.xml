@@ -4,7 +4,10 @@
 <persistence-unit name="de.fhws.fiw.fds.suttondemoHibernate">
     <description>How to use Hibernate with Sutton</description>
     <class>de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel</class>
+    <class>de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation</class>
     <class>de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.PersonDB</class>
+    <class>de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.LocationDB</class>
+    <class>de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.PersonLocationDB</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
         <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>

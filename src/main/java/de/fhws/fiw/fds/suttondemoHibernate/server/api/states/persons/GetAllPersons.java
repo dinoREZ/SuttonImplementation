@@ -50,7 +50,7 @@ public class GetAllPersons extends AbstractGetCollectionState<Person> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(PersonUri.REL_PATH, PersonRelTypes.CREATE_PERSON, getAcceptRequestHeader());
     }
 
     public static class Builder extends AbstractGetCollectionStateBuilder<Person> {

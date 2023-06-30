@@ -105,4 +105,8 @@ public abstract class AbstractQuery<T extends AbstractModel> {
         this.pagingBehavior.addNextPageLink(pagingContext, this.result);
     }
 
+    protected Predicate<T> all( )
+    {
+        return p -> true;
+    }
 }

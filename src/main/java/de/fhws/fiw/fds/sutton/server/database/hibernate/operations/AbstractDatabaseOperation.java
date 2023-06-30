@@ -6,6 +6,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 
+import java.lang.reflect.InvocationTargetException;
+
 public abstract class AbstractDatabaseOperation<T extends AbstractDBModel, R extends AbstractResult> {
 
     protected EntityManager em;
@@ -39,7 +41,7 @@ public abstract class AbstractDatabaseOperation<T extends AbstractDBModel, R ext
         }
     }
 
-    protected abstract R run();
+    protected abstract R run() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
     protected abstract R errorResult();
 

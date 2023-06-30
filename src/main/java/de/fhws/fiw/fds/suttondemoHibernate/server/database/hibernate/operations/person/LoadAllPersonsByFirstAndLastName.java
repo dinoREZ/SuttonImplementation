@@ -1,4 +1,4 @@
-package de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations;
+package de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations.person;
 
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;

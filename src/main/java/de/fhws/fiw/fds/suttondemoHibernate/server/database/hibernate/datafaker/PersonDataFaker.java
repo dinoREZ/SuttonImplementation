@@ -7,7 +7,7 @@ import java.time.ZoneId;
 
 public class PersonDataFaker {
 
-    final private Faker faker;
+    private final Faker faker;
 
     public PersonDataFaker() {
         this.faker = new Faker();

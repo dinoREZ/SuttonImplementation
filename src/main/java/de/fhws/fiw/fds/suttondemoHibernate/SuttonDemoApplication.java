@@ -18,6 +18,7 @@ package de.fhws.fiw.fds.suttondemoHibernate;
 
 import de.fhws.fiw.fds.sutton.server.api.AbstractApplication;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.services.DispatcherService;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.services.LocationService;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.services.PersonService;
 import org.apache.catalina.loader.ParallelWebappClassLoader;
 
@@ -44,6 +45,7 @@ public class SuttonDemoApplication extends AbstractApplication {
         final Set<Class<?>> returnValue = new HashSet<>();
 
         returnValue.add(PersonService.class);
+        returnValue.add(LocationService.class);
         returnValue.add(DispatcherService.class);
 
         return returnValue;

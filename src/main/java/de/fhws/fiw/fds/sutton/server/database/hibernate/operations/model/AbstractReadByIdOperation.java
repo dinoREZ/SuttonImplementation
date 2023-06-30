@@ -1,6 +1,7 @@
-package de.fhws.fiw.fds.sutton.server.database.hibernate.operations;
+package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.model;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import jakarta.persistence.EntityManagerFactory;
 

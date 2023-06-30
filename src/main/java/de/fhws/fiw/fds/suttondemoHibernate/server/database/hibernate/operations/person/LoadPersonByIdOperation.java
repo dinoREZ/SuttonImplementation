@@ -1,6 +1,6 @@
-package de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations;
+package de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations.person;
 
-import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractReadByIdOperation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.model.AbstractReadByIdOperation;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.PersonDB;
 import jakarta.persistence.EntityManagerFactory;
 

@@ -45,7 +45,8 @@ public class PutSinglePerson extends AbstractPutState<Person> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(PersonUri.REL_PATH_ID, PersonRelTypes.GET_SINGLE_PERSON, getAcceptRequestHeader(),
+                this.modelToUpdate.getId());
     }
 
     public static class Builder extends AbstractPutStateBuilder<Person> {

@@ -1,10 +1,11 @@
-package de.fhws.fiw.fds.sutton.server.database.hibernate.operations;
+package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.model;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import jakarta.persistence.EntityManagerFactory;
 
-public class AbstractUpdateOperation<T extends AbstractDBModel>
+public abstract class AbstractUpdateOperation<T extends AbstractDBModel>
         extends AbstractDatabaseOperation<T, NoContentResult> {
 
     private T modelToUpdate;

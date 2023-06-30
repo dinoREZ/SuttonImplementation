@@ -1,6 +1,7 @@
-package de.fhws.fiw.fds.sutton.server.database.hibernate.operations;
+package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.model;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -8,7 +9,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
-public class AbstractReadAllOperation<T extends AbstractDBModel>
+public abstract class AbstractReadAllOperation<T extends AbstractDBModel>
         extends AbstractDatabaseOperation<T, CollectionModelHibernateResult<T>> {
 
     private Class<T> clazz;

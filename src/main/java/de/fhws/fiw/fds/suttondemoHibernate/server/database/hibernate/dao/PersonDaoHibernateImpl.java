@@ -5,7 +5,7 @@ import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelH
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.PersonDB;
-import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations.*;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations.person.*;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
@@ -47,7 +47,7 @@ public class PersonDaoHibernateImpl implements PersonDaoHibernate {
 
     @Override
     public NoContentResult delete(long id) {
-        return new DeletePersonByIdOperation(emf, id).start();
+        return new DeleteOperationPersonById(emf, id).start();
     }
 
 }

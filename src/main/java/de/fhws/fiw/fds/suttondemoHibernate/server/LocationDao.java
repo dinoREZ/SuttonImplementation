@@ -5,8 +5,6 @@ import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Location;
 
 public interface LocationDao extends IDatabaseAccessObject<Location> {
 
-    void resetDatabase();
-
-    void initializeDatabase();
+    //marker interface
 
 }

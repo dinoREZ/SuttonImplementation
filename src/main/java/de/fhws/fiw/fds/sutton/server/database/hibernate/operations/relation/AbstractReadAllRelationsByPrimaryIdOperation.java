@@ -21,19 +21,16 @@ public abstract class AbstractReadAllRelationsByPrimaryIdOperation<
         extends AbstractDatabaseOperation<SecondaryModel, CollectionModelHibernateResult<SecondaryModel>> {
 
     private final Class<Relation> clazzOfRelation;
-    private final Class<PrimaryModel> clazzOfPrimaryModel;
     private final long primaryId;
 
     private final java.util.function.Predicate<SecondaryModel> filter;
 
     public AbstractReadAllRelationsByPrimaryIdOperation(EntityManagerFactory emf,
                                                         Class<Relation> clazzOfRelation,
-                                                        Class<PrimaryModel> clazzOfPrimaryModel,
                                                         long primaryId,
                                                         java.util.function.Predicate<SecondaryModel> predicate) {
         super(emf);
         this.clazzOfRelation = clazzOfRelation;
-        this.clazzOfPrimaryModel = clazzOfPrimaryModel;
         this.primaryId = primaryId;
         this.filter = predicate;
     }

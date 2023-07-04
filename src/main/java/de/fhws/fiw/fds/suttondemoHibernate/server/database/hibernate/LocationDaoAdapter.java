@@ -51,17 +51,6 @@ public class LocationDaoAdapter implements LocationDao {
     }
 
     @Override
-    public void initializeDatabase() {
-        this.populateDatabase();
-    }
-
-    @Override
-    public void resetDatabase() {
-        final CollectionModelHibernateResult<LocationDB> all = this.dao.readAll();
-        all.getResult().stream().forEach(p -> this.dao.delete(p.getId()));
-    }
-
-    @Override
     public NoContentResult delete(long id) {
         return this.dao.delete(id);
     }

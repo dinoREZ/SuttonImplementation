@@ -12,7 +12,7 @@ public class LoadAllPersonLocationsOperation extends AbstractReadAllRelationsByP
 
 
     public LoadAllPersonLocationsOperation(EntityManagerFactory emf, long primaryId, Predicate<LocationDB> predicate) {
-        super(emf, PersonLocationDB.class, PersonDB.class, primaryId, predicate);
+        super(emf, PersonLocationDB.class, primaryId, predicate);
     }
 
 }

@@ -3,22 +3,25 @@ package suttondemoHibernate.getpersons;
 import de.fhws.fiw.fds.suttondemoHibernate.client.models.PersonClientModel;
 import de.fhws.fiw.fds.suttondemoHibernate.client.web.PersonWebClient;
 import de.fhws.fiw.fds.suttondemoHibernate.client.web.PersonWebResponse;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+
+// TODO adjust these tests to work with new code
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestPersonIT {
 
     private final static String BASE_URL = "http://localhost:8080/dbdemo/api/persons";
 
     private PersonWebClient client;
 
-    @Before
+    @BeforeAll
     public void set_up() throws IOException {
         this.client = new PersonWebClient();
         this.client.resetDatabaseOnServer(BASE_URL);

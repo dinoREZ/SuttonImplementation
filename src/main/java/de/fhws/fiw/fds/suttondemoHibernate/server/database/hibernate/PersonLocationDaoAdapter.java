@@ -7,10 +7,7 @@ import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 import de.fhws.fiw.fds.suttondemoHibernate.server.PersonLocationDao;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Location;
-import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonDaoHibernate;
-import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonDaoHibernateImpl;
-import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonLocationDaoHibernate;
-import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.PersonLocationDaoHibernateImpl;
+import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao.*;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.datafaker.LocationDataFaker;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.datafaker.PersonDataFaker;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.LocationDB;
@@ -36,6 +33,34 @@ public class PersonLocationDaoAdapter implements PersonLocationDao {
     }
 
     @Override
+    public NoContentResult update(long primaryId, Location model) {
+        LocationDB dbModel = createFrom(model);
+        NoContentResult returnValue = this.dao.update(primaryId, dbModel);
+        model.setId(dbModel.getId());
+        return returnValue;
+    }
+
+    @Override
+    public NoContentResult deleteRelation(long primaryId, long secondaryId) {
+        return this.dao.deleteRelation(primaryId, secondaryId);
+    }
+
+    @Override
+    public NoContentResult deleteRelationsFromPrimary(long primaryId) {
+        return this.dao.deleteRelationsFromPrimary(primaryId);
+    }
+
+    @Override
+    public NoContentResult deleteRelationsToSecondary(long secondaryId) {
+        return this.dao.deleteRelationsToSecondary(secondaryId);
+    }
+
+    @Override
+    public SingleModelResult<Location> readById(long primaryId, long secondaryId) {
+        return new SingleModelResult<>(createFrom(this.dao.readById(primaryId, secondaryId).getResult()));
+    }
+
+    @Override
     public CollectionModelResult<Location> readByPredicate(long primaryId, Predicate<Location> predicate) {
         return new CollectionModelResult<>(
                 createFrom(this.dao.readByPredicate(primaryId, locationDB -> predicate.test(createFrom(locationDB))).getResult())
@@ -50,10 +75,9 @@ public class PersonLocationDaoAdapter implements PersonLocationDao {
         );
     }
 
-
     @Override
     public void resetDatabase() {
-        // TODO
+        deleteAllDataAndRelations();
     }
 
     @Override
@@ -125,5 +149,22 @@ public class PersonLocationDaoAdapter implements PersonLocationDao {
 
     private LocationDB createLocation() {
         return this.locationFaker.createLocation();
+    }
+
+
+    private void deleteAllDataAndRelations() {
+        PersonDaoHibernate personDaoHibernate = new PersonDaoHibernateImpl();
+        LocationDaoHibernate locationDaoHibernate = new LocationDaoHibernateImpl();
+
+        personDaoHibernate.readAll().getResult().forEach(p -> {
+            this.dao.readAllByPredicate(p.getId(), locationDB -> true).getResult()
+                    .forEach(l -> {
+                        this.dao.deleteRelation(p.getId(), l.getId());
+                    });
+
+            personDaoHibernate.delete(p.getId());
+        });
+
+        locationDaoHibernate.readAll().getResult().forEach(l -> locationDaoHibernate.delete(l.getId()));
     }
 }

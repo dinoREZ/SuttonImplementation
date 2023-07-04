@@ -5,36 +5,38 @@ import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelatio
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class AbstractPersistRelationByPrimaryIdOperation<
+public abstract class AbstractDeleteAllRelationsBySecondaryIdOperation <
         PrimaryModel extends AbstractDBModel,
         SecondaryModel extends AbstractDBModel,
         Relation extends AbstractDbRelation<PrimaryModel, SecondaryModel>>
         extends AbstractDatabaseOperation<SecondaryModel, NoContentResult> {
 
     private final Class<Relation> clazzOfRelation;
-    private final Class<PrimaryModel> clazzOfPrimaryModel;
-    private final long primaryId;
-    private final SecondaryModel secondaryModel;
+    private final long secondaryId;
 
-    public AbstractPersistRelationByPrimaryIdOperation(EntityManagerFactory emf, Class<Relation> clazzOfRelation, Class<PrimaryModel> clazzOfPrimaryModel, long primaryId, SecondaryModel secondaryModel) {
+    public AbstractDeleteAllRelationsBySecondaryIdOperation(EntityManagerFactory emf, Class<Relation> clazzOfRelation, long secondaryId) {
         super(emf);
         this.clazzOfRelation = clazzOfRelation;
-        this.clazzOfPrimaryModel = clazzOfPrimaryModel;
-        this.primaryId = primaryId;
-        this.secondaryModel = secondaryModel;
+        this.secondaryId = secondaryId;
     }
 
     @Override
     protected NoContentResult run() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        PrimaryModel primaryResource = this.em.find(clazzOfPrimaryModel, primaryId);
-        this.em.persist(secondaryModel);
-        AbstractDbRelation<PrimaryModel, SecondaryModel> relation = clazzOfRelation.getDeclaredConstructor().newInstance();
-        relation.setFirstModel(primaryResource);
-        relation.setSecondModel(secondaryModel);
-        this.em.merge(relation); // merge is needed because of detached entity exception
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaDelete<Relation> delete = cb.createCriteriaDelete(this.clazzOfRelation);
+        Root<Relation> rootEntry = delete.from(this.clazzOfRelation);
+
+        Predicate firstModelIdEquals = cb.equal(rootEntry.get("dbRelationId").get("secondModelId"), this.secondaryId);
+        delete.where(firstModelIdEquals);
+        em.createQuery(delete).executeUpdate();
+
         return new NoContentResult();
     }
 

@@ -15,9 +15,10 @@
 package de.fhws.fiw.fds.suttondemoHibernate.server.api.services;
 
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Location;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Person;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.queries.QueryByFirstAndLastName;
-import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.person_locations.GetAllLocationsOfPerson;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.person_locations.*;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.persons.*;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.utils.InitializeDatabase;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.utils.ResetDatabase;
@@ -116,24 +117,70 @@ public class PersonService extends AbstractService {
     }
 
     @GET
-    @Path("resetdatabase")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response resetDatabase() {
-        System.out.println("RESET DATABASE");
-
-        ResetDatabase.reset();
-
-        return Response.ok().build();
+    @Path( "{personId: \\d+}/locations/{locationId: \\d+}" )
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    public Response getLocationByIdOfPerson( @PathParam( "personId" ) final long personId,
+                                             @PathParam( "locationId" ) final long locationId )
+    {
+        return new GetSingleLocationOfPerson.Builder( )
+                .setParentId( personId )
+                .setRequestedId( locationId )
+                .setUriInfo( this.uriInfo )
+                .setRequest( this.request )
+                .setHttpServletRequest( this.httpServletRequest )
+                .setContext( this.context )
+                .build( )
+                .execute( );
     }
 
-    @GET
-    @Path("filldatabase")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response fillDatabase() {
-        System.out.println("FILL DATABASE");
-
-        InitializeDatabase.initializePersonDB();
-
-        return Response.ok().build();
+    @POST
+    @Path( "{personId: \\d+}/locations" )
+    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    public Response createNewLocationOfPerson( @PathParam( "personId" ) final long personId, final Location location )
+    {
+        return new PostNewLocationOfPerson.Builder( )
+                .setParentId( personId )
+                .setModelToCreate( location )
+                .setUriInfo( this.uriInfo )
+                .setRequest( this.request )
+                .setHttpServletRequest( this.httpServletRequest )
+                .setContext( this.context )
+                .build( )
+                .execute( );
     }
+
+    @PUT
+    @Path( "{personId: \\d+}/locations/{locationId: \\d+}" )
+    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    public Response updateNewLocationOfPerson( @PathParam( "personId" ) final long personId,
+                                               @PathParam( "locationId" ) final long locationId, final Location location )
+    {
+        return new PutSingleLocationOfPerson.Builder( )
+                .setParentId( personId )
+                .setRequestedId( locationId )
+                .setModelToUpdate( location )
+                .setUriInfo( this.uriInfo )
+                .setRequest( this.request )
+                .setHttpServletRequest( this.httpServletRequest )
+                .setContext( this.context )
+                .build( )
+                .execute( );
+    }
+
+    @DELETE
+    @Path( "{personId: \\d+}/locations/{locationId: \\d+}" )
+    public Response deleteLocationOfPerson( @PathParam( "personId" ) final long personId,
+                                            @PathParam( "locationId" ) final long locationId )
+    {
+        return new DeleteSingleLocationOfPerson.Builder( )
+                .setParentId( personId )
+                .setRequestedId( locationId )
+                .setUriInfo( this.uriInfo )
+                .setRequest( this.request )
+                .setHttpServletRequest( this.httpServletRequest )
+                .setContext( this.context )
+                .build( )
+                .execute( );
+    }
+
 }

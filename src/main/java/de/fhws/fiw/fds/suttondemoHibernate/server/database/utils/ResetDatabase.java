@@ -4,10 +4,8 @@ import de.fhws.fiw.fds.suttondemoHibernate.server.DaoFactory;
 
 public class ResetDatabase {
 
-    public static void reset() {
-        DaoFactory.getInstance().getPersonDao().resetDatabase();
+    public static void resetAll() {
+        DaoFactory.getInstance().getPersonLocationDao().resetDatabase();
     }
-
-    // TODO add missing rests
 
 }

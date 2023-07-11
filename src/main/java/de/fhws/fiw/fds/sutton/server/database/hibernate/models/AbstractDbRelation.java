@@ -8,15 +8,16 @@ import java.io.Serializable;
 public abstract class AbstractDbRelation<A extends AbstractDBModel, B extends AbstractDBModel> {
 
     @EmbeddedId
+    @Column(name = SuttonColumnConstants.DB_RELATION_ID)
     private DbRelationId dbRelationId = new DbRelationId();
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @MapsId("firstModelId")
-    private A firstModel;
+    @MapsId(SuttonColumnConstants.PRIMARY_ID)
+    private A primaryModel;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @MapsId("secondModelId")
-    private B secondModel;
+    @MapsId(SuttonColumnConstants.SECONDARY_ID)
+    private B secondaryModel;
 
     public AbstractDbRelation() {
         // make JPA happy
@@ -31,45 +32,45 @@ public abstract class AbstractDbRelation<A extends AbstractDBModel, B extends Ab
         this.dbRelationId = dbRelationId;
     }
 
-    public A getFirstModel() {
-        return firstModel;
+    public A getPrimaryModel() {
+        return primaryModel;
     }
 
-    public void setFirstModel(A firstModel) {
-        this.firstModel = firstModel;
+    public void setPrimaryModel(A primaryModel) {
+        this.primaryModel = primaryModel;
     }
 
-    public B getSecondModel() {
-        return secondModel;
+    public B getSecondaryModel() {
+        return secondaryModel;
     }
 
-    public void setSecondModel(B secondModel) {
-        this.secondModel = secondModel;
+    public void setSecondaryModel(B secondaryModel) {
+        this.secondaryModel = secondaryModel;
     }
 
     @Embeddable
     public static class DbRelationId implements Serializable {
 
-        @Column(name = "firstModelId")
-        private long firstModelId;
+        @Column(name = SuttonColumnConstants.PRIMARY_ID)
+        private long primaryId;
 
-        @Column(name = "secondModelId")
-        private long secondModelId;
+        @Column(name = SuttonColumnConstants.SECONDARY_ID)
+        private long secondaryId;
 
-        public long getFirstModelId() {
-            return firstModelId;
+        public long getPrimaryId() {
+            return primaryId;
         }
 
-        public void setFirstModelId(long firstModelId) {
-            this.firstModelId = firstModelId;
+        public void setPrimaryId(long primaryId) {
+            this.primaryId = primaryId;
         }
 
-        public long getSecondModelId() {
-            return secondModelId;
+        public long getSecondaryId() {
+            return secondaryId;
         }
 
-        public void setSecondModelId(long secondModelId) {
-            this.secondModelId = secondModelId;
+        public void setSecondaryId(long secondaryId) {
+            this.secondaryId = secondaryId;
         }
     }
 

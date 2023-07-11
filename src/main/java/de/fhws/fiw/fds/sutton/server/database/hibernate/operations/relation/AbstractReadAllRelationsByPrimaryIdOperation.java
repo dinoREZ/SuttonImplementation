@@ -2,6 +2,7 @@ package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.relation;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import jakarta.persistence.EntityManagerFactory;
@@ -41,11 +42,11 @@ public abstract class AbstractReadAllRelationsByPrimaryIdOperation<
         CriteriaQuery<Relation> find = cb.createQuery(this.clazzOfRelation);
         Root<Relation> rootEntry = find.from(this.clazzOfRelation);
 
-        Predicate firstModelIdEquals = cb.equal(rootEntry.get("dbRelationId").get("firstModelId"), this.primaryId);
-        find.where(firstModelIdEquals);
+        Predicate primaryIdEquals = cb.equal(rootEntry.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.PRIMARY_ID), this.primaryId);
+        find.where(primaryIdEquals);
         TypedQuery<Relation> findQuery = em.createQuery(find);
         List<SecondaryModel> results = findQuery.getResultList().stream()
-                .map(r -> (SecondaryModel) r.getSecondModel())
+                .map(r -> (SecondaryModel) r.getSecondaryModel())
                 .filter(this.filter)
                 .collect(Collectors.toList());
         return new CollectionModelHibernateResult<>(results);

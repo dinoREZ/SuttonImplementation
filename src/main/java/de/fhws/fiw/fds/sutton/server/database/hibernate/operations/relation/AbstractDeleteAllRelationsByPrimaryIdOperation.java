@@ -2,6 +2,7 @@ package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.relation;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import jakarta.persistence.EntityManagerFactory;
@@ -33,8 +34,8 @@ public abstract class AbstractDeleteAllRelationsByPrimaryIdOperation<
         CriteriaDelete<Relation> delete = cb.createCriteriaDelete(this.clazzOfRelation);
         Root<Relation> rootEntry = delete.from(this.clazzOfRelation);
 
-        Predicate firstModelIdEquals = cb.equal(rootEntry.get("dbRelationId").get("firstModelId"), this.primaryId);
-        delete.where(firstModelIdEquals);
+        Predicate primaryIdEquals = cb.equal(rootEntry.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.PRIMARY_ID), this.primaryId);
+        delete.where(primaryIdEquals);
         em.createQuery(delete).executeUpdate();
 
         return new NoContentResult();

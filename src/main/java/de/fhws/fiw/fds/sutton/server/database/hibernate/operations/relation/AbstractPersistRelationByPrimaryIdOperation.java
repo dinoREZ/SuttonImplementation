@@ -29,11 +29,11 @@ public abstract class AbstractPersistRelationByPrimaryIdOperation<
 
     @Override
     protected NoContentResult run() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        PrimaryModel primaryResource = this.em.find(clazzOfPrimaryModel, primaryId);
+        PrimaryModel primaryModel = this.em.find(clazzOfPrimaryModel, primaryId);
         this.em.persist(secondaryModel);
         AbstractDbRelation<PrimaryModel, SecondaryModel> relation = clazzOfRelation.getDeclaredConstructor().newInstance();
-        relation.setFirstModel(primaryResource);
-        relation.setSecondModel(secondaryModel);
+        relation.setPrimaryModel(primaryModel);
+        relation.setSecondaryModel(secondaryModel);
         this.em.merge(relation); // merge is needed because of detached entity exception
         return new NoContentResult();
     }

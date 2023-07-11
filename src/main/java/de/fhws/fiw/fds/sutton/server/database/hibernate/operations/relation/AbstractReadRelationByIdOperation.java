@@ -2,6 +2,7 @@ package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.relation;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import jakarta.persistence.EntityManagerFactory;
@@ -34,12 +35,12 @@ public abstract class AbstractReadRelationByIdOperation<
         CriteriaQuery<Relation> find = cb.createQuery(this.clazzOfRelation);
         Root<Relation> rootEntry = find.from(this.clazzOfRelation);
 
-        Predicate firstModelIdEquals = cb.equal(rootEntry.get("dbRelationId").get("firstModelId"), this.primaryId);
-        Predicate secondModelIdEquals = cb.equal(rootEntry.get("dbRelationId").get("secondModelId"), this.secondaryId);
-        find.where(firstModelIdEquals, secondModelIdEquals);
+        Predicate primaryIdEquals = cb.equal(rootEntry.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.PRIMARY_ID), this.primaryId);
+        Predicate secondaryIdEquals = cb.equal(rootEntry.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.SECONDARY_ID), this.secondaryId);
+        find.where(primaryIdEquals, secondaryIdEquals);
 
         Optional<Relation> result = em.createQuery(find).getResultStream().findFirst();
-        return result.map(relation -> new SingleModelHibernateResult<>((SecondaryModel) relation.getSecondModel()))
+        return result.map(relation -> new SingleModelHibernateResult<>((SecondaryModel) relation.getSecondaryModel()))
                 .orElseGet(SingleModelHibernateResult::new);
     }
 

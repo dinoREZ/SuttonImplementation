@@ -2,6 +2,7 @@ package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.relation;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import jakarta.persistence.EntityManagerFactory;
@@ -40,17 +41,17 @@ public abstract class AbstractUpdateRelationByPrimaryIdOperation<
         CriteriaQuery<Relation> find = cb.createQuery(this.clazzOfRelation);
         Root<Relation> rootEntry = find.from(this.clazzOfRelation);
 
-        Predicate firstModelIdEquals = cb.equal(rootEntry.get("dbRelationId").get("firstModelId"), this.primaryId);
-        Predicate secondModelIdEquals = cb.equal(rootEntry.get("dbRelationId").get("secondModelId"), secondaryModelToUpdate.getId());
-        find.where(firstModelIdEquals, secondModelIdEquals);
+        Predicate primaryIdEquals = cb.equal(rootEntry.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.PRIMARY_ID), this.primaryId);
+        Predicate secondaryIdEquals = cb.equal(rootEntry.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.SECONDARY_ID), secondaryModelToUpdate.getId());
+        find.where(primaryIdEquals, secondaryIdEquals);
 
         Relation relationOnDB = em.createQuery(find).getResultStream().findFirst().orElse(null);
 
         if(relationOnDB == null){
             PrimaryModel primaryResource = this.em.find(clazzOfPrimaryModel, primaryId);
             AbstractDbRelation<PrimaryModel, SecondaryModel> relation = clazzOfRelation.getDeclaredConstructor().newInstance();
-            relation.setFirstModel(primaryResource);
-            relation.setSecondModel(secondaryModelToUpdate);
+            relation.setPrimaryModel(primaryResource);
+            relation.setSecondaryModel(secondaryModelToUpdate);
             this.em.merge(relation); // merge is needed because of detached entity exception
         }
 

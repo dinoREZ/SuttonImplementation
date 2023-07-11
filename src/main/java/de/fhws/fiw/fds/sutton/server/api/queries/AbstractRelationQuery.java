@@ -10,11 +10,8 @@ public abstract class AbstractRelationQuery<T extends AbstractModel> extends Abs
 
     protected long primaryId;
 
-    protected boolean showAll;
-
-    protected AbstractRelationQuery(final long primaryId, final boolean showAll) {
+    protected AbstractRelationQuery(final long primaryId) {
         this.primaryId = primaryId;
-        this.showAll = showAll;
     }
 
     public AbstractRelationQuery setPagingBehavior(final PagingBehavior pagingBehavior) {
@@ -22,7 +19,4 @@ public abstract class AbstractRelationQuery<T extends AbstractModel> extends Abs
         return this;
     }
 
-    public boolean isShowAll() {
-        return showAll;
-    }
 }

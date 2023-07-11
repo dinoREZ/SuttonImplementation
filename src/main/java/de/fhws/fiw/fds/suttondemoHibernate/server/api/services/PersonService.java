@@ -18,6 +18,7 @@ import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Location;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.models.Person;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.queries.QueryByFirstAndLastName;
+import de.fhws.fiw.fds.suttondemoHibernate.server.api.queries.QueryByLocationName;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.person_locations.*;
 import de.fhws.fiw.fds.suttondemoHibernate.server.api.states.persons.*;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.utils.InitializeDatabase;
@@ -36,7 +37,7 @@ public class PersonService extends AbstractService {
             @DefaultValue("") @QueryParam("lastname") final String lastName,
             @DefaultValue("0") @QueryParam("offset") int offset,
             @DefaultValue("20") @QueryParam("size") int size,
-            @DefaultValue( "0" ) @QueryParam( "wait" ) int waitingTime ){
+            @DefaultValue("0") @QueryParam("wait") int waitingTime) {
         return new GetAllPersons.Builder().setQuery(new QueryByFirstAndLastName(firstName, lastName, offset, size, waitingTime))
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
@@ -99,88 +100,85 @@ public class PersonService extends AbstractService {
     }
 
     @GET
-    @Path( "{personId: \\d+}/locations" )
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public Response getLocationsOfPerson( @PathParam( "personId" ) final long personId,
-                                          @DefaultValue( "" ) @QueryParam( "cityname" ) final String cityName,
-                                          @DefaultValue( "false" ) @QueryParam( "showAll" ) final boolean showAll )
-    {
-        return new GetAllLocationsOfPerson.Builder( )
-                .setParentId( personId )
-                .setQuery( new GetAllLocationsOfPerson.FilterLocationsByName( personId, showAll, cityName ) )
-                .setUriInfo( this.uriInfo )
-                .setRequest( this.request )
-                .setHttpServletRequest( this.httpServletRequest )
-                .setContext( this.context )
-                .build( )
-                .execute( );
+    @Path("{personId: \\d+}/locations")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getLocationsOfPerson(@PathParam("personId") final long personId,
+                                         @DefaultValue("") @QueryParam("cityname") final String cityName,
+                                         @DefaultValue("0") @QueryParam("offset") int offset,
+                                         @DefaultValue("20") @QueryParam("size") int size,
+                                         @DefaultValue("0") @QueryParam("wait") int waitingTime) {
+        return new GetAllLocationsOfPerson.Builder()
+                .setParentId(personId)
+                .setQuery(new QueryByLocationName(personId, cityName, offset, size, waitingTime))
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .build()
+                .execute();
     }
 
     @GET
-    @Path( "{personId: \\d+}/locations/{locationId: \\d+}" )
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public Response getLocationByIdOfPerson( @PathParam( "personId" ) final long personId,
-                                             @PathParam( "locationId" ) final long locationId )
-    {
-        return new GetSingleLocationOfPerson.Builder( )
-                .setParentId( personId )
-                .setRequestedId( locationId )
-                .setUriInfo( this.uriInfo )
-                .setRequest( this.request )
-                .setHttpServletRequest( this.httpServletRequest )
-                .setContext( this.context )
-                .build( )
-                .execute( );
+    @Path("{personId: \\d+}/locations/{locationId: \\d+}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getLocationByIdOfPerson(@PathParam("personId") final long personId,
+                                            @PathParam("locationId") final long locationId) {
+        return new GetSingleLocationOfPerson.Builder()
+                .setParentId(personId)
+                .setRequestedId(locationId)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .build()
+                .execute();
     }
 
     @POST
-    @Path( "{personId: \\d+}/locations" )
-    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public Response createNewLocationOfPerson( @PathParam( "personId" ) final long personId, final Location location )
-    {
-        return new PostNewLocationOfPerson.Builder( )
-                .setParentId( personId )
-                .setModelToCreate( location )
-                .setUriInfo( this.uriInfo )
-                .setRequest( this.request )
-                .setHttpServletRequest( this.httpServletRequest )
-                .setContext( this.context )
-                .build( )
-                .execute( );
+    @Path("{personId: \\d+}/locations")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response createNewLocationOfPerson(@PathParam("personId") final long personId, final Location location) {
+        return new PostNewLocationOfPerson.Builder()
+                .setParentId(personId)
+                .setModelToCreate(location)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .build()
+                .execute();
     }
 
     @PUT
-    @Path( "{personId: \\d+}/locations/{locationId: \\d+}" )
-    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    public Response updateNewLocationOfPerson( @PathParam( "personId" ) final long personId,
-                                               @PathParam( "locationId" ) final long locationId, final Location location )
-    {
-        return new PutSingleLocationOfPerson.Builder( )
-                .setParentId( personId )
-                .setRequestedId( locationId )
-                .setModelToUpdate( location )
-                .setUriInfo( this.uriInfo )
-                .setRequest( this.request )
-                .setHttpServletRequest( this.httpServletRequest )
-                .setContext( this.context )
-                .build( )
-                .execute( );
+    @Path("{personId: \\d+}/locations/{locationId: \\d+}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response updateNewLocationOfPerson(@PathParam("personId") final long personId,
+                                              @PathParam("locationId") final long locationId, final Location location) {
+        return new PutSingleLocationOfPerson.Builder()
+                .setParentId(personId)
+                .setRequestedId(locationId)
+                .setModelToUpdate(location)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .build()
+                .execute();
     }
 
     @DELETE
-    @Path( "{personId: \\d+}/locations/{locationId: \\d+}" )
-    public Response deleteLocationOfPerson( @PathParam( "personId" ) final long personId,
-                                            @PathParam( "locationId" ) final long locationId )
-    {
-        return new DeleteSingleLocationOfPerson.Builder( )
-                .setParentId( personId )
-                .setRequestedId( locationId )
-                .setUriInfo( this.uriInfo )
-                .setRequest( this.request )
-                .setHttpServletRequest( this.httpServletRequest )
-                .setContext( this.context )
-                .build( )
-                .execute( );
+    @Path("{personId: \\d+}/locations/{locationId: \\d+}")
+    public Response deleteLocationOfPerson(@PathParam("personId") final long personId,
+                                           @PathParam("locationId") final long locationId) {
+        return new DeleteSingleLocationOfPerson.Builder()
+                .setParentId(personId)
+                .setRequestedId(locationId)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .build()
+                .execute();
     }
 
 }

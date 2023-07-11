@@ -30,8 +30,7 @@ public class PersonDaoHibernateImpl implements PersonDaoHibernate {
 
     @Override
     public CollectionModelHibernateResult<PersonDB> readAll(SearchParameter searchParameter) {
-        /* ATTENTION: parameter searchParameter is NOT used by intention. To be done by students later. */
-        return new LoadAllPersonsOperations(emf).start();
+        return new LoadAllPersonsOperations(emf, searchParameter).start();
     }
 
     @Override

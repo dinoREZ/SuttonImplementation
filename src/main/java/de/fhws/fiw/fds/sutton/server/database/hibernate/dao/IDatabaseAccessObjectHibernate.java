@@ -13,7 +13,7 @@ public interface IDatabaseAccessObjectHibernate<T extends AbstractDBModel> {
     SingleModelHibernateResult<T> readById(final long id);
 
     default CollectionModelHibernateResult<T> readAll() {
-        return readAll(new SearchParameter());
+        return readAll(SearchParameter.DEFAULT);
     }
 
     CollectionModelHibernateResult<T> readAll(SearchParameter searchParameter);

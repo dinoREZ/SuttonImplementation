@@ -49,7 +49,7 @@ public class PagingBehaviorUsingOffsetSize<T extends AbstractModel> extends Pagi
     /**
      * the highest allowed value {@link Integer} for the page size
      */
-    public static final int DEFAULT_MAX_PAGE_SIZE = 20;
+    public static final int DEFAULT_MAX_PAGE_SIZE = Integer.MAX_VALUE;
 
     /**
      * Default name {@link String} of the size property to be used as query parameter

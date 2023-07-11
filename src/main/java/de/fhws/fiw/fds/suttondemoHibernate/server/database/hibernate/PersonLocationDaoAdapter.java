@@ -1,5 +1,6 @@
 package de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate;
 
+import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
@@ -14,7 +15,6 @@ import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.Loca
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.PersonDB;
 
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -61,18 +61,13 @@ public class PersonLocationDaoAdapter implements PersonLocationDao {
     }
 
     @Override
-    public CollectionModelResult<Location> readByPredicate(long primaryId, Predicate<Location> predicate) {
-        return new CollectionModelResult<>(
-                createFrom(this.dao.readByPredicate(primaryId, locationDB -> predicate.test(createFrom(locationDB))).getResult())
-        );
+    public CollectionModelResult<Location> readAll(long primaryId, SearchParameter searchParameter) {
+        return createResult(this.dao.readAll(primaryId, searchParameter));
     }
 
-    // FIXME: Wo ist der Unterschied zu oben?
     @Override
-    public CollectionModelResult<Location> readAllByPredicate(long primaryId, Predicate<Location> predicate) {
-        return new CollectionModelResult<>(
-                createFrom(this.dao.readAllByPredicate(primaryId, locationDB -> predicate.test(createFrom(locationDB))).getResult())
-        );
+    public CollectionModelResult<Location> readByCityName(long primaryId, String cityName, SearchParameter searchParameter) {
+        return createResult(this.dao.readByCityName(primaryId, cityName, searchParameter));
     }
 
     @Override
@@ -157,7 +152,7 @@ public class PersonLocationDaoAdapter implements PersonLocationDao {
         LocationDaoHibernate locationDaoHibernate = new LocationDaoHibernateImpl();
 
         personDaoHibernate.readAll().getResult().forEach(p -> {
-            this.dao.readAllByPredicate(p.getId(), locationDB -> true).getResult()
+            this.dao.readAll(p.getId(), SearchParameter.DEFAULT).getResult()
                     .forEach(l -> {
                         this.dao.deleteRelation(p.getId(), l.getId());
                     });

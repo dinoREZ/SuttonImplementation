@@ -70,8 +70,8 @@ public class LoadAllPersonsByFirstAndLastName extends AbstractDatabaseOperation<
     }
 
     private Predicate createPredicate(CriteriaBuilder cb, Root<PersonDB> root) {
-        final Predicate matchFirstName = cb.like(cb.lower(root.get("firstName")), this.firstName + "%");
-        final Predicate matchLastName = cb.like(cb.lower(root.get("lastName")), this.lastName + "%");
+        final Predicate matchFirstName = cb.like(cb.lower(root.get("firstName")), this.firstName.toLowerCase() + "%");
+        final Predicate matchLastName = cb.like(cb.lower(root.get("lastName")), this.lastName.toLowerCase() + "%");
         return cb.and(matchFirstName, matchLastName);
     }
 

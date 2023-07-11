@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class AbstractDbRelation<A extends AbstractDBModel, B extends AbstractDBModel> {
+public abstract class AbstractDBRelation<A extends AbstractDBModel, B extends AbstractDBModel> {
 
     @EmbeddedId
     @Column(name = SuttonColumnConstants.DB_RELATION_ID)
@@ -19,7 +19,7 @@ public abstract class AbstractDbRelation<A extends AbstractDBModel, B extends Ab
     @MapsId(SuttonColumnConstants.SECONDARY_ID)
     private B secondaryModel;
 
-    public AbstractDbRelation() {
+    public AbstractDBRelation() {
         // make JPA happy
         // also used for AbstractDBRelationOperations. Must be public.
     }

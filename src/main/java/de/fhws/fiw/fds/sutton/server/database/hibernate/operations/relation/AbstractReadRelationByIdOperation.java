@@ -1,7 +1,7 @@
 package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.relation;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
-import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBRelation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public abstract class AbstractReadRelationByIdOperation<
         PrimaryModel extends AbstractDBModel,
         SecondaryModel extends AbstractDBModel,
-        Relation extends AbstractDbRelation>
+        Relation extends AbstractDBRelation>
         extends AbstractDatabaseOperation<SecondaryModel, SingleModelHibernateResult<SecondaryModel>> {
 
     private final Class<Relation> clazzOfRelation;

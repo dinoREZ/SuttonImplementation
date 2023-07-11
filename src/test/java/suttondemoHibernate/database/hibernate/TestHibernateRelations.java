@@ -1,5 +1,6 @@
 package suttondemoHibernate.database.hibernate;
 
+import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
@@ -9,6 +10,7 @@ import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.Pers
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,7 +45,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         NoContentResult resultSaveRel = relDao.create(person.getId(), location);
         assertFalse(resultSaveRel.hasError());
 
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(1, locationResultGetAllById.getResult().size());
     }
 
@@ -71,7 +73,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         NoContentResult resultSaveRel = relDao.create(person.getId(), location);
         assertFalse(resultSaveRel.hasError());
 
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(1, locationResultGetAllByIdBeforeDeletion.getResult().size());
 
         NoContentResult resultDelete = relDao.deleteRelation(person.getId(), location.getId());
@@ -80,7 +82,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         // Only Relation should have been deleted
         CollectionModelHibernateResult<PersonDB> personResultGetAll = personDao.readAll();
         assertEquals(1, personResultGetAll.getResult().size());
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(0, locationResultGetAllById.getResult().size());
         CollectionModelHibernateResult<LocationDB> locationResultGetAll = new LocationDaoHibernateImpl().readAll();
         assertEquals(1, locationResultGetAll.getResult().size());
@@ -110,7 +112,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         NoContentResult resultSaveRel = relDao.create(person.getId(), location);
         assertFalse(resultSaveRel.hasError());
 
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(1, locationResultGetAllByIdBeforeDeletion.getResult().size());
 
         NoContentResult resultDelete = relDao.deleteRelationsFromPrimary(person.getId());
@@ -119,7 +121,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         // Only Relation should have been deleted
         CollectionModelHibernateResult<PersonDB> personResultGetAll = personDao.readAll();
         assertEquals(1, personResultGetAll.getResult().size());
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(0, locationResultGetAllById.getResult().size());
         CollectionModelHibernateResult<LocationDB> locationResultGetAll = new LocationDaoHibernateImpl().readAll();
         assertEquals(1, locationResultGetAll.getResult().size());
@@ -149,7 +151,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         NoContentResult resultSaveRel = relDao.create(person.getId(), location);
         assertFalse(resultSaveRel.hasError());
 
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(1, locationResultGetAllByIdBeforeDeletion.getResult().size());
 
         NoContentResult resultDelete = relDao.deleteRelationsToSecondary(location.getId());
@@ -158,7 +160,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         // Only Relation should have been deleted
         CollectionModelHibernateResult<PersonDB> personResultGetAll = personDao.readAll();
         assertEquals(1, personResultGetAll.getResult().size());
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(0, locationResultGetAllById.getResult().size());
         CollectionModelHibernateResult<LocationDB> locationResultGetAll = new LocationDaoHibernateImpl().readAll();
         assertEquals(1, locationResultGetAll.getResult().size());
@@ -188,7 +190,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
         NoContentResult resultSaveRel = relDao.create(person.getId(), location);
         assertFalse(resultSaveRel.hasError());
 
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdBeforeDeletion = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(1, locationResultGetAllByIdBeforeDeletion.getResult().size());
 
         SingleModelHibernateResult<LocationDB> resultGetById = relDao.readById(person.getId(), location.getId());
@@ -229,7 +231,7 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
 
         // there should be no relation
         PersonLocationDaoHibernate relDao = new PersonLocationDaoHibernateImpl();
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(0, locationResultGetAllById.getResult().size());
 
         // update location to person relation
@@ -239,7 +241,44 @@ public class TestHibernateRelations extends AbstractHibernateTestHelper {
 
         NoContentResult resultUpdate = relDao.update(person.getId(), locationInDB);
         assertFalse(resultUpdate.hasError());
-        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdAfterUpdate = relDao.readAllByPredicate(person.getId(), locationDB -> true);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllByIdAfterUpdate = relDao.readAll(person.getId(), SearchParameter.DEFAULT);
         assertEquals(1, locationResultGetAllByIdAfterUpdate.getResult().size());
+    }
+
+    @Test
+    public void test_db_read_PersonLocation_by_cityName_with_paging() throws Exception {
+        //Person
+        PersonDB person = new PersonDB();
+        person.setFirstName("James");
+        person.setLastName("Bond");
+        person.setBirthDate(LocalDate.of(1948, 7, 7));
+        person.setEmailAddress("james.bond@thws.de");
+
+        PersonDaoHibernate personDao = new PersonDaoHibernateImpl();
+        NoContentResult resultSavePerson = personDao.create(person);
+
+        assertFalse(resultSavePerson.hasError());
+
+        CollectionModelHibernateResult<PersonDB> personResultGetAll = personDao.readAll();
+        assertEquals(1, personResultGetAll.getResult().size());
+        PersonLocationDaoHibernate relDao = new PersonLocationDaoHibernateImpl();
+
+        // 25 Relations to Location
+        IntStream.range(0, 25).forEach(i -> {
+            LocationDB location = new LocationDB();
+            location.setCityName("London");
+            location.setVisitedOn(LocalDate.of(2021, 9, 30));
+            location.setLongitude(-0.118092);
+            location.setLatitude(51.509865);
+
+            NoContentResult resultSaveRel = relDao.create(person.getId(), location);
+            assertFalse(resultSaveRel.hasError());
+        });
+
+        SearchParameter searchParameter = new SearchParameter();
+        searchParameter.setSize(20);
+        CollectionModelHibernateResult<LocationDB> locationResultGetAllById = relDao.readByCityName(person.getId(), "London", searchParameter);
+        assertEquals(20, locationResultGetAllById.getResult().size());
+        assertEquals(25, locationResultGetAllById.getTotalNumberOfResult());
     }
 }

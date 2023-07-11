@@ -1,7 +1,7 @@
 package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.relation;
 
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
-import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBRelation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class AbstractUpdateRelationByPrimaryIdOperation<
         PrimaryModel extends AbstractDBModel,
         SecondaryModel extends AbstractDBModel,
-        Relation extends AbstractDbRelation<PrimaryModel, SecondaryModel>>
+        Relation extends AbstractDBRelation<PrimaryModel, SecondaryModel>>
         extends AbstractDatabaseOperation<SecondaryModel, NoContentResult> {
 
     private final Class<Relation> clazzOfRelation;
@@ -49,7 +49,7 @@ public abstract class AbstractUpdateRelationByPrimaryIdOperation<
 
         if(relationOnDB == null){
             PrimaryModel primaryResource = this.em.find(clazzOfPrimaryModel, primaryId);
-            AbstractDbRelation<PrimaryModel, SecondaryModel> relation = clazzOfRelation.getDeclaredConstructor().newInstance();
+            AbstractDBRelation<PrimaryModel, SecondaryModel> relation = clazzOfRelation.getDeclaredConstructor().newInstance();
             relation.setPrimaryModel(primaryResource);
             relation.setSecondaryModel(secondaryModelToUpdate);
             this.em.merge(relation); // merge is needed because of detached entity exception

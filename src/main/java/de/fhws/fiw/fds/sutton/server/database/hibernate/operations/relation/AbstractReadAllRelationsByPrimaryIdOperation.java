@@ -1,7 +1,8 @@
 package de.fhws.fiw.fds.sutton.server.database.hibernate.operations.relation;
 
+import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBModel;
-import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDbRelation;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBRelation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
@@ -18,22 +19,21 @@ import java.util.stream.Collectors;
 public abstract class AbstractReadAllRelationsByPrimaryIdOperation<
         PrimaryModel extends AbstractDBModel,
         SecondaryModel extends AbstractDBModel,
-        Relation extends AbstractDbRelation>
+        Relation extends AbstractDBRelation>
         extends AbstractDatabaseOperation<SecondaryModel, CollectionModelHibernateResult<SecondaryModel>> {
 
     private final Class<Relation> clazzOfRelation;
     private final long primaryId;
-
-    private final java.util.function.Predicate<SecondaryModel> filter;
+    private final SearchParameter searchParameter;
 
     public AbstractReadAllRelationsByPrimaryIdOperation(EntityManagerFactory emf,
                                                         Class<Relation> clazzOfRelation,
                                                         long primaryId,
-                                                        java.util.function.Predicate<SecondaryModel> predicate) {
+                                                        SearchParameter searchParameter) {
         super(emf);
         this.clazzOfRelation = clazzOfRelation;
         this.primaryId = primaryId;
-        this.filter = predicate;
+        this.searchParameter = searchParameter;
     }
 
     @Override
@@ -45,9 +45,13 @@ public abstract class AbstractReadAllRelationsByPrimaryIdOperation<
         Predicate primaryIdEquals = cb.equal(rootEntry.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.PRIMARY_ID), this.primaryId);
         find.where(primaryIdEquals);
         TypedQuery<Relation> findQuery = em.createQuery(find);
-        List<SecondaryModel> results = findQuery.getResultList().stream()
+        List<SecondaryModel> results = findQuery
+                .setHint("org.hibernate.cacheable", true)
+                .setFirstResult(this.searchParameter.getOffset())
+                .setMaxResults(this.searchParameter.getSize())
+                .getResultList()
+                .stream()
                 .map(r -> (SecondaryModel) r.getSecondaryModel())
-                .filter(this.filter)
                 .collect(Collectors.toList());
         return new CollectionModelHibernateResult<>(results);
     }

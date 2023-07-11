@@ -5,8 +5,6 @@ import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 
-import java.util.function.Predicate;
-
 public interface IDatabaseRelationAccessObject<T extends AbstractModel> {
 
     /**
@@ -75,22 +73,22 @@ public interface IDatabaseRelationAccessObject<T extends AbstractModel> {
     SingleModelResult<T> readById(final long primaryId, final long secondaryId);
 
     /**
-     * Searches all sub-resources linked to a primary resource, defined by the provided primaryId, using the provided predicate
+     * Searches the database for all sub-resources linked to a primary resource using the provided searchParameter
+     * to configure the paging behavior and the sorting criteria
      *
-     * @param primaryId id ({@link Long}) of the primary resource
-     * @param predicate {@link Predicate} by which the collection of the sub-resources mapped to a primary resource should be filtered
-     * @return a {@link CollectionModelResult} of all the sub-resources which satisfy the provided predicate
+     * @param searchParameter {@link SearchParameter} to set the paging behavior and the sorting criteria
+     * @return a {@link CollectionModelResult} of all resources in the database
      */
-    CollectionModelResult<T> readByPredicate(final long primaryId, final Predicate<T> predicate);
+    CollectionModelResult<T> readAll(final long primaryId, SearchParameter searchParameter);
 
     /**
-     * Searches the database for all sub-resources using to the provided predicate, no matter if they are mapped to a
-     * primary resource or not.
+     * Searches the database for all sub-resources linked to a primary resource using the provided searchParameter
+     * to configure the paging behavior and the sorting criteria
      *
-     * @param primaryId id ({@link Long}) of the primary resource
-     * @param predicate {@link Predicate} by which the database of the sub-resources should be searched
-     * @return a {@link CollectionModelResult} of all sub-resources that satisfy the provided predicate
+     * @return a {@link CollectionModelResult} of all resources in the database
      */
-    CollectionModelResult<T> readAllByPredicate(final long primaryId, final Predicate<T> predicate);
+    default CollectionModelResult<T> readAll(final long primaryId) {
+        return readAll(primaryId, SearchParameter.DEFAULT);
+    }
 
 }

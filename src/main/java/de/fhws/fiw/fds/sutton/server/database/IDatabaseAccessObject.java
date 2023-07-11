@@ -19,8 +19,6 @@ import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 
-import java.util.function.Predicate;
-
 /**
  * This interface defines the CRUD operations methods, that each model's database has to implement.
  */
@@ -47,7 +45,7 @@ public interface IDatabaseAccessObject<T extends AbstractModel> {
      * @return a {@link CollectionModelResult} of all the results in the database
      */
     default CollectionModelResult<T> readAll() {
-        return readAll(new SearchParameter());
+        return readAll(SearchParameter.DEFAULT);
     }
 
     /**

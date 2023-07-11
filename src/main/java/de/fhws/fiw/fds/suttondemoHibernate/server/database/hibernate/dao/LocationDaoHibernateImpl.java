@@ -9,7 +9,7 @@ import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations.
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class LocationDaoHibernateImpl implements LocationDaoHibernate{
+public class LocationDaoHibernateImpl implements LocationDaoHibernate {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("de.fhws.fiw.fds.suttondemoHibernate");
 
@@ -29,8 +29,7 @@ public class LocationDaoHibernateImpl implements LocationDaoHibernate{
 
     @Override
     public CollectionModelHibernateResult<LocationDB> readAll(SearchParameter searchParameter) {
-        /* ATTENTION: parameter searchParameter is NOT used by intention. To be done by students later. */
-        return new LoadAllLocationsOperations(emf).start();
+        return new LoadAllLocationsOperations(emf, searchParameter).start();
     }
 
     @Override

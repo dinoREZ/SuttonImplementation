@@ -1,17 +1,17 @@
 package de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.dao;
 
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.IDatabaseConnection;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.models.LocationDB;
 import de.fhws.fiw.fds.suttondemoHibernate.server.database.hibernate.operations.location.*;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 public class LocationDaoHibernateImpl implements LocationDaoHibernate {
 
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("de.fhws.fiw.fds.suttondemoHibernate");
+    private static final EntityManagerFactory emf = IDatabaseConnection.SUTTON_EMF;
 
     public LocationDaoHibernateImpl() {
         super();

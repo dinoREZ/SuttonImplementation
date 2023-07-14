@@ -17,6 +17,7 @@
 package de.fhws.fiw.fds.sutton.server.api.states;
 
 import de.fhws.fiw.fds.sutton.server.api.hyperlinks.Hyperlinks;
+import de.fhws.fiw.fds.sutton.server.api.rateLimiting.RateLimiter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -42,6 +43,8 @@ public abstract class AbstractState {
 
     protected Response.ResponseBuilder responseBuilder;
 
+    private RateLimiter rateLimiter;
+
     /**
      * This constructor instantiates an instance of the AbstractState class using the builder pattern
      */
@@ -50,6 +53,7 @@ public abstract class AbstractState {
         this.httpServletRequest = builder.httpServletRequest;
         this.request = builder.request;
         this.context = builder.context;
+        this.rateLimiter = builder.rateLimiter != null ? builder.rateLimiter : RateLimiter.DEFAULT;
         this.responseBuilder = Response.ok();
     }
 
@@ -60,7 +64,7 @@ public abstract class AbstractState {
      */
     public final Response execute() {
         try {
-            return buildInternal();
+            return buildInternalWithRateLimiter();
         } catch (final WebApplicationException f) {
             throw f;
         } catch (final Exception e) {
@@ -69,6 +73,31 @@ public abstract class AbstractState {
             return this.responseBuilder.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build();
         }
+    }
+
+    /**
+     * This adds the {@link RateLimiter}-Logic and checks if the request is allowed.
+     *
+     * @return the response sent back to the client
+     */
+    private Response buildInternalWithRateLimiter() {
+        String apiKey = getApiKeyFromRequest();
+        if (rateLimiter.isRequestAllowed(apiKey)) {
+            return buildInternal();
+        } else {
+            throw new WebApplicationException(Response.status(Response.Status.TOO_MANY_REQUESTS)
+                    .entity("Rate limit exceeded for API key: " + apiKey)
+                    .build());
+        }
+    }
+
+    /**
+     * This reads the API-Key from the header of the {@link HttpServletRequest}.
+     *
+     * @return the API-Key String of the header
+     */
+    private String getApiKeyFromRequest() {
+        return httpServletRequest.getHeader("API-Key");
     }
 
     /**
@@ -146,6 +175,8 @@ public abstract class AbstractState {
 
         protected ContainerRequestContext context;
 
+        protected RateLimiter rateLimiter;
+
         public AbstractStateBuilder setUriInfo(final UriInfo uriInfo) {
             this.uriInfo = uriInfo;
             return this;
@@ -163,6 +194,11 @@ public abstract class AbstractState {
 
         public AbstractStateBuilder setContext(final ContainerRequestContext context) {
             this.context = context;
+            return this;
+        }
+
+        public AbstractStateBuilder setRateLimiter(final RateLimiter rateLimiter) {
+            this.rateLimiter = rateLimiter;
             return this;
         }
 

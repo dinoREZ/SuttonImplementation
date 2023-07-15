@@ -31,168 +31,156 @@ import java.net.URI;
  *
  * <p>Each extending state class has to define a builder class, which must extend
  * {@link AbstractPutState.AbstractPutStateBuilder}</p>
- * */
-public abstract class AbstractPutState<T extends AbstractModel> extends AbstractState
-{
-	/**
-	 * The updated model {@link AbstractModel} to save in the database
-	 * */
-	protected T modelToUpdate;
+ */
+public abstract class AbstractPutState<T extends AbstractModel> extends AbstractState {
 
-	/**
-	 * The id {@link Long} from the request of the resource to be updated
-	 * */
-	protected long requestedId;
+    /**
+     * The updated model {@link AbstractModel} to save in the database
+     */
+    protected T modelToUpdate;
 
-	/**
-	 * The result {@link SingleModelResult} of searching the model to be updated in the database
-	 * */
-	protected SingleModelResult<T> resultAfterGet;
+    /**
+     * The id {@link Long} from the request of the resource to be updated
+     */
+    protected long requestedId;
 
-	/**
-	 * The model {@link AbstractModel} from the result of searching the model to update in the database
-	 * */
-	protected T storedModel;
+    /**
+     * The result {@link SingleModelResult} of searching the model to be updated in the database
+     */
+    protected SingleModelResult<T> resultAfterGet;
 
-	/**
-	 * The result {@link NoContentResult} of updating the model in the database
-	 * */
-	protected NoContentResult resultAfterUpdate;
+    /**
+     * The model {@link AbstractModel} from the result of searching the model to update in the database
+     */
+    protected T storedModel;
 
-	protected AbstractPutState( final AbstractPutStateBuilder<T> builder )
-	{
-		super( builder );
-		this.requestedId = builder.requestedId;
-		this.modelToUpdate = builder.modelToUpdate;
-	}
+    /**
+     * The result {@link NoContentResult} of updating the model in the database
+     */
+    protected NoContentResult resultAfterUpdate;
 
-	@Override
-	protected Response buildInternal( )
-	{
-		configureState( );
+    protected AbstractPutState(final AbstractPutStateBuilder<T> builder) {
+        super(builder);
+        this.requestedId = builder.requestedId;
+        this.modelToUpdate = builder.modelToUpdate;
+    }
 
-		authorizeRequest( );
+    @Override
+    protected Response buildInternal() {
+        configureState();
 
-		if ( this.requestedId != this.modelToUpdate.getId( ) )
-		{
-			return Response.status( Response.Status.BAD_REQUEST ).build( );
-		}
+        authorizeRequest();
 
-		this.resultAfterGet = loadModel( );
+        if (this.requestedId != this.modelToUpdate.getId()) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
 
-		if ( this.resultAfterGet.isEmpty( ) )
-		{
-			return Response.status( Response.Status.NOT_FOUND ).build( );
-		}
+        this.resultAfterGet = loadModel();
 
-		this.storedModel = this.resultAfterGet.getResult( );
+        if (this.resultAfterGet.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
-		if ( clientDoesNotKnowCurrentModelState( this.storedModel ) )
-		{
-			return Response.status( Response.Status.PRECONDITION_FAILED ).build( );
-		}
+        this.storedModel = this.resultAfterGet.getResult();
 
-		this.resultAfterUpdate = updateModel( );
+        if (clientDoesNotKnowCurrentModelState(this.storedModel)) {
+            return Response.status(Response.Status.PRECONDITION_FAILED).build();
+        }
 
-		if ( this.resultAfterUpdate.hasError( ) )
-		{
-			return Response.serverError( ).build( );
-		}
+        this.resultAfterUpdate = updateModel();
 
-		return createResponse( );
-	}
+        if (this.resultAfterUpdate.hasError()) {
+            return Response.serverError().build();
+        }
 
-	/**
-	 * This method should be used to prove if the user is allowed to update an existing model
-	 * */
-	protected abstract void authorizeRequest( );
+        return createResponse();
+    }
 
-	/**
-	 * Extending classes should use this method to load the model to update from the database
-	 * */
-	protected abstract SingleModelResult<T> loadModel( );
+    /**
+     * This method should be used to prove if the user is allowed to update an existing model
+     */
+    protected abstract void authorizeRequest();
 
-	/**
-	 * Returns true if the user doesn't have the most recent version of the model
-	 * @param modelFromDatabase the model from the database so that the user can compare it with
-	 *                          the model, the user knows about
-	 * */
-	protected boolean clientDoesNotKnowCurrentModelState( final AbstractModel modelFromDatabase )
-	{
-		return false;
-	}
+    /**
+     * Extending classes should use this method to load the model to update from the database
+     */
+    protected abstract SingleModelResult<T> loadModel();
 
-	/**
-	 * Extending classes should use this method to implement the updating mechanism of the model in the database
-	 * @return the result {@link NoContentResult} of updating the model in the database
-	 * */
-	protected abstract NoContentResult updateModel( );
+    /**
+     * Returns true if the user doesn't have the most recent version of the model
+     *
+     * @param modelFromDatabase the model from the database so that the user can compare it with
+     *                          the model, the user knows about
+     */
+    protected boolean clientDoesNotKnowCurrentModelState(final AbstractModel modelFromDatabase) {
+        return false;
+    }
 
-	protected Response createResponse( )
-	{
-		defineResponseStatus( );
+    /**
+     * Extending classes should use this method to implement the updating mechanism of the model in the database
+     *
+     * @return the result {@link NoContentResult} of updating the model in the database
+     */
+    protected abstract NoContentResult updateModel();
 
-		defineHttpCaching( );
+    protected Response createResponse() {
+        defineResponseStatus();
 
-		defineHttpResponseBody( );
+        defineHttpCaching();
 
-		defineSelfLink( );
+        defineHttpResponseBody();
 
-		defineTransitionLinks( );
+        defineSelfLink();
 
-		return this.responseBuilder.build( );
-	}
+        defineTransitionLinks();
 
-	private void defineResponseStatus( )
-	{
-		this.responseBuilder.status( Response.Status.NO_CONTENT );
-	}
+        return this.responseBuilder.build();
+    }
 
-	/**
-	 * This method is used to configure the cashing behavior. It could be used to solve the lost update problem when
-	 * multiple clients attempt to update the same resource at the same time.
-	 * */
-	protected void defineHttpCaching( )
-	{
+    private void defineResponseStatus() {
+        this.responseBuilder.status(Response.Status.NO_CONTENT);
+    }
 
-	}
+    /**
+     * This method is used to configure the cashing behavior. It could be used to solve the lost update problem when
+     * multiple clients attempt to update the same resource at the same time.
+     */
+    protected void defineHttpCaching() {
 
-	private void defineHttpResponseBody( )
-	{
-		this.responseBuilder.entity( "" );
-	}
+    }
 
-	/**
-	 * This method is used to define all transition links based on the idea of a REST system as
-	 * a finite state machine.
-	 */
-	protected abstract void defineTransitionLinks( );
+    private void defineHttpResponseBody() {
+        this.responseBuilder.entity("");
+    }
 
-	protected void defineSelfLink( )
-	{
-		final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder( );
-		final URI self = builder.build( );
+    /**
+     * This method is used to define all transition links based on the idea of a REST system as
+     * a finite state machine.
+     */
+    protected abstract void defineTransitionLinks();
 
-		this.responseBuilder.link( self, "self" );
-	}
+    protected void defineSelfLink() {
+        final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder();
+        final URI self = builder.build();
 
-	public static abstract class AbstractPutStateBuilder<T extends AbstractModel>
-		extends AbstractState.AbstractStateBuilder
-	{
-		protected long requestedId;
+        this.responseBuilder.link(self, "self");
+    }
 
-		protected T modelToUpdate;
+    public static abstract class AbstractPutStateBuilder<T extends AbstractModel>
+            extends AbstractState.AbstractStateBuilder {
+        protected long requestedId;
 
-		public AbstractPutStateBuilder setRequestedId( final long requestedId )
-		{
-			this.requestedId = requestedId;
-			return this;
-		}
+        protected T modelToUpdate;
 
-		public AbstractPutStateBuilder setModelToUpdate( final T modelToUpdate )
-		{
-			this.modelToUpdate = modelToUpdate;
-			return this;
-		}
-	}
+        public AbstractPutStateBuilder setRequestedId(final long requestedId) {
+            this.requestedId = requestedId;
+            return this;
+        }
+
+        public AbstractPutStateBuilder setModelToUpdate(final T modelToUpdate) {
+            this.modelToUpdate = modelToUpdate;
+            return this;
+        }
+    }
+
 }

@@ -26,80 +26,87 @@ import java.util.function.Predicate;
 /**
  * the AbstractQuery class is used to set the paging behavior to be used, when the amount of the requested resources
  * is too big to be returned in a single response. The AbstractQuery class sets also the paging links accordingly
- * */
+ */
 public abstract class AbstractQuery<T extends AbstractModel> {
 
-	/**
-	 * The resulting data {@link CollectionModelResult} from querying the storage to be returned to the client
-	 * */
-	protected CollectionModelResult<T> result;
+    /**
+     * The resulting data {@link CollectionModelResult} from querying the storage to be returned to the client
+     */
+    protected CollectionModelResult<T> result;
 
-	/**
-	 * The paging behavior {@link PagingBehavior}  through which the resulting data should be organized and sent back to the client in the response
-	 * */
-	protected PagingBehavior pagingBehavior = new OnePageWithAllResults();
+    /**
+     * The paging behavior {@link PagingBehavior}  through which the resulting data should be organized and sent back to the client in the response
+     */
+    protected PagingBehavior pagingBehavior = new OnePageWithAllResults();
 
-	/**
-	 * Default constructor to instantiate an AbstractQuery
-	 * */
-	protected AbstractQuery() {
-	}
+    /**
+     * Default constructor to instantiate an AbstractQuery
+     */
+    protected AbstractQuery() {
+    }
 
-	/**
-	 * Sets the paging behavior of the AbstractQuery to the given one
-	 * @param pagingBehavior - {@link PagingBehavior} the paging behavior to be used
-	 * @return the same AbstractQuery object, on which the method was called
-	 * */
-	public AbstractQuery setPagingBehavior(final PagingBehavior pagingBehavior) {
-		this.pagingBehavior = pagingBehavior;
-		return this;
-	}
+    /**
+     * Sets the paging behavior of the AbstractQuery to the given one
+     *
+     * @param pagingBehavior - {@link PagingBehavior} the paging behavior to be used
+     * @return the same AbstractQuery object, on which the method was called
+     */
+    public AbstractQuery setPagingBehavior(final PagingBehavior pagingBehavior) {
+        this.pagingBehavior = pagingBehavior;
+        return this;
+    }
 
-	public final CollectionModelResult<T> startQuery() {
-		/*
-		 * DON'T OPTIMIZE THE FOLLOWING TWO LINES. WE NEED THE RESULT IN OTHER METHODS
-		 * LATER.
-		 */
-		this.result = executeQuery();
-		return this.result;
-	}
+    public final CollectionModelResult<T> startQuery() {
+        /*
+         * DON'T OPTIMIZE THE FOLLOWING TWO LINES. WE NEED THE RESULT IN OTHER METHODS
+         * LATER.
+         */
+        this.result = executeQuery();
+        return this.result;
+    }
 
-	protected CollectionModelResult<T> executeQuery() {
-		CollectionModelResult<T> result;
+    protected CollectionModelResult<T> executeQuery() {
+        CollectionModelResult<T> result;
 
-		try {
-			final SearchParameter searchParameter = new SearchParameter();
-			searchParameter.setOffset(this.pagingBehavior.getOffset());
-			searchParameter.setSize(this.pagingBehavior.getSize());
+        try {
+            final SearchParameter searchParameter = new SearchParameter();
+            searchParameter.setOffset(this.pagingBehavior.getOffset());
+            searchParameter.setSize(this.pagingBehavior.getSize());
 
-			result = doExecuteQuery(searchParameter);
-		} catch (final DatabaseException e) {
-			result = new CollectionModelResult<>();
-		}
+            result = doExecuteQuery(searchParameter);
+        } catch (final DatabaseException e) {
+            result = new CollectionModelResult<>();
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Extending classes should use this method to define the query to fetch the data
-	 * from the database
-	 * @param searchParameter {@link SearchParameter} the parameter to be used to search for matching results
-	 *                                               in the database
-	 * @return a {@link CollectionModelResult} of the fetched data from the database
-	 * @throws DatabaseException
-	 * */
-	protected abstract CollectionModelResult<T> doExecuteQuery(SearchParameter searchParameter)
-			throws DatabaseException;
+    /**
+     * Extending classes should use this method to define the query to fetch the data
+     * from the database
+     *
+     * @param searchParameter {@link SearchParameter} the parameter to be used to search for matching results
+     *                        in the database
+     * @return a {@link CollectionModelResult} of the fetched data from the database
+     * @throws DatabaseException
+     */
+    protected abstract CollectionModelResult<T> doExecuteQuery(SearchParameter searchParameter)
+            throws DatabaseException;
 
-	public final void addSelfLink(final PagingContext pagingContext) {
-		this.pagingBehavior.addSelfLink(pagingContext);
-	}
+    public final void addSelfLink(final PagingContext pagingContext) {
+        this.pagingBehavior.addSelfLink(pagingContext);
+    }
 
-	public final void addPrevPageLink(final PagingContext pagingContext) {
-		this.pagingBehavior.addPrevPageLink(pagingContext);
-	}
+    public final void addPrevPageLink(final PagingContext pagingContext) {
+        this.pagingBehavior.addPrevPageLink(pagingContext);
+    }
 
-	public final void addNextPageLink(final PagingContext pagingContext) {
-		this.pagingBehavior.addNextPageLink(pagingContext, this.result);
-	}
+    public final void addNextPageLink(final PagingContext pagingContext) {
+        this.pagingBehavior.addNextPageLink(pagingContext, this.result);
+    }
+
+    protected Predicate<T> all( )
+    {
+        return p -> true;
+    }
 }

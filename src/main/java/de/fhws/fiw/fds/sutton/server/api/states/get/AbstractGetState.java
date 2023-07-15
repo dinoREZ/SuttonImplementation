@@ -31,129 +31,119 @@ import java.net.URI;
  *
  * <p>Each extending state class has to define a builder class, which must extend
  * {@link AbstractGetState.AbstractGetStateBuilder}.</p>
- * */
-public abstract class AbstractGetState<T extends AbstractModel> extends AbstractState
-{
-	/**
-	 * id {@link Long} of the model to be searched in the database
-	 * */
-	protected long requestedId;
+ */
+public abstract class AbstractGetState<T extends AbstractModel> extends AbstractState {
 
-	/**
-	 * The result {@link SingleModelResult} of searching the model in the database
-	 * */
-	protected SingleModelResult<T> requestedModel;
+    /**
+     * id {@link Long} of the model to be searched in the database
+     */
+    protected long requestedId;
 
-	public AbstractGetState( final AbstractGetStateBuilder builder )
-	{
-		super( builder );
-		this.requestedId = builder.requestedId;
-	}
+    /**
+     * The result {@link SingleModelResult} of searching the model in the database
+     */
+    protected SingleModelResult<T> requestedModel;
 
-	@Override
-	protected Response buildInternal( )
-	{
-		configureState( );
+    public AbstractGetState(final AbstractGetStateBuilder builder) {
+        super(builder);
+        this.requestedId = builder.requestedId;
+    }
 
-		authorizeRequest( );
+    @Override
+    protected Response buildInternal() {
+        configureState();
 
-		this.requestedModel = loadModel( );
+        authorizeRequest();
 
-		if ( this.requestedModel.hasError( ) )
-		{
-			return Response.serverError( )
-						   .build( );
-		}
+        this.requestedModel = loadModel();
 
-		if ( this.requestedModel.isEmpty( ) )
-		{
-			return Response.status( Response.Status.NOT_FOUND )
-						   .build( );
-		}
+        if (this.requestedModel.hasError()) {
+            return Response.serverError()
+                    .build();
+        }
 
-		if ( clientKnowsCurrentModelState( this.requestedModel.getResult( ) ) )
-		{
-			return Response.notModified( ).build( );
-		}
+        if (this.requestedModel.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .build();
+        }
 
-		this.responseBuilder = Response.ok( );
+        if (clientKnowsCurrentModelState(this.requestedModel.getResult())) {
+            return Response.notModified().build();
+        }
 
-		return createResponse( );
-	}
+        this.responseBuilder = Response.ok();
 
-	/**
-	 * This method should be used to prove if the user is allowed to request a model
-	 * */
-	protected abstract void authorizeRequest( );
+        return createResponse();
+    }
 
-	/**
-	 * Extending classes should use this method to implement the loading of the requested resource from the database
-	 * */
-	protected abstract SingleModelResult<T> loadModel( );
+    /**
+     * This method should be used to prove if the user is allowed to request a model
+     */
+    protected abstract void authorizeRequest();
 
-	/**
-	 * Returns true if the user doesn't have the most recent version of the model
-	 * @param modelFromDatabase the model from the database so that the user can compare it with
-	 *                          the model, the user knows about
-	 * */
-	protected boolean clientKnowsCurrentModelState( final AbstractModel modelFromDatabase )
-	{
-		return false;
-	}
+    /**
+     * Extending classes should use this method to implement the loading of the requested resource from the database
+     */
+    protected abstract SingleModelResult<T> loadModel();
 
-	protected Response createResponse( )
-	{
-		defineHttpResponseBody( );
+    /**
+     * Returns true if the user doesn't have the most recent version of the model
+     *
+     * @param modelFromDatabase the model from the database so that the user can compare it with
+     *                          the model, the user knows about
+     */
+    protected boolean clientKnowsCurrentModelState(final AbstractModel modelFromDatabase) {
+        return false;
+    }
 
-		defineHttpCaching( );
+    protected Response createResponse() {
+        defineHttpResponseBody();
 
-		defineSelfLink( );
+        defineHttpCaching();
 
-		defineTransitionLinks( );
+        defineSelfLink();
 
-		return this.responseBuilder.build( );
-	}
+        defineTransitionLinks();
 
-	protected void defineHttpResponseBody( )
-	{
-		this.responseBuilder.entity( this.requestedModel.getResult( ) );
-	}
+        return this.responseBuilder.build();
+    }
 
-	/**
-	 * This method is used to define the caching behavior. It could also be used to inform the client that the requested
-	 * resource hasn't been modified using the Etag or the last-modified mechanism. In this case this method should
-	 * return a response with the status 304.
-	 * */
-	protected void defineHttpCaching( )
-	{
+    protected void defineHttpResponseBody() {
+        this.responseBuilder.entity(this.requestedModel.getResult());
+    }
 
-	}
+    /**
+     * This method is used to define the caching behavior. It could also be used to inform the client that the requested
+     * resource hasn't been modified using the Etag or the last-modified mechanism. In this case this method should
+     * return a response with the status 304.
+     */
+    protected void defineHttpCaching() {
 
-	/**
-	 * This method is used to define all transition links based on the idea of a REST system as
-	 * a finite state machine.
-	 */
-	protected abstract void defineTransitionLinks( );
+    }
 
-	protected void defineSelfLink( )
-	{
-		final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder( );
-		final URI self = builder.build( );
+    /**
+     * This method is used to define all transition links based on the idea of a REST system as
+     * a finite state machine.
+     */
+    protected abstract void defineTransitionLinks();
 
-		Hyperlinks.addLink( this.responseBuilder, self, "self", getAcceptRequestHeader( ) );
-	}
+    protected void defineSelfLink() {
+        final UriBuilder builder = this.uriInfo.getAbsolutePathBuilder();
+        final URI self = builder.build();
 
-	public static abstract class AbstractGetStateBuilder extends AbstractState.AbstractStateBuilder
-	{
-		/**
-		 * id {@link Long} of the model to be searched in the database
-		 * */
-		protected long requestedId;
+        Hyperlinks.addLink(this.responseBuilder, self, "self", getAcceptRequestHeader());
+    }
 
-		public AbstractGetStateBuilder setRequestedId( final long requestedId )
-		{
-			this.requestedId = requestedId;
-			return this;
-		}
-	}
+    public static abstract class AbstractGetStateBuilder extends AbstractState.AbstractStateBuilder {
+        /**
+         * id {@link Long} of the model to be searched in the database
+         */
+        protected long requestedId;
+
+        public AbstractGetStateBuilder setRequestedId(final long requestedId) {
+            this.requestedId = requestedId;
+            return this;
+        }
+    }
+
 }

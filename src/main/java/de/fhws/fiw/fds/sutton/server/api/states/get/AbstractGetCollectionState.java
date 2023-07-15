@@ -30,144 +30,131 @@ import javax.ws.rs.core.Response;
  *
  * <p>Each extending state class has to define a builder class, which must extend
  * {@link AbstractGetCollectionState.AbstractGetCollectionStateBuilder}.</p>
- * */
-public abstract class AbstractGetCollectionState<T extends AbstractModel> extends AbstractState
-{
-	/**
-	 * The header name {@link String} of the total number of results found in the database to be sent in
-	 * the response to the client
-	 * */
-	public static final String HEADER_TOTALNUMBEROFRESULTS = "X-totalnumberofresults";
+ */
+public abstract class AbstractGetCollectionState<T extends AbstractModel> extends AbstractState {
 
-	/**
-	 * The header name {@link String} for the number of the results in the current response page
-	 * */
-	public static final String HEADER_NUMBEROFRESULTS = "X-numberofresults";
+    /**
+     * The header name {@link String} of the total number of results found in the database to be sent in
+     * the response to the client
+     */
+    public static final String HEADER_TOTALNUMBEROFRESULTS = "X-totalnumberofresults";
 
-	/**
-	 * The query {@link AbstractQuery} to be used to fetch the resources from the database and to set the paging
-	 * behavior
-	 * */
-	protected AbstractQuery<T> query;
+    /**
+     * The header name {@link String} for the number of the results in the current response page
+     */
+    public static final String HEADER_NUMBEROFRESULTS = "X-numberofresults";
 
-	/**
-	 * the collection {@link CollectionModelResult} of the requested resources to be sent to the client
-	 * */
-	protected CollectionModelResult<T> result;
+    /**
+     * The query {@link AbstractQuery} to be used to fetch the resources from the database and to set the paging
+     * behavior
+     */
+    protected AbstractQuery<T> query;
 
-	protected AbstractGetCollectionState( final AbstractGetCollectionStateBuilder<T> builder )
-	{
-		super( builder );
-		this.query = builder.query;
-	}
+    /**
+     * the collection {@link CollectionModelResult} of the requested resources to be sent to the client
+     */
+    protected CollectionModelResult<T> result;
 
-	@Override
-	protected Response buildInternal( )
-	{
-		configureState( );
+    protected AbstractGetCollectionState(final AbstractGetCollectionStateBuilder<T> builder) {
+        super(builder);
+        this.query = builder.query;
+    }
 
-		authorizeRequest( );
+    @Override
+    protected Response buildInternal() {
+        configureState();
 
-		this.result = loadModels( );
+        authorizeRequest();
 
-		if ( this.result.hasError( ) )
-		{
-			return Response.serverError( )
-						   .build( );
-		}
+        this.result = loadModels();
 
-		return createResponse( );
-	}
+        if (this.result.hasError()) {
+            return Response.serverError()
+                    .build();
+        }
 
-	/**
-	 * This method should be used to prove if the user is allowed to request a model
-	 * */
-	protected abstract void authorizeRequest( );
+        return createResponse();
+    }
 
-	/**
-	 * Extending classes should use this method to implement the loading of the requested resources
-	 * from the database
-	 * */
-	protected final CollectionModelResult<T> loadModels( )
-	{
-		return this.query.startQuery( );
-	}
+    /**
+     * This method should be used to prove if the user is allowed to request a model
+     */
+    protected abstract void authorizeRequest();
 
-	protected Response createResponse( )
-	{
-		defineHttpHeaderTotalNumberOfResults( );
+    /**
+     * Extending classes should use this method to implement the loading of the requested resources
+     * from the database
+     */
+    protected final CollectionModelResult<T> loadModels() {
+        return this.query.startQuery();
+    }
 
-		defineHttpHeaderNumberOfResults( );
+    protected Response createResponse() {
+        defineHttpHeaderTotalNumberOfResults();
 
-		defineHttpResponseBody( );
+        defineHttpHeaderNumberOfResults();
 
-		defineSelfLink( );
+        defineHttpResponseBody();
 
-		definePagingLinks( );
+        defineSelfLink();
 
-		defineTransitionLinks( );
+        definePagingLinks();
 
-		return this.responseBuilder.build( );
-	}
+        defineTransitionLinks();
 
-	protected void defineHttpHeaderTotalNumberOfResults( )
-	{
-		this.responseBuilder.header( getHeaderForTotalNumberOfResults( ), this.result.getTotalNumberOfResult( ) );
-	}
+        return this.responseBuilder.build();
+    }
 
-	protected String getHeaderForTotalNumberOfResults( )
-	{
-		return HEADER_TOTALNUMBEROFRESULTS;
-	}
+    protected void defineHttpHeaderTotalNumberOfResults() {
+        this.responseBuilder.header(getHeaderForTotalNumberOfResults(), this.result.getTotalNumberOfResult());
+    }
 
-	/**
-	 * Extending classes should use this method to set the body of the response.
-	 * */
-	protected abstract void defineHttpResponseBody( );
+    protected String getHeaderForTotalNumberOfResults() {
+        return HEADER_TOTALNUMBEROFRESULTS;
+    }
 
-	protected void defineHttpHeaderNumberOfResults( )
-	{
-		this.responseBuilder.header( getHeaderForNumberOfResults( ), this.result.getResult( ).size( ) );
-	}
+    /**
+     * Extending classes should use this method to set the body of the response.
+     */
+    protected abstract void defineHttpResponseBody();
 
-	protected String getHeaderForNumberOfResults( )
-	{
-		return HEADER_NUMBEROFRESULTS;
-	}
+    protected void defineHttpHeaderNumberOfResults() {
+        this.responseBuilder.header(getHeaderForNumberOfResults(), this.result.getResult().size());
+    }
 
-	/**
-	 * This method is used to define all transition links based on the idea of a REST system as
-	 * a finite state machine.
-	 */
-	protected abstract void defineTransitionLinks( );
+    protected String getHeaderForNumberOfResults() {
+        return HEADER_NUMBEROFRESULTS;
+    }
 
-	protected void definePagingLinks( )
-	{
-		final PagingContext pagingContext = createPagingContext( );
+    /**
+     * This method is used to define all transition links based on the idea of a REST system as
+     * a finite state machine.
+     */
+    protected abstract void defineTransitionLinks();
 
-		this.query.addPrevPageLink( pagingContext );
-		this.query.addNextPageLink( pagingContext );
-	}
+    protected void definePagingLinks() {
+        final PagingContext pagingContext = createPagingContext();
 
-	protected void defineSelfLink( )
-	{
-		this.query.addSelfLink( createPagingContext( ) );
-	}
+        this.query.addPrevPageLink(pagingContext);
+        this.query.addNextPageLink(pagingContext);
+    }
 
-	private PagingContext createPagingContext( )
-	{
-		return new PagingContext( this.uriInfo, this.responseBuilder, getAcceptRequestHeader( ) );
-	}
+    protected void defineSelfLink() {
+        this.query.addSelfLink(createPagingContext());
+    }
 
-	public static abstract class AbstractGetCollectionStateBuilder<T extends AbstractModel>
-		extends AbstractStateBuilder
-	{
-		protected AbstractQuery<T> query;
+    private PagingContext createPagingContext() {
+        return new PagingContext(this.uriInfo, this.responseBuilder, getAcceptRequestHeader());
+    }
 
-		public AbstractGetCollectionStateBuilder setQuery( final AbstractQuery<T> query )
-		{
-			this.query = query;
-			return this;
-		}
-	}
+    public static abstract class AbstractGetCollectionStateBuilder<T extends AbstractModel>
+            extends AbstractStateBuilder {
+        protected AbstractQuery<T> query;
+
+        public AbstractGetCollectionStateBuilder setQuery(final AbstractQuery<T> query) {
+            this.query = query;
+            return this;
+        }
+    }
+
 }

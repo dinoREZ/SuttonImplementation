@@ -16,6 +16,7 @@
 
 package de.fhws.fiw.fds.sutton.server;
 
+import de.fhws.fiw.fds.sutton.server.database.hibernate.DatabaseInstaller;
 import org.apache.catalina.Context;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.startup.Tomcat;
@@ -24,30 +25,32 @@ import org.apache.catalina.webresources.StandardRoot;
 
 import java.io.File;
 
-public abstract class AbstractStart
-{
-	private static final String CONTEXT_PATH_PREFIX = "/";
-	private static final String WEB_APP_LOCATION = "src/main/webapp/";
-	private static final String WEB_APP_MOUNT = "/WEB-INF/classes";
-	private static final String WEB_APP_CLASSES = "target/classes";
+public abstract class AbstractStart {
 
-	protected void startTomcat( ) throws Exception
-	{
-		final Tomcat tomcat = new Tomcat( );
-		tomcat.setPort( 8088 );
+    private static final String CONTEXT_PATH_PREFIX = "/";
+    private static final String WEB_APP_LOCATION = "src/main/webapp/";
+    private static final String WEB_APP_MOUNT = "/WEB-INF/classes";
+    private static final String WEB_APP_CLASSES = "target/classes";
 
-		final Context context = tomcat.addWebapp( CONTEXT_PATH_PREFIX + contextPath( ),
-			new File( WEB_APP_LOCATION ).getAbsolutePath( ) );
-		final String pathToClasses = new File( WEB_APP_CLASSES ).getAbsolutePath( );
-		final WebResourceRoot resources = new StandardRoot( context );
-		final DirResourceSet dirResourceSet = new DirResourceSet( resources, WEB_APP_MOUNT, pathToClasses, "/" );
+    protected void startTomcat() throws Exception {
+        new DatabaseInstaller().install();
 
-		resources.addPreResources( dirResourceSet );
-		context.setResources( resources );
+        final Tomcat tomcat = new Tomcat();
+        tomcat.setPort(8080);
 
-		tomcat.start( );
-		tomcat.getServer( ).await( );
-	}
+        final Context context = tomcat.addWebapp(CONTEXT_PATH_PREFIX + contextPath(),
+                new File(WEB_APP_LOCATION).getAbsolutePath());
+        final String pathToClasses = new File(WEB_APP_CLASSES).getAbsolutePath();
+        final WebResourceRoot resources = new StandardRoot(context);
+        final DirResourceSet dirResourceSet = new DirResourceSet(resources, WEB_APP_MOUNT, pathToClasses, "/");
 
-	protected abstract String contextPath( );
+        resources.addPreResources(dirResourceSet);
+        context.setResources(resources);
+
+        tomcat.start();
+        tomcat.getServer().await();
+    }
+
+    protected abstract String contextPath();
+
 }

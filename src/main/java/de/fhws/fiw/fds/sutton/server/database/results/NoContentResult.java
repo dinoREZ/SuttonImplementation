@@ -22,21 +22,19 @@ package de.fhws.fiw.fds.sutton.server.database.results;
  *
  * @see CollectionModelResult
  * @see SingleModelResult
- * */
-public class NoContentResult extends AbstractResult
-{
-	/**
-	 * Default constructor to instantiate an empty result with no content
-	 * */
-	public NoContentResult( )
-	{
-		super( );
-	}
+ */
+public class NoContentResult extends AbstractResult {
 
-	@Override
-	public boolean isEmpty( )
-	{
-		return true;
-	}
+    /**
+     * Default constructor to instantiate an empty result with no content
+     */
+    public NoContentResult() {
+        super();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
 
 }

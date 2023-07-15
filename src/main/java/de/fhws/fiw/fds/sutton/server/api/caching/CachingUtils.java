@@ -21,76 +21,77 @@ import javax.ws.rs.core.CacheControl;
 /**
  * The CachingUtils class is a utility class that provides useful methods to simplify the creation of cache control
  * in the response
- * */
-public class CachingUtils
-{
-	/**
-	 * Creates a cache control object, where the returned data are allowed to be saved in public caches and are valid
-	 * for 2 seconds since they have been sent from the origin server
-	 * @return {@link CacheControl}
-	 * */
-	public static CacheControl create2SecondsPublicCaching( )
-	{
-		final CacheControl cacheControl = new CacheControl( );
-		cacheControl.setPrivate( false );
-		cacheControl.setMaxAge( 2 );
+ */
+public class CachingUtils {
 
-		return cacheControl;
-	}
+    /**
+     * Creates a cache control object, where the returned data are allowed to be saved in public caches and are valid
+     * for 2 seconds since they have been sent from the origin server
+     *
+     * @return {@link CacheControl}
+     */
+    public static CacheControl create2SecondsPublicCaching() {
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setPrivate(false);
+        cacheControl.setMaxAge(2);
 
-	/**
-	 * Creates a cache control object, where the returned data are allowed to be saved in public caches and are valid
-	 * for 30 seconds since they have been sent from the origin server
-	 * @return {@link CacheControl}
-	 * */
-	public static CacheControl create30SecondsPublicCaching( )
-	{
-		final CacheControl cacheControl = new CacheControl( );
-		cacheControl.setPrivate( false );
-		cacheControl.setMaxAge( 30 );
+        return cacheControl;
+    }
 
-		return cacheControl;
-	}
+    /**
+     * Creates a cache control object, where the returned data are allowed to be saved in public caches and are valid
+     * for 30 seconds since they have been sent from the origin server
+     *
+     * @return {@link CacheControl}
+     */
+    public static CacheControl create30SecondsPublicCaching() {
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setPrivate(false);
+        cacheControl.setMaxAge(30);
 
-	/**
-	 * Creates a cache control object, where the returned data are allowed to be saved in public caches and are valid
-	 * for 60 seconds since they have been sent from the origin server
-	 * @return {@link CacheControl}
-	 * */
-	public static CacheControl create60SecondsPublicCaching( )
-	{
-		final CacheControl cacheControl = new CacheControl( );
-		cacheControl.setPrivate( false );
-		cacheControl.setMaxAge( 60 );
+        return cacheControl;
+    }
 
-		return cacheControl;
-	}
+    /**
+     * Creates a cache control object, where the returned data are allowed to be saved in public caches and are valid
+     * for 60 seconds since they have been sent from the origin server
+     *
+     * @return {@link CacheControl}
+     */
+    public static CacheControl create60SecondsPublicCaching() {
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setPrivate(false);
+        cacheControl.setMaxAge(60);
 
-	/**
-	 * Creates a cache control object, <strong>where the returned data are only allowed to be saved in private
-	 * caches</strong> and are valid for 30 seconds since they have been sent from the origin server
-	 * @return {@link CacheControl}
-	 * */
-	public static CacheControl create30SecondsPrivateCaching( )
-	{
-		final CacheControl cacheControl = new CacheControl( );
-		cacheControl.setPrivate( true );
-		cacheControl.setMaxAge( 30 );
+        return cacheControl;
+    }
 
-		return cacheControl;
-	}
+    /**
+     * Creates a cache control object, <strong>where the returned data are only allowed to be saved in private
+     * caches</strong> and are valid for 30 seconds since they have been sent from the origin server
+     *
+     * @return {@link CacheControl}
+     */
+    public static CacheControl create30SecondsPrivateCaching() {
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setPrivate(true);
+        cacheControl.setMaxAge(30);
 
-	/**
-	 * Creates a cache control object, <strong>where the returned data are not allowed to be cached
-	 * </strong>
-	 * @return {@link CacheControl}
-	 * */
-	public static CacheControl createNoCacheNoStoreCaching( )
-	{
-		final CacheControl cacheControl = new CacheControl( );
-		cacheControl.setNoCache( true );
-		cacheControl.setNoStore( true );
+        return cacheControl;
+    }
 
-		return cacheControl;
-	}
+    /**
+     * Creates a cache control object, <strong>where the returned data are not allowed to be cached
+     * </strong>
+     *
+     * @return {@link CacheControl}
+     */
+    public static CacheControl createNoCacheNoStoreCaching() {
+        final CacheControl cacheControl = new CacheControl();
+        cacheControl.setNoCache(true);
+        cacheControl.setNoStore(true);
+
+        return cacheControl;
+    }
+
 }

@@ -24,95 +24,84 @@ import java.net.URI;
 /**
  * The Hyperlinks class provides the required functionality to create hyperlinks according to the specifications of
  * the REST architecture
- * */
-public class Hyperlinks
-{
-	/**
-	 * Creates hyperlinks as specified in the specifications of the REST architecture and adds them to the response as
-	 * headers
-	 * @param uriInfo the {@link UriInfo} to derive the required path information from
-	 * @param responseBuilder the {@link Response.ResponseBuilder} to add the created hyperlink to as a header
-	 * @param mediaType {@link String} the media type in which the data will be sent when this link is requested
-	 * @param relationType {@link String} describes what the hyperlink stands for
-	 * @param path {@link String} the relative path to use it to build the href for the hyperlink
-	 * @param params an ellipsis of {@link Object} to be built to the href part of the hyperlink
-	 * */
-	public static void addLink( final UriInfo uriInfo,
-		final Response.ResponseBuilder responseBuilder,
-		final String path,
-		final String relationType,
-		final String mediaType,
-		final Object... params )
-	{
-		final UriBuilder builder = uriInfo.getAbsolutePathBuilder( );
-		builder.replacePath( beforeQuestionMark( path ) );
-		builder.replaceQuery( afterQuestionMark( path ) );
-		String uriTemplate = builder.toTemplate( );
+ */
+public class Hyperlinks {
 
-		for ( final Object p : params )
-		{
-			uriTemplate = replaceFirstTemplate( uriTemplate, p );
-		}
+    /**
+     * Creates hyperlinks as specified in the specifications of the REST architecture and adds them to the response as
+     * headers
+     *
+     * @param uriInfo         the {@link UriInfo} to derive the required path information from
+     * @param responseBuilder the {@link Response.ResponseBuilder} to add the created hyperlink to as a header
+     * @param mediaType       {@link String} the media type in which the data will be sent when this link is requested
+     * @param relationType    {@link String} describes what the hyperlink stands for
+     * @param path            {@link String} the relative path to use it to build the href for the hyperlink
+     * @param params          an ellipsis of {@link Object} to be built to the href part of the hyperlink
+     */
+    public static void addLink(final UriInfo uriInfo,
+                               final Response.ResponseBuilder responseBuilder,
+                               final String path,
+                               final String relationType,
+                               final String mediaType,
+                               final Object... params) {
+        final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.replacePath(beforeQuestionMark(path));
+        builder.replaceQuery(afterQuestionMark(path));
+        String uriTemplate = builder.toTemplate();
 
-		responseBuilder.header( "Link", linkHeader( uriTemplate, relationType, mediaType ) );
-	}
+        for (final Object p : params) {
+            uriTemplate = replaceFirstTemplate(uriTemplate, p);
+        }
 
-	private static String beforeQuestionMark( final String path )
-	{
-		if ( path.contains( "?" ) )
-		{
-			return path.substring( 0, path.indexOf( "?" ) );
-		}
-		else
-		{
-			return path;
-		}
-	}
+        responseBuilder.header("Link", linkHeader(uriTemplate, relationType, mediaType));
+    }
 
-	private static String afterQuestionMark( final String path )
-	{
-		if ( path.contains( "?" ) )
-		{
-			return path.substring( path.indexOf( "?" ) + 1 );
-		}
-		else
-		{
-			return "";
-		}
-	}
+    private static String beforeQuestionMark(final String path) {
+        if (path.contains("?")) {
+            return path.substring(0, path.indexOf("?"));
+        } else {
+            return path;
+        }
+    }
 
-	public static String replaceFirstTemplate( final String uri, final Object value )
-	{
-		return uri.replaceFirst( "\\{id\\}", value.toString( ) );
-	}
+    private static String afterQuestionMark(final String path) {
+        if (path.contains("?")) {
+            return path.substring(path.indexOf("?") + 1);
+        } else {
+            return "";
+        }
+    }
 
-	public static String linkHeader( final String uri, final String rel, final String mediaType )
-	{
-		final StringBuilder sb = new StringBuilder( );
-		sb.append( '<' ).append( uri ).append( ">;" );
-		sb.append( "rel" ).append( "=\"" ).append( rel ).append( "\"" );
-		if ( mediaType != null && !mediaType.isEmpty( ) )
-		{
-			sb.append( ";" );
-			sb.append( "type" ).append( "=\"" ).append( mediaType ).append( "\"" );
-		}
+    public static String replaceFirstTemplate(final String uri, final Object value) {
+        return uri.replaceFirst("\\{id\\}", value.toString());
+    }
 
-		return sb.toString( );
-	}
+    public static String linkHeader(final String uri, final String rel, final String mediaType) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append('<').append(uri).append(">;");
+        sb.append("rel").append("=\"").append(rel).append("\"");
+        if (mediaType != null && !mediaType.isEmpty()) {
+            sb.append(";");
+            sb.append("type").append("=\"").append(mediaType).append("\"");
+        }
 
-	/**
-	 * Creates hyperlinks as specified in the specifications of the REST architecture and adds them to the response as
-	 * headers
-	 * @param uri the {@link URI} to derive the required path information from
-	 * @param responseBuilder the {@link Response.ResponseBuilder} to add the created hyperlink to as a header
-	 * @param mediaType {@link String} the media type in which the data will be sent when this link is requested
-	 * @param relType {@link String} describes what the hyperlink stands for
-	 * */
-	public static void addLink( final Response.ResponseBuilder responseBuilder,
-		final URI uri,
-		final String relType,
-		final String mediaType )
-	{
-		responseBuilder.header( "Link", linkHeader( uri.toASCIIString( ), relType, mediaType ) );
-	}
+        return sb.toString();
+    }
+
+    /**
+     * Creates hyperlinks as specified in the specifications of the REST architecture and adds them to the response as
+     * headers
+     *
+     * @param uri             the {@link URI} to derive the required path information from
+     * @param responseBuilder the {@link Response.ResponseBuilder} to add the created hyperlink to as a header
+     * @param mediaType       {@link String} the media type in which the data will be sent when this link is requested
+     * @param relType         {@link String} describes what the hyperlink stands for
+     */
+    public static void addLink(final Response.ResponseBuilder responseBuilder,
+                               final URI uri,
+                               final String relType,
+                               final String mediaType) {
+        responseBuilder.header("Link", linkHeader(uri.toASCIIString(), relType, mediaType));
+    }
+
 }

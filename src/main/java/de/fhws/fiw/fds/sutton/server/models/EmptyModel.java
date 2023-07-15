@@ -16,6 +16,6 @@
 
 package de.fhws.fiw.fds.sutton.server.models;
 
-public class EmptyModel extends AbstractModel
-{
+public class EmptyModel extends AbstractModel {
+
 }

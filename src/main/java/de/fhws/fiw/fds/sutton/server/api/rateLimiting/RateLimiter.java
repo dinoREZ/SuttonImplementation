@@ -27,8 +27,8 @@ public class RateLimiter implements IDatabaseConnection {
      * @param checkRate in seconds the resetRate of {@link APIKey} is checked
      */
     public RateLimiter(long checkRate) {
-        Timer resetTimer = new Timer();
-        resetTimer.scheduleAtFixedRate(new ResetTask(), checkRate * 1000, checkRate * 1000);
+        //Timer resetTimer = new Timer();
+        //resetTimer.scheduleAtFixedRate(new ResetTask(), checkRate * 1000, checkRate * 1000);
     }
 
     /**

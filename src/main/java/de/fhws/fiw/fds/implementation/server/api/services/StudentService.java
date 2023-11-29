@@ -1,29 +1,29 @@
 package de.fhws.fiw.fds.implementation.server.api.services;
 
-import de.fhws.fiw.fds.implementation.server.api.models.Human;
-import de.fhws.fiw.fds.implementation.server.api.queries.HumanQuery;
+import de.fhws.fiw.fds.implementation.server.api.models.Student;
+import de.fhws.fiw.fds.implementation.server.api.queries.StudentQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
-import de.fhws.fiw.fds.implementation.server.api.states.human.DeleteHumanState;
-import de.fhws.fiw.fds.implementation.server.api.states.human.GetHumanCollectionState;
-import de.fhws.fiw.fds.implementation.server.api.states.human.GetHumanState;
-import de.fhws.fiw.fds.implementation.server.api.states.human.PostHumanState;
-import de.fhws.fiw.fds.implementation.server.api.states.human.PutHumanState;
+import de.fhws.fiw.fds.implementation.server.api.states.student.DeleteStudentState;
+import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentCollectionState;
+import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentState;
+import de.fhws.fiw.fds.implementation.server.api.states.student.PostStudentState;
+import de.fhws.fiw.fds.implementation.server.api.states.student.PutStudentState;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("humans")
-public class HumanService extends AbstractService {
+@Path("students")
+public class StudentService extends AbstractService {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getAllHumans(
+    public Response getAllStudents(
             @DefaultValue("") @QueryParam("firstName") final String firstName,
             @DefaultValue("") @QueryParam("lastName")final String lastName) {
-        HumanQuery query = new HumanQuery(firstName, lastName);
-        return new GetHumanCollectionState.Builder()
+        StudentQuery query = new StudentQuery(firstName, lastName);
+        return new GetStudentCollectionState.Builder()
                 .setQuery(query)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
@@ -37,8 +37,8 @@ public class HumanService extends AbstractService {
     @GET
     @Path("{id : \\d+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getHuman(@PathParam("id") final long id) {
-        return new GetHumanState.Builder()
+    public Response getStudent(@PathParam("id") final long id) {
+        return new GetStudentState.Builder()
                 .setRequestedId(id)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
@@ -51,9 +51,9 @@ public class HumanService extends AbstractService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createHuman(final Human human) {
-        return new PostHumanState.Builder()
-                .setModelToCreate(human)
+    public Response createStudent(final Student student) {
+        return new PostStudentState.Builder()
+                .setModelToCreate(student)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setContext(this.context)
@@ -66,9 +66,9 @@ public class HumanService extends AbstractService {
     @PUT
     @Path("{id : \\d+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateHuman(@PathParam("id") long id, final Human human) {
-        return new PutHumanState.Builder()
-                .setModelToUpdate(human)
+    public Response updateStudent(@PathParam("id") long id, final Student student) {
+        return new PutStudentState.Builder()
+                .setModelToUpdate(student)
                 .setRequestedId(id)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
@@ -81,8 +81,8 @@ public class HumanService extends AbstractService {
 
     @DELETE
     @Path("{id : \\d+}")
-    public Response deleteHuman(@PathParam("id") final long id) {
-        return new DeleteHumanState.Builder()
+    public Response deleteStudent(@PathParam("id") final long id) {
+        return new DeleteStudentState.Builder()
                 .setRequestedId(id)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)

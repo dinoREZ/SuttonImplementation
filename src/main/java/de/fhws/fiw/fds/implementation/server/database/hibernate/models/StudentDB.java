@@ -6,15 +6,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "humans")
-public class HumanDB extends AbstractDBModel {
+@Table(name = "students")
+public class StudentDB extends AbstractDBModel {
     @Column(name = "firstName")
     private String firstName;
 
     @Column(name = "lastName")
     private String lastName;
 
-    public HumanDB() {
+    public StudentDB() {
 
     }
 

@@ -1,10 +1,10 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate;
 
-import de.fhws.fiw.fds.implementation.server.api.models.Human;
-import de.fhws.fiw.fds.implementation.server.database.HumanDao;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.HumanDaoHibernate;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.HumanDaoHibernateImpl;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.models.HumanDB;
+import de.fhws.fiw.fds.implementation.server.api.models.Student;
+import de.fhws.fiw.fds.implementation.server.database.StudentDao;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.StudentDaoHibernate;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.StudentDaoHibernateImpl;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
@@ -14,27 +14,27 @@ import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 
 import java.util.stream.Collectors;
 
-public class HumanDaoAdapter implements HumanDao {
+public class StudentDaoAdapter implements StudentDao {
 
-    private final HumanDaoHibernate dao = new HumanDaoHibernateImpl();
+    private final StudentDaoHibernate dao = new StudentDaoHibernateImpl();
 
     @Override
-    public NoContentResult create(Human model) {
-        final HumanDB dbModel = createFrom(model);
+    public NoContentResult create(Student model) {
+        final StudentDB dbModel = createFrom(model);
         final NoContentResult returnValue = this.dao.create(dbModel);
         model.setId(dbModel.getId());
         return returnValue;
     }
 
     @Override
-    public SingleModelResult<Human> readById(long id) {
-        SingleModelHibernateResult<HumanDB> result = this.dao.readById(id);
+    public SingleModelResult<Student> readById(long id) {
+        SingleModelHibernateResult<StudentDB> result = this.dao.readById(id);
         if(result.isEmpty()) {
             return new SingleModelResult<>();
         }
 
         if(result.hasError()) {
-            final SingleModelResult<Human> returnValue = new SingleModelResult<>( );
+            final SingleModelResult<Student> returnValue = new SingleModelResult<>( );
             returnValue.setError( );
             return returnValue;
         }
@@ -44,16 +44,16 @@ public class HumanDaoAdapter implements HumanDao {
     }
 
     @Override
-    public CollectionModelResult<Human> readAll(SearchParameter searchParameter) {
+    public CollectionModelResult<Student> readAll(SearchParameter searchParameter) {
         // TODO
         return null;
     }
 
     @Override
-    public CollectionModelResult<Human> readByQuery(String firstName, String lastName) {
-        CollectionModelHibernateResult<HumanDB> result = dao.readByQuery(firstName, lastName);
+    public CollectionModelResult<Student> readByQuery(String firstName, String lastName) {
+        CollectionModelHibernateResult<StudentDB> result = dao.readByQuery(firstName, lastName);
 
-        CollectionModelResult<Human> returnValue;
+        CollectionModelResult<Student> returnValue;
         if(result.hasError()) {
             returnValue = new CollectionModelResult<>();
             returnValue.setError();
@@ -66,7 +66,7 @@ public class HumanDaoAdapter implements HumanDao {
     }
 
     @Override
-    public NoContentResult update(Human model) {
+    public NoContentResult update(Student model) {
         return dao.update(createFrom(model));
     }
 
@@ -75,16 +75,16 @@ public class HumanDaoAdapter implements HumanDao {
         return dao.delete(id);
     }
 
-    private HumanDB createFrom(Human model) {
-        final HumanDB returnValue = new HumanDB();
+    private StudentDB createFrom(Student model) {
+        final StudentDB returnValue = new StudentDB();
         returnValue.setId(model.getId());
         returnValue.setFirstName(model.getFirstName());
         returnValue.setLastName(model.getLastName());
         return returnValue;
     }
 
-    private Human createFrom(HumanDB model) {
-        final Human returnValue = new Human();
+    private Student createFrom(StudentDB model) {
+        final Student returnValue = new Student();
         returnValue.setId(model.getId());
         returnValue.setFirstName(model.getFirstName());
         returnValue.setLastName(model.getLastName());

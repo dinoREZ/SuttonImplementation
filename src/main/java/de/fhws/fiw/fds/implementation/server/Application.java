@@ -1,7 +1,7 @@
 package de.fhws.fiw.fds.implementation.server;
 
 import de.fhws.fiw.fds.implementation.server.api.services.DispatcherService;
-import de.fhws.fiw.fds.implementation.server.api.services.HumanService;
+import de.fhws.fiw.fds.implementation.server.api.services.StudentService;
 import de.fhws.fiw.fds.sutton.server.api.AbstractApplication;
 
 import javax.ws.rs.ApplicationPath;
@@ -15,7 +15,7 @@ public class Application extends AbstractApplication {
         final Set<Class<?>> returnValue = new HashSet<>();
 
         returnValue.add(DispatcherService.class);
-        returnValue.add(HumanService.class);
+        returnValue.add(StudentService.class);
 
         // TODO add return values
 

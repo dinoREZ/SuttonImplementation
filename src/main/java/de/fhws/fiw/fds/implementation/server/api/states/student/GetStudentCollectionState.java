@@ -1,14 +1,14 @@
-package de.fhws.fiw.fds.implementation.server.api.states.human;
+package de.fhws.fiw.fds.implementation.server.api.states.student;
 
-import de.fhws.fiw.fds.implementation.server.api.models.Human;
+import de.fhws.fiw.fds.implementation.server.api.models.Student;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetCollectionState;
 
 import javax.ws.rs.core.GenericEntity;
 
-public class GetHumanCollectionState extends AbstractGetCollectionState<Human> {
+public class GetStudentCollectionState extends AbstractGetCollectionState<Student> {
 
-    protected GetHumanCollectionState(Builder builder) {
+    protected GetStudentCollectionState(Builder builder) {
         super(builder);
     }
 
@@ -29,10 +29,10 @@ public class GetHumanCollectionState extends AbstractGetCollectionState<Human> {
 
     }
 
-    public static class Builder extends AbstractGetCollectionStateBuilder<Human> {
+    public static class Builder extends AbstractGetCollectionStateBuilder<Student> {
         @Override
         public AbstractState build() {
-            return new GetHumanCollectionState(this);
+            return new GetStudentCollectionState(this);
         }
     }
 }

@@ -1,14 +1,14 @@
-package de.fhws.fiw.fds.implementation.server.api.states.human;
+package de.fhws.fiw.fds.implementation.server.api.states.student;
 
-import de.fhws.fiw.fds.implementation.server.api.models.Human;
+import de.fhws.fiw.fds.implementation.server.api.models.Student;
 import de.fhws.fiw.fds.implementation.server.database.DaoFactory;
 import de.fhws.fiw.fds.sutton.server.api.states.delete.AbstractDeleteState;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 
-public class DeleteHumanState extends AbstractDeleteState<Human> {
+public class DeleteStudentState extends AbstractDeleteState<Student> {
 
-    public DeleteHumanState(Builder builder) {
+    public DeleteStudentState(Builder builder) {
         super(builder);
     }
 
@@ -18,13 +18,13 @@ public class DeleteHumanState extends AbstractDeleteState<Human> {
     }
 
     @Override
-    protected SingleModelResult<Human> loadModel() {
-        return DaoFactory.getInstance().getHumanDao().readById(modelIdToDelete);
+    protected SingleModelResult<Student> loadModel() {
+        return DaoFactory.getInstance().getStudentDao().readById(modelIdToDelete);
     }
 
     @Override
     protected NoContentResult deleteModel() {
-        return DaoFactory.getInstance().getHumanDao().delete(modelIdToDelete);
+        return DaoFactory.getInstance().getStudentDao().delete(modelIdToDelete);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class DeleteHumanState extends AbstractDeleteState<Human> {
 
     public static class Builder extends AbstractDeleteStateBuilder {
         @Override
-        public DeleteHumanState build() {
-            return new DeleteHumanState( this );
+        public DeleteStudentState build() {
+            return new DeleteStudentState( this );
         }
     }
 }

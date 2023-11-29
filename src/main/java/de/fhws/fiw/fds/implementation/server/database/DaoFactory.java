@@ -1,6 +1,6 @@
 package de.fhws.fiw.fds.implementation.server.database;
 
-import de.fhws.fiw.fds.implementation.server.database.hibernate.HumanDaoAdapter;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.StudentDaoAdapter;
 
 public class DaoFactory {
     private static DaoFactory INSTANCE;
@@ -13,13 +13,13 @@ public class DaoFactory {
         return INSTANCE;
     }
 
-    private final HumanDao humanDao;
+    private final StudentDao studentDao;
 
     private DaoFactory() {
-        this.humanDao = new HumanDaoAdapter();
+        this.studentDao = new StudentDaoAdapter();
     }
 
-    public HumanDao getHumanDao() {
-        return this.humanDao;
+    public StudentDao getStudentDao() {
+        return this.studentDao;
     }
 }

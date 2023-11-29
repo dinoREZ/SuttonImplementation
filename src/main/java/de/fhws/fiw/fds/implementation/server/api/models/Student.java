@@ -2,16 +2,16 @@ package de.fhws.fiw.fds.implementation.server.api.models;
 
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 
-public class Human extends AbstractModel {
+public class Student extends AbstractModel {
     private String firstName;
     private String lastName;
 
-    public Human(String firstName, String lastName) {
+    public Student(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Human() {
+    public Student() {
 
     }
 
@@ -33,7 +33,7 @@ public class Human extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Human{" +
+        return "Student{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", id=" + id +

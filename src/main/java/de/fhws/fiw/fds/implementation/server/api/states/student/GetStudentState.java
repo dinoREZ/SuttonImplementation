@@ -1,15 +1,15 @@
-package de.fhws.fiw.fds.implementation.server.api.states.human;
+package de.fhws.fiw.fds.implementation.server.api.states.student;
 
-import de.fhws.fiw.fds.implementation.server.api.models.Human;
+import de.fhws.fiw.fds.implementation.server.api.models.Student;
 import de.fhws.fiw.fds.implementation.server.database.DaoFactory;
 import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetState;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 
-public class GetHumanState extends AbstractGetState<Human> {
+public class GetStudentState extends AbstractGetState<Student> {
 
 
-    public GetHumanState(Builder builder) {
+    public GetStudentState(Builder builder) {
         super(builder);
     }
 
@@ -19,8 +19,8 @@ public class GetHumanState extends AbstractGetState<Human> {
     }
 
     @Override
-    protected SingleModelResult<Human> loadModel() {
-        return DaoFactory.getInstance().getHumanDao().readById(this.requestedId);
+    protected SingleModelResult<Student> loadModel() {
+        return DaoFactory.getInstance().getStudentDao().readById(this.requestedId);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class GetHumanState extends AbstractGetState<Human> {
     public static class Builder extends AbstractGetStateBuilder {
         @Override
         public AbstractState build() {
-            return new GetHumanState( this );
+            return new GetStudentState( this );
         }
     }
 }

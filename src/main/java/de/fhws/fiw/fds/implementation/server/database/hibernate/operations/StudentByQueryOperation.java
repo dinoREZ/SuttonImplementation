@@ -1,6 +1,6 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate.operations;
 
-import de.fhws.fiw.fds.implementation.server.database.hibernate.models.HumanDB;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import jakarta.persistence.EntityManagerFactory;
@@ -9,18 +9,18 @@ import jakarta.persistence.criteria.*;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class HumanByQueryOperation extends AbstractDatabaseOperation<HumanDB, CollectionModelHibernateResult<HumanDB>> {
+public class StudentByQueryOperation extends AbstractDatabaseOperation<StudentDB, CollectionModelHibernateResult<StudentDB>> {
 
     private String firstName;
     private String lastName;
 
-    public HumanByQueryOperation(EntityManagerFactory emf, String firstName, String lastName) {
+    public StudentByQueryOperation(EntityManagerFactory emf, String firstName, String lastName) {
         super(emf);
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    private Predicate formulateConditions(CriteriaBuilder criteriaBuilder, Root<HumanDB> root) {
+    private Predicate formulateConditions(CriteriaBuilder criteriaBuilder, Root<StudentDB> root) {
         final Predicate matchFirstName = criteriaBuilder.like(root.get("firstName"), "%" + this.firstName + "%");
         final Predicate matchLastName = criteriaBuilder.like(root.get("lastName"), "%" + this.lastName + "%");
 
@@ -28,17 +28,17 @@ public class HumanByQueryOperation extends AbstractDatabaseOperation<HumanDB, Co
     }
 
     @Override
-    protected CollectionModelHibernateResult<HumanDB> run() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    protected CollectionModelHibernateResult<StudentDB> run() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<HumanDB> criteriaQuery = criteriaBuilder.createQuery(HumanDB.class);
-        final Root<HumanDB> root = criteriaQuery.from(HumanDB.class);
+        CriteriaQuery<StudentDB> criteriaQuery = criteriaBuilder.createQuery(StudentDB.class);
+        final Root<StudentDB> root = criteriaQuery.from(StudentDB.class);
 
         final Order sorting = criteriaBuilder.asc(root.get("lastName"));
 
         criteriaQuery = criteriaQuery.select(root).where(formulateConditions(criteriaBuilder, root)).orderBy(sorting);
-        final TypedQuery<HumanDB> allQuery = em.createQuery(criteriaQuery);
+        final TypedQuery<StudentDB> allQuery = em.createQuery(criteriaQuery);
 
-        CollectionModelHibernateResult<HumanDB> returnValue = new CollectionModelHibernateResult<>(allQuery.getResultList());
+        CollectionModelHibernateResult<StudentDB> returnValue = new CollectionModelHibernateResult<>(allQuery.getResultList());
         returnValue.setTotalNumberOfResult(getTotalResultCount());
 
         return returnValue;
@@ -47,7 +47,7 @@ public class HumanByQueryOperation extends AbstractDatabaseOperation<HumanDB, Co
     private int getTotalResultCount() {
         final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         final CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-        final Root<HumanDB> root = countQuery.from(HumanDB.class);
+        final Root<StudentDB> root = countQuery.from(StudentDB.class);
 
         countQuery.select(criteriaBuilder.count(root)).where(formulateConditions(criteriaBuilder, root));
         return em
@@ -57,7 +57,7 @@ public class HumanByQueryOperation extends AbstractDatabaseOperation<HumanDB, Co
     }
 
     @Override
-    protected CollectionModelHibernateResult<HumanDB> errorResult() {
+    protected CollectionModelHibernateResult<StudentDB> errorResult() {
         return null;
     }
 }

@@ -1,34 +1,28 @@
 package de.fhws.fiw.fds.implementation.server.api.services;
 
-import de.fhws.fiw.fds.implementation.server.api.models.Student;
-import de.fhws.fiw.fds.implementation.server.api.queries.StudentQuery;
+import de.fhws.fiw.fds.implementation.server.api.models.Course;
+import de.fhws.fiw.fds.implementation.server.api.queries.CourseQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
-import de.fhws.fiw.fds.implementation.server.api.states.student.DeleteStudentState;
-import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentCollectionState;
-import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentState;
-import de.fhws.fiw.fds.implementation.server.api.states.student.PostStudentState;
-import de.fhws.fiw.fds.implementation.server.api.states.student.PutStudentState;
+import de.fhws.fiw.fds.implementation.server.api.states.course.*;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("students")
-public class StudentService extends AbstractService {
+@Path("courses")
+public class CourseService extends AbstractService {
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getAllStudents(
-            @DefaultValue("") @QueryParam("firstName") final String firstName,
-            @DefaultValue("") @QueryParam("lastName")final String lastName) {
-        StudentQuery query = new StudentQuery(firstName, lastName);
-        return new GetStudentCollectionState.Builder()
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllCourses(@DefaultValue("") @QueryParam("name") final String name) {
+        CourseQuery query = new CourseQuery(name);
+        return new GetCourseCollectionState.Builder()
                 .setQuery(query)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
-                .setHttpServletRequest(this.httpServletRequest)
                 .setContext(this.context)
+                .setHttpServletRequest(this.httpServletRequest)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
                 .build()
                 .execute();
@@ -37,8 +31,8 @@ public class StudentService extends AbstractService {
     @GET
     @Path("{id : \\d+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStudent(@PathParam("id") final long id) {
-        return new GetStudentState.Builder()
+    public Response getCourse(@PathParam("id") final long id) {
+        return new GetCourseState.Builder()
                 .setRequestedId(id)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
@@ -51,9 +45,9 @@ public class StudentService extends AbstractService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createStudent(final Student student) {
-        return new PostStudentState.Builder()
-                .setModelToCreate(student)
+    public Response createCourse(final Course course) {
+        return new PostCourseState.Builder()
+                .setModelToCreate(course)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setContext(this.context)
@@ -66,9 +60,9 @@ public class StudentService extends AbstractService {
     @PUT
     @Path("{id : \\d+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateStudent(@PathParam("id") long id, final Student student) {
-        return new PutStudentState.Builder()
-                .setModelToUpdate(student)
+    public Response updateCourse(@PathParam("id") long id, final Course course) {
+        return new PutCourseState.Builder()
+                .setModelToUpdate(course)
                 .setRequestedId(id)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
@@ -81,8 +75,8 @@ public class StudentService extends AbstractService {
 
     @DELETE
     @Path("{id : \\d+}")
-    public Response deleteStudent(@PathParam("id") final long id) {
-        return new DeleteStudentState.Builder()
+    public Response deleteCourse(@PathParam("id") final long id) {
+        return new DeleteCourseState.Builder()
                 .setRequestedId(id)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
@@ -91,13 +85,5 @@ public class StudentService extends AbstractService {
                 .setRateLimiter(new AnyApiKeyRateLimiter())
                 .build()
                 .execute();
-    }
-
-    @GET
-    @Path("{studentId: \\d+}/courses")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCoursesOfStudent(@PathParam("studentId") final long studentId) {
-        // TODO
-        return null;
     }
 }

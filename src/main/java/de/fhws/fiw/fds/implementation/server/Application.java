@@ -1,5 +1,6 @@
 package de.fhws.fiw.fds.implementation.server;
 
+import de.fhws.fiw.fds.implementation.server.api.services.CourseService;
 import de.fhws.fiw.fds.implementation.server.api.services.DispatcherService;
 import de.fhws.fiw.fds.implementation.server.api.services.StudentService;
 import de.fhws.fiw.fds.sutton.server.api.AbstractApplication;
@@ -16,6 +17,7 @@ public class Application extends AbstractApplication {
 
         returnValue.add(DispatcherService.class);
         returnValue.add(StudentService.class);
+        returnValue.add(CourseService.class);
 
         // TODO add return values
 

@@ -1,4 +1,4 @@
-package de.fhws.fiw.fds.implementation.server.database.hibernate.operations;
+package de.fhws.fiw.fds.implementation.server.database.hibernate.operations.student;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
@@ -58,6 +58,7 @@ public class StudentByQueryOperation extends AbstractDatabaseOperation<StudentDB
 
     @Override
     protected CollectionModelHibernateResult<StudentDB> errorResult() {
+        // TODO?
         return null;
     }
 }

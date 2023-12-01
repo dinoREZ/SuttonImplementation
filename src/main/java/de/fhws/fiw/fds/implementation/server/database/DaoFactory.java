@@ -1,5 +1,6 @@
 package de.fhws.fiw.fds.implementation.server.database;
 
+import de.fhws.fiw.fds.implementation.server.database.hibernate.CourseDaoAdapter;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.StudentDaoAdapter;
 
 public class DaoFactory {
@@ -14,12 +15,18 @@ public class DaoFactory {
     }
 
     private final StudentDao studentDao;
+    private final CourseDao courseDao;
 
     private DaoFactory() {
         this.studentDao = new StudentDaoAdapter();
+        this.courseDao = new CourseDaoAdapter();
     }
 
     public StudentDao getStudentDao() {
         return this.studentDao;
+    }
+
+    public CourseDao getCourseDao() {
+        return courseDao;
     }
 }

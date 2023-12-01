@@ -1,8 +1,9 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate.dao;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.*;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.student.*;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.IDatabaseConnection;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
@@ -12,7 +13,7 @@ import jakarta.persistence.Persistence;
 public class StudentDaoHibernateImpl implements StudentDaoHibernate {
 
     private static final String PERSISTENCE_UNIT_NAME = "de.fhws.fiw.fds.sutton";
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+    private static final EntityManagerFactory emf = IDatabaseConnection.SUTTON_EMF;
 
     public StudentDaoHibernateImpl() {
         super();

@@ -18,7 +18,7 @@ public class CourseDaoAdapter implements CourseDao {
     private final CourseDaoHibernate dao = new CourseDaoHibernateImpl();
 
     @Override
-    public CollectionModelResult<Course> readyByQuery(String name) {
+    public CollectionModelResult<Course> readByQuery(String name) {
         CollectionModelHibernateResult<CourseDB> result = dao.readByQuery(name);
 
         CollectionModelResult<Course> returnValue;

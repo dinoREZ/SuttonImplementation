@@ -8,6 +8,7 @@
     <class>de.fhws.fiw.fds.sutton.server.api.rateLimiting.model.APIKey</class>
     <class>de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB</class>
     <class>de.fhws.fiw.fds.implementation.server.database.hibernate.models.CourseDB</class>
+    <class>de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentCourseDB</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
         <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>

@@ -1,8 +1,11 @@
 package de.fhws.fiw.fds.implementation.server.api.services;
 
 import de.fhws.fiw.fds.implementation.server.api.models.Student;
+import de.fhws.fiw.fds.implementation.server.api.queries.CourseQuery;
+import de.fhws.fiw.fds.implementation.server.api.queries.CoursesOfStudentQuery;
 import de.fhws.fiw.fds.implementation.server.api.queries.StudentQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
+import de.fhws.fiw.fds.implementation.server.api.states.coursesOfStudent.GetCoursesOfStudentState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.DeleteStudentState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentCollectionState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentState;
@@ -96,8 +99,18 @@ public class StudentService extends AbstractService {
     @GET
     @Path("{studentId: \\d+}/courses")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCoursesOfStudent(@PathParam("studentId") final long studentId) {
-        // TODO
-        return null;
+    public Response getCoursesOfStudent(
+            @PathParam("studentId") final long studentId,
+            @DefaultValue("") @QueryParam("name") final String name) {
+        return new GetCoursesOfStudentState.Builder()
+                .setParentId(studentId)
+                .setQuery(new CoursesOfStudentQuery(studentId, name))
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .setRateLimiter(new AnyApiKeyRateLimiter())
+                .build()
+                .execute();
     }
 }

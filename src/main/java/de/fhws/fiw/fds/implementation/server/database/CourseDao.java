@@ -5,5 +5,5 @@ import de.fhws.fiw.fds.sutton.server.database.IDatabaseAccessObject;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 public interface CourseDao extends IDatabaseAccessObject<Course> {
-    CollectionModelResult<Course> readyByQuery(String name);
+    CollectionModelResult<Course> readByQuery(String name);
 }

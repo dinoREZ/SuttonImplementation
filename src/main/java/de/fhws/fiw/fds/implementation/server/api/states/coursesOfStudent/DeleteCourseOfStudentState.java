@@ -29,7 +29,7 @@ public class DeleteCourseOfStudentState extends AbstractDeleteRelationState<Cour
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(CoursesOfStudentUri.REL_PATH, CoursesOfStudentRelTypes.GET_ALL_LINKED_COURSES, primaryId);
     }
 
     public static class Builder extends AbstractDeleteRelationStateBuilder {

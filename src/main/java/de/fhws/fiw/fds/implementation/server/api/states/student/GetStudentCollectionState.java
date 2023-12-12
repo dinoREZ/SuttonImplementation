@@ -26,7 +26,7 @@ public class GetStudentCollectionState extends AbstractGetCollectionState<Studen
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(StudentUri.REL_PATH, StudentRelTypes.CREATE_STUDENT);
     }
 
     public static class Builder extends AbstractGetCollectionStateBuilder<Student> {

@@ -25,7 +25,7 @@ public class GetCourseCollectionState extends AbstractGetCollectionState<Course>
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(CourseUri.REL_PATH, CourseRelTypes.CREATE_COURSE);
     }
 
     public static class Builder extends AbstractGetCollectionStateBuilder<Course> {

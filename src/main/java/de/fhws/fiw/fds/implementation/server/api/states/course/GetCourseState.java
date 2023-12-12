@@ -24,7 +24,8 @@ public class GetCourseState extends AbstractGetState<Course> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(CourseUri.REL_PATH_ID, CourseRelTypes.UPDATE_COURSE, this.requestedId);
+        addLink(CourseUri.REL_PATH_ID, CourseRelTypes.DELETE_COURSE, this.requestedId);
     }
 
     public static class Builder extends AbstractGetStateBuilder {

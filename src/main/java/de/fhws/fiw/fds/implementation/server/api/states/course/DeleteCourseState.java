@@ -30,7 +30,7 @@ public class DeleteCourseState extends AbstractDeleteState<Course> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(CourseUri.REL_PATH, CourseRelTypes.GET_ALL_COURSES);
     }
 
     public static class Builder extends AbstractDeleteStateBuilder {

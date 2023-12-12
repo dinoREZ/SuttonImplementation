@@ -28,7 +28,7 @@ public class PutStudentState extends AbstractPutState<Student> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(StudentUri.REL_PATH_ID, StudentRelTypes.GET_STUDENT, requestedId);
     }
 
     public static class Builder extends AbstractPutStateBuilder<Student> {

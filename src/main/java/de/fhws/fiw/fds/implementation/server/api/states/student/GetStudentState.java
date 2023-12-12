@@ -25,7 +25,8 @@ public class GetStudentState extends AbstractGetState<Student> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(StudentUri.REL_PATH_ID, StudentRelTypes.UPDATE_STUDENT, requestedId);
+        addLink(StudentUri.REL_PATH_ID, StudentRelTypes.DELETE_STUDENT, requestedId);
     }
 
     public static class Builder extends AbstractGetStateBuilder {

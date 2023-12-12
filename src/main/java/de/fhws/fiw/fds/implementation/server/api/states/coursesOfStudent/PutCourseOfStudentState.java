@@ -29,7 +29,7 @@ public class PutCourseOfStudentState extends AbstractPutRelationState<Course> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(CoursesOfStudentUri.REL_PATH_ID, CoursesOfStudentRelTypes.GET_COURSE, primaryId, requestedId);
     }
 
     public static class Builder extends AbstractPutRelationStateBuilder<Course> {

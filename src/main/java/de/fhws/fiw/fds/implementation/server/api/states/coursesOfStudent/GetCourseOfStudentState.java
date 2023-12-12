@@ -23,7 +23,9 @@ public class GetCourseOfStudentState extends AbstractGetRelationState<Course> {
 
     @Override
     protected void defineTransitionLinks() {
-
+        addLink(CoursesOfStudentUri.REL_PATH, CoursesOfStudentRelTypes.GET_ALL_LINKED_COURSES, primaryId);
+        addLink(CoursesOfStudentUri.REL_PATH_ID, CoursesOfStudentRelTypes.UPDATE_COURSE, primaryId, requestedId);
+        addLink(CoursesOfStudentUri.REL_PATH_ID, CoursesOfStudentRelTypes.DELETE_LINK_FROM_STUDENT_TO_COURSE, primaryId, requestedId);
     }
 
     public static class Builder extends AbstractGetRelationStateBuilder {

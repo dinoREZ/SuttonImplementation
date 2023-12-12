@@ -24,8 +24,10 @@ public class StudentService extends AbstractService {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAllStudents(
             @DefaultValue("") @QueryParam("firstName") final String firstName,
-            @DefaultValue("") @QueryParam("lastName")final String lastName) {
-        StudentQuery query = new StudentQuery(firstName, lastName);
+            @DefaultValue("") @QueryParam("lastName")final String lastName,
+            @DefaultValue("0") @QueryParam("offset") int offset,
+            @DefaultValue("20") @QueryParam("size") int size) {
+        StudentQuery query = new StudentQuery(firstName, lastName, offset, size);
         return new GetStudentCollectionState.Builder()
                 .setQuery(query)
                 .setUriInfo(this.uriInfo)

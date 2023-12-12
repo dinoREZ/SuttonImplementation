@@ -37,8 +37,8 @@ public class StudentDaoHibernateImpl implements StudentDaoHibernate {
     }
 
     @Override
-    public CollectionModelHibernateResult<StudentDB> readByQuery(String firstName, String lastName) {
-        return new StudentByQueryOperation(emf, firstName, lastName).start();
+    public CollectionModelHibernateResult<StudentDB> readByQuery(String firstName, String lastName, SearchParameter searchParameter) {
+        return new StudentByQueryOperation(emf, firstName, lastName, searchParameter).start();
     }
 
     @Override

@@ -50,8 +50,8 @@ public class StudentDaoAdapter implements StudentDao {
     }
 
     @Override
-    public CollectionModelResult<Student> readByQuery(String firstName, String lastName) {
-        CollectionModelHibernateResult<StudentDB> result = dao.readByQuery(firstName, lastName);
+    public CollectionModelResult<Student> readByQuery(String firstName, String lastName, SearchParameter searchParameter) {
+        CollectionModelHibernateResult<StudentDB> result = dao.readByQuery(firstName, lastName, searchParameter);
 
         CollectionModelResult<Student> returnValue;
         if(result.hasError()) {

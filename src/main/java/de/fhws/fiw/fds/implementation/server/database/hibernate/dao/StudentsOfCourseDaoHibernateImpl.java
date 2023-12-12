@@ -1,11 +1,9 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate.dao;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.coursesOfStudent.CoursesOfStudentDeleteByIdOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.coursesOfStudent.CoursesOfStudentsDeleteOperation;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentOfCourseByIdOperation;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentOfCourseUpdateOperation;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseByQueryOperation;
-import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseCreateOperation;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.*;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.IDatabaseConnection;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
@@ -39,12 +37,12 @@ public class StudentsOfCourseDaoHibernateImpl implements StudentsOfCourseDaoHibe
 
     @Override
     public NoContentResult deleteRelationsFromPrimary(long primaryId) {
-        return null;
+        return new CoursesOfStudentDeleteByIdOperation(emf, primaryId).start();
     }
 
     @Override
     public NoContentResult deleteRelationsToSecondary(long secondaryId) {
-        return null;
+        return new StudentsOfCourseDeleteByIdOperation(emf, secondaryId).start();
     }
 
     @Override

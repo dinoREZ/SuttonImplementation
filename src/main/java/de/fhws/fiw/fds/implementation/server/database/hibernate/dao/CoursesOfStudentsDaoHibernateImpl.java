@@ -2,6 +2,7 @@ package de.fhws.fiw.fds.implementation.server.database.hibernate.dao;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.CourseDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.coursesOfStudent.*;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseDeleteByIdOperation;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.IDatabaseConnection;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
@@ -34,12 +35,12 @@ public class CoursesOfStudentsDaoHibernateImpl implements CoursesOfStudentsDaoHi
 
     @Override
     public NoContentResult deleteRelationsFromPrimary(long primaryId) {
-        return null;
+        return new StudentsOfCourseDeleteByIdOperation(emf, primaryId).start();
     }
 
     @Override
     public NoContentResult deleteRelationsToSecondary(long secondaryId) {
-        return null;
+        return new CoursesOfStudentDeleteByIdOperation(emf, secondaryId).start();
     }
 
     @Override

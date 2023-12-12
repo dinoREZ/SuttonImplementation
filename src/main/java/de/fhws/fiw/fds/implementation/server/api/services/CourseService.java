@@ -1,9 +1,13 @@
 package de.fhws.fiw.fds.implementation.server.api.services;
 
 import de.fhws.fiw.fds.implementation.server.api.models.Course;
+import de.fhws.fiw.fds.implementation.server.api.models.Student;
 import de.fhws.fiw.fds.implementation.server.api.queries.CourseQuery;
+import de.fhws.fiw.fds.implementation.server.api.queries.StudentsOfCourseQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
 import de.fhws.fiw.fds.implementation.server.api.states.course.*;
+import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.GetStudentsOfCourseState;
+import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.PostStudentOfCourseState;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
 import javax.ws.rs.*;
@@ -82,6 +86,39 @@ public class CourseService extends AbstractService {
                 .setRequest(this.request)
                 .setContext(this.context)
                 .setHttpServletRequest(this.httpServletRequest)
+                .setRateLimiter(new AnyApiKeyRateLimiter())
+                .build()
+                .execute();
+    }
+
+    @GET
+    @Path("{courseId : \\d+}/students")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStudentsOfCourse(@PathParam("courseId") final long courseId,
+                                        @DefaultValue("") @QueryParam("firstName") final String firstName) {
+        return new GetStudentsOfCourseState.Builder()
+                .setParentId(courseId)
+                .setQuery(new StudentsOfCourseQuery(courseId, firstName))
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .setRateLimiter(new AnyApiKeyRateLimiter())
+                .build()
+                .execute();
+    }
+
+    @POST
+    @Path("{courseId: \\d+}/students")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createStudentOfCourse(@PathParam("courseId") final long courseId, final Student student) {
+        return new PostStudentOfCourseState.Builder()
+                .setParentId(courseId)
+                .setModelToCreate(student)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
                 .build()
                 .execute();

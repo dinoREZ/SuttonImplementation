@@ -3,6 +3,7 @@ package de.fhws.fiw.fds.implementation.server.database;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.CourseDaoAdapter;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.CoursesOfStudentDaoAdapter;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.StudentDaoAdapter;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.StudentsOfCourseDaoAdapter;
 
 public class DaoFactory {
     private static DaoFactory INSTANCE;
@@ -20,10 +21,13 @@ public class DaoFactory {
 
     private final CoursesOfStudentDao coursesOfStudentDao;
 
+    private final StudentsOfCourseDao studentsOfCourseDao;
+
     private DaoFactory() {
         this.studentDao = new StudentDaoAdapter();
         this.courseDao = new CourseDaoAdapter();
         this.coursesOfStudentDao = new CoursesOfStudentDaoAdapter();
+        this.studentsOfCourseDao = new StudentsOfCourseDaoAdapter();
     }
 
     public StudentDao getStudentDao() {
@@ -36,5 +40,9 @@ public class DaoFactory {
 
     public CoursesOfStudentDao getCoursesOfStudentDao() {
         return coursesOfStudentDao;
+    }
+
+    public StudentsOfCourseDao getStudentsOfCourseDao() {
+        return studentsOfCourseDao;
     }
 }

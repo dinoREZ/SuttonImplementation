@@ -6,10 +6,7 @@ import de.fhws.fiw.fds.implementation.server.api.queries.CourseQuery;
 import de.fhws.fiw.fds.implementation.server.api.queries.StudentsOfCourseQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
 import de.fhws.fiw.fds.implementation.server.api.states.course.*;
-import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.GetStudentOfCourseState;
-import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.GetStudentsOfCourseState;
-import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.PostStudentOfCourseState;
-import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.PutStudentOfCourseState;
+import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.*;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
 import javax.ws.rs.*;
@@ -152,6 +149,22 @@ public class CourseService extends AbstractService {
                 .setParentId(courseId)
                 .setRequestedId(studentId)
                 .setModelToUpdate(student)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .setRateLimiter(new AnyApiKeyRateLimiter())
+                .build()
+                .execute();
+    }
+
+    @DELETE
+    @Path("{courseId: \\d+}/students/{studentId: \\d+}")
+    public Response deleteStudentOfCourse(@PathParam("courseId") final long courseId,
+                                          @PathParam("studentId") final long studentId) {
+        return new DeleteStudentOfCourseState.Builder()
+                .setParentId(courseId)
+                .setRequestedId(studentId)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setHttpServletRequest(this.httpServletRequest)

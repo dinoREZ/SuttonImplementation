@@ -1,6 +1,7 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate.dao;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.coursesOfStudent.CoursesOfStudentsDeleteOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentOfCourseByIdOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentOfCourseUpdateOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseByQueryOperation;
@@ -32,8 +33,8 @@ public class StudentsOfCourseDaoHibernateImpl implements StudentsOfCourseDaoHibe
     }
 
     @Override
-    public NoContentResult deleteRelation(long primaryId, long secondaryId) {
-        return null;
+    public NoContentResult deleteRelation(long courseId, long studentId) {
+        return new CoursesOfStudentsDeleteOperation(emf, studentId, courseId).start();
     }
 
     @Override

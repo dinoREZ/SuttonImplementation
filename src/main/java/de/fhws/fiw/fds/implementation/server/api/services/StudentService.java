@@ -2,7 +2,6 @@ package de.fhws.fiw.fds.implementation.server.api.services;
 
 import de.fhws.fiw.fds.implementation.server.api.models.Course;
 import de.fhws.fiw.fds.implementation.server.api.models.Student;
-import de.fhws.fiw.fds.implementation.server.api.queries.CourseQuery;
 import de.fhws.fiw.fds.implementation.server.api.queries.CoursesOfStudentQuery;
 import de.fhws.fiw.fds.implementation.server.api.queries.StudentQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
@@ -168,8 +167,8 @@ public class StudentService extends AbstractService {
 
     @DELETE
     @Path("{studentId: \\d+}/courses/{courseId: \\d+}")
-    public Response deleteLocationOfPerson(@PathParam("studentId") final long studentId,
-                                           @PathParam("courseId") final long courseId) {
+    public Response deleteCourseOfStudent(@PathParam("studentId") final long studentId,
+                                          @PathParam("courseId") final long courseId) {
         return new DeleteCourseOfStudentState.Builder()
                 .setParentId(studentId)
                 .setRequestedId(courseId)

@@ -44,7 +44,7 @@ public class StudentsOfCourseDaoAdapter implements StudentsOfCourseDao {
 
     @Override
     public NoContentResult deleteRelation(long primaryId, long secondaryId) {
-        return null;
+        return dao.deleteRelation(primaryId, secondaryId);
     }
 
     @Override

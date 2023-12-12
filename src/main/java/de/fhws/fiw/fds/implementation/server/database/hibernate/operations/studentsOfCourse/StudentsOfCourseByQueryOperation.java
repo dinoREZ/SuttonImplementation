@@ -2,6 +2,7 @@ package de.fhws.fiw.fds.implementation.server.database.hibernate.operations.stud
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentCourseDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
+import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBRelation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
@@ -17,11 +18,13 @@ public class StudentsOfCourseByQueryOperation extends AbstractDatabaseOperation<
 
     private final long courseId;
     private final String firstName;
+    private final SearchParameter searchParameter;
 
-    public StudentsOfCourseByQueryOperation(EntityManagerFactory emf, long courseId, String firstName) {
+    public StudentsOfCourseByQueryOperation(EntityManagerFactory emf, long courseId, String firstName, SearchParameter searchParameter) {
         super(emf);
         this.courseId = courseId;
         this.firstName = firstName;
+        this.searchParameter = searchParameter;
     }
 
     @Override
@@ -48,6 +51,8 @@ public class StudentsOfCourseByQueryOperation extends AbstractDatabaseOperation<
 
         return this.em
                 .createQuery(find)
+                .setMaxResults(searchParameter.getSize())
+                .setFirstResult(searchParameter.getOffset())
                 .getResultList()
                 .stream()
                 .map(AbstractDBRelation::getPrimaryModel)

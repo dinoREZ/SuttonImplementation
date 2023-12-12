@@ -18,8 +18,8 @@ public class StudentsOfCourseDaoAdapter implements StudentsOfCourseDao {
     StudentsOfCourseDaoHibernate dao = new StudentsOfCourseDaoHibernateImpl();
 
     @Override
-    public CollectionModelResult<Student> readByQuery(long courseId, String name) {
-        CollectionModelHibernateResult<StudentDB> result = this.dao.readByQuery(courseId, name);
+    public CollectionModelResult<Student> readByQuery(long courseId, String name, SearchParameter searchParameter) {
+        CollectionModelHibernateResult<StudentDB> result = this.dao.readByQuery(courseId, name, searchParameter);
 
         CollectionModelResult<Student> returnValue;
         if(result.hasError()) {

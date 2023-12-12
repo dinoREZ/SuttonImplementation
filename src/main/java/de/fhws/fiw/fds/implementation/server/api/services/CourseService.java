@@ -96,10 +96,12 @@ public class CourseService extends AbstractService {
     @Path("{courseId : \\d+}/students")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStudentsOfCourse(@PathParam("courseId") final long courseId,
-                                        @DefaultValue("") @QueryParam("firstName") final String firstName) {
+                                        @DefaultValue("") @QueryParam("firstName") final String firstName,
+                                        @DefaultValue("0") @QueryParam("offset") int offset,
+                                        @DefaultValue("20") @QueryParam("size") int size) {
         return new GetStudentsOfCourseState.Builder()
                 .setParentId(courseId)
-                .setQuery(new StudentsOfCourseQuery(courseId, firstName))
+                .setQuery(new StudentsOfCourseQuery(courseId, firstName, offset, size))
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setHttpServletRequest(this.httpServletRequest)

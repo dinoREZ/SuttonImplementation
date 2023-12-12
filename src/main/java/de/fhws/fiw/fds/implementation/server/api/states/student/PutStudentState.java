@@ -2,9 +2,13 @@ package de.fhws.fiw.fds.implementation.server.api.states.student;
 
 import de.fhws.fiw.fds.implementation.server.api.models.Student;
 import de.fhws.fiw.fds.implementation.server.database.DaoFactory;
+import de.fhws.fiw.fds.sutton.server.api.caching.EtagGenerator;
 import de.fhws.fiw.fds.sutton.server.api.states.put.AbstractPutState;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
+import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
+
+import javax.ws.rs.core.EntityTag;
 
 public class PutStudentState extends AbstractPutState<Student> {
     protected PutStudentState(Builder builder) {
@@ -29,6 +33,12 @@ public class PutStudentState extends AbstractPutState<Student> {
     @Override
     protected void defineTransitionLinks() {
         addLink(StudentUri.REL_PATH_ID, StudentRelTypes.GET_STUDENT, requestedId);
+    }
+
+    @Override
+    protected boolean clientDoesNotKnowCurrentModelState(final AbstractModel modelFromDatabase) {
+        EntityTag entityTag = EtagGenerator.createEntityTag(modelFromDatabase);
+        return this.request.evaluatePreconditions(entityTag) == null;
     }
 
     public static class Builder extends AbstractPutStateBuilder<Student> {

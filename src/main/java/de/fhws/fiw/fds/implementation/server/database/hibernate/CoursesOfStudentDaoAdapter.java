@@ -32,7 +32,7 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
             returnValue.setError();
         }
         else {
-            returnValue = new CollectionModelResult<>(result.getResult().stream().map(this::createFrom).collect(Collectors.toList()));
+            returnValue = new CollectionModelResult<>(result.getResult().stream().map(course -> createFrom(course, primaryId)).collect(Collectors.toList()));
         }
         return returnValue;
     }
@@ -82,7 +82,7 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
             return returnValue;
         }
         else {
-            return new SingleModelResult<>(createFrom(result.getResult()));
+            return new SingleModelResult<>(createFrom(result.getResult(), primaryId));
         }
     }
 
@@ -91,8 +91,9 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
         return null;
     }
 
-    private Course createFrom(CourseDB courseDB) {
+    private Course createFrom(CourseDB courseDB, long studentId) {
         final Course course = new Course();
+        course.setPrimaryId(studentId);
         course.setId(courseDB.getId());
         course.setName(courseDB.getName());
         return course;

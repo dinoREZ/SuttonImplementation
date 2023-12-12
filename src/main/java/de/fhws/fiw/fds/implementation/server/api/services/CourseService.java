@@ -18,8 +18,10 @@ public class CourseService extends AbstractService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllCourses(@DefaultValue("") @QueryParam("name") final String name) {
-        CourseQuery query = new CourseQuery(name);
+    public Response getAllCourses(@DefaultValue("") @QueryParam("name") final String name,
+                                  @DefaultValue("0") @QueryParam("offset") int offset,
+                                  @DefaultValue("20") @QueryParam("size") int size) {
+        CourseQuery query = new CourseQuery(name, offset, size);
         return new GetCourseCollectionState.Builder()
                 .setQuery(query)
                 .setUriInfo(this.uriInfo)

@@ -8,7 +8,6 @@ import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelH
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 public class CourseDaoHibernateImpl implements CourseDaoHibernate {
     private static final String PERSISTENCE_UNIT_NAME = "de.fhws.fiw.fds.sutton";
@@ -20,8 +19,8 @@ public class CourseDaoHibernateImpl implements CourseDaoHibernate {
     }
 
     @Override
-    public CollectionModelHibernateResult<CourseDB> readByQuery(String name) {
-        return new CourseByQueryOperation(emf, name).start();
+    public CollectionModelHibernateResult<CourseDB> readByQuery(String name, SearchParameter searchParameter) {
+        return new CourseByQueryOperation(emf, name, searchParameter).start();
     }
 
     @Override

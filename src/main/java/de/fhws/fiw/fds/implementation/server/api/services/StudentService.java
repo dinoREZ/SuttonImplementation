@@ -1,5 +1,6 @@
 package de.fhws.fiw.fds.implementation.server.api.services;
 
+import de.fhws.fiw.fds.implementation.server.api.models.Course;
 import de.fhws.fiw.fds.implementation.server.api.models.Student;
 import de.fhws.fiw.fds.implementation.server.api.queries.CourseQuery;
 import de.fhws.fiw.fds.implementation.server.api.queries.CoursesOfStudentQuery;
@@ -7,6 +8,7 @@ import de.fhws.fiw.fds.implementation.server.api.queries.StudentQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
 import de.fhws.fiw.fds.implementation.server.api.states.coursesOfStudent.GetCourseOfStudentState;
 import de.fhws.fiw.fds.implementation.server.api.states.coursesOfStudent.GetCoursesOfStudentState;
+import de.fhws.fiw.fds.implementation.server.api.states.coursesOfStudent.PostCourseOfStudentState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.DeleteStudentState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentCollectionState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentState;
@@ -123,6 +125,22 @@ public class StudentService extends AbstractService {
         return new GetCourseOfStudentState.Builder()
                 .setParentId(studentId)
                 .setRequestedId(courseId)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .setRateLimiter(new AnyApiKeyRateLimiter())
+                .build()
+                .execute();
+    }
+
+    @POST
+    @Path("{studentId: \\d+}/courses")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createCourseOfStudent(@PathParam("studentId") final long studentId, final Course course) {
+        return new PostCourseOfStudentState.Builder()
+                .setParentId(studentId)
+                .setModelToCreate(course)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setHttpServletRequest(this.httpServletRequest)

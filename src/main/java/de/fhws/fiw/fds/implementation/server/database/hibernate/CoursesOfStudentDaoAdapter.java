@@ -42,7 +42,7 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
         CourseDB courseDB = createFrom(secondary);
         NoContentResult returnValue = this.dao.create(primaryId, courseDB);
         secondary.setId(courseDB.getId());
-        return null;
+        return returnValue;
     }
 
     @Override

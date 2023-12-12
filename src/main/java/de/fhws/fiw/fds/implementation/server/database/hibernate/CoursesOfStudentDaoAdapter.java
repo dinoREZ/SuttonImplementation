@@ -7,6 +7,7 @@ import de.fhws.fiw.fds.implementation.server.database.hibernate.models.CourseDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
@@ -66,7 +67,20 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
 
     @Override
     public SingleModelResult<Course> readById(long primaryId, long secondaryId) {
-        return null;
+        SingleModelHibernateResult<CourseDB> result = this.dao.readById(primaryId, secondaryId);
+
+        if(result.isEmpty()) {
+            return new SingleModelResult<>();
+        }
+
+        if(result.hasError()) {
+            SingleModelResult<Course> returnValue = new SingleModelResult<>();
+            returnValue.setError();
+            return returnValue;
+        }
+        else {
+            return new SingleModelResult<>(createFrom(result.getResult()));
+        }
     }
 
     @Override

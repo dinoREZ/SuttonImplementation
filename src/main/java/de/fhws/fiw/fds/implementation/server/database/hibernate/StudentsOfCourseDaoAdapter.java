@@ -39,7 +39,7 @@ public class StudentsOfCourseDaoAdapter implements StudentsOfCourseDao {
 
     @Override
     public NoContentResult update(long primaryId, Student secondary) {
-        return null;
+        return dao.update(primaryId, createFrom(secondary));
     }
 
     @Override
@@ -60,7 +60,6 @@ public class StudentsOfCourseDaoAdapter implements StudentsOfCourseDao {
     @Override
     public SingleModelResult<Student> readById(long primaryId, long secondaryId) {
         SingleModelHibernateResult<StudentDB> result = dao.readById(primaryId, secondaryId);
-        System.out.println("!!!!!" + result.getResult().getClass());
 
         if(result.isEmpty()) {
             return new SingleModelResult<>();

@@ -9,6 +9,7 @@ import de.fhws.fiw.fds.implementation.server.api.states.course.*;
 import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.GetStudentOfCourseState;
 import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.GetStudentsOfCourseState;
 import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.PostStudentOfCourseState;
+import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.PutStudentOfCourseState;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
 import javax.ws.rs.*;
@@ -133,6 +134,24 @@ public class CourseService extends AbstractService {
         return new PostStudentOfCourseState.Builder()
                 .setParentId(courseId)
                 .setModelToCreate(student)
+                .setUriInfo(this.uriInfo)
+                .setRequest(this.request)
+                .setHttpServletRequest(this.httpServletRequest)
+                .setContext(this.context)
+                .setRateLimiter(new AnyApiKeyRateLimiter())
+                .build()
+                .execute();
+    }
+
+    @PUT
+    @Path("{courseId: \\d+}/students/{studentId: \\d+}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateStudentOfCourse(@PathParam("courseId") final long courseId,
+                                          @PathParam("studentId") final long studentId, final Student student) {
+        return new PutStudentOfCourseState.Builder()
+                .setParentId(courseId)
+                .setRequestedId(studentId)
+                .setModelToUpdate(student)
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setHttpServletRequest(this.httpServletRequest)

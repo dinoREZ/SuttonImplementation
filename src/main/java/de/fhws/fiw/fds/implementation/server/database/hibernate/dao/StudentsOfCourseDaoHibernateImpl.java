@@ -2,6 +2,7 @@ package de.fhws.fiw.fds.implementation.server.database.hibernate.dao;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentOfCourseByIdOperation;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentOfCourseUpdateOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseByQueryOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseCreateOperation;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
@@ -27,7 +28,7 @@ public class StudentsOfCourseDaoHibernateImpl implements StudentsOfCourseDaoHibe
 
     @Override
     public NoContentResult update(long primaryId, StudentDB secondaryModel) {
-        return null;
+        return new StudentOfCourseUpdateOperation(emf, primaryId, secondaryModel).start();
     }
 
     @Override

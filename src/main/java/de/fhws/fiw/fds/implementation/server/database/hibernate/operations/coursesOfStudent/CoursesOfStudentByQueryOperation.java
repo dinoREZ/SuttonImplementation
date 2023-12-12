@@ -3,6 +3,7 @@ package de.fhws.fiw.fds.implementation.server.database.hibernate.operations.cour
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.CourseDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentCourseDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
+import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBRelation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
@@ -18,11 +19,13 @@ public class CoursesOfStudentByQueryOperation extends AbstractDatabaseOperation<
     private final Class<StudentCourseDB> classOfRelation = StudentCourseDB.class;
     private final long primaryId;
     private final String name;
+    private final SearchParameter searchParameter;
 
-    public CoursesOfStudentByQueryOperation(EntityManagerFactory emf, long primaryId, String name) {
+    public CoursesOfStudentByQueryOperation(EntityManagerFactory emf, long primaryId, String name, SearchParameter searchParameter) {
         super(emf);
         this.primaryId = primaryId;
         this.name = name;
+        this.searchParameter = searchParameter;
     }
 
     @Override
@@ -49,6 +52,8 @@ public class CoursesOfStudentByQueryOperation extends AbstractDatabaseOperation<
 
         return this.em
                 .createQuery(find)
+                .setMaxResults(searchParameter.getSize())
+                .setFirstResult(searchParameter.getOffset())
                 .getResultList()
                 .stream()
                 .map(AbstractDBRelation::getSecondaryModel)

@@ -14,8 +14,8 @@ public class CoursesOfStudentsDaoHibernateImpl implements CoursesOfStudentsDaoHi
     private static final EntityManagerFactory emf = IDatabaseConnection.SUTTON_EMF;
 
     @Override
-    public CollectionModelHibernateResult<CourseDB> readByQuery(long primaryId, String name) {
-        return new CoursesOfStudentByQueryOperation(emf, primaryId, name).start();
+    public CollectionModelHibernateResult<CourseDB> readByQuery(long primaryId, String name, SearchParameter searchParameter) {
+        return new CoursesOfStudentByQueryOperation(emf, primaryId, name, searchParameter).start();
     }
 
     @Override

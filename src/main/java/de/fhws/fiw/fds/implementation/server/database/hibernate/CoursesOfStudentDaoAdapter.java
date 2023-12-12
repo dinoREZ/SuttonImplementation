@@ -23,8 +23,8 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
     }
 
     @Override
-    public CollectionModelResult<Course> readByQuery(long primaryId, String name) {
-        CollectionModelHibernateResult<CourseDB> result = this.dao.readByQuery(primaryId, name);
+    public CollectionModelResult<Course> readByQuery(long primaryId, String name, SearchParameter searchParameter) {
+        CollectionModelHibernateResult<CourseDB> result = this.dao.readByQuery(primaryId, name, searchParameter);
 
         CollectionModelResult<Course> returnValue;
         if(result.hasError()) {

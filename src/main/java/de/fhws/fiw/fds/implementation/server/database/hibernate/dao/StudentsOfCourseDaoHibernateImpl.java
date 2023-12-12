@@ -1,6 +1,7 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate.dao;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
+import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentOfCourseByIdOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseByQueryOperation;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.operations.studentsOfCourse.StudentsOfCourseCreateOperation;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
@@ -46,7 +47,7 @@ public class StudentsOfCourseDaoHibernateImpl implements StudentsOfCourseDaoHibe
 
     @Override
     public SingleModelHibernateResult<StudentDB> readById(long primaryId, long secondaryId) {
-        return null;
+        return new StudentOfCourseByIdOperation(emf, primaryId, secondaryId).start();
     }
 
     @Override

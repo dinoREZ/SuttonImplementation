@@ -7,6 +7,7 @@ import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.StudentsOfCo
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
 import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
@@ -58,7 +59,21 @@ public class StudentsOfCourseDaoAdapter implements StudentsOfCourseDao {
 
     @Override
     public SingleModelResult<Student> readById(long primaryId, long secondaryId) {
-        return null;
+        SingleModelHibernateResult<StudentDB> result = dao.readById(primaryId, secondaryId);
+        System.out.println("!!!!!" + result.getResult().getClass());
+
+        if(result.isEmpty()) {
+            return new SingleModelResult<>();
+        }
+
+        if(result.hasError()) {
+            SingleModelResult<Student> returnValue = new SingleModelResult<>();
+            returnValue.setError();
+            return returnValue;
+        }
+        else {
+            return new SingleModelResult<>(createFrom(result.getResult()));
+        }
     }
 
     @Override

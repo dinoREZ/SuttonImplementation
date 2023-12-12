@@ -47,7 +47,10 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
 
     @Override
     public NoContentResult update(long primaryId, Course secondary) {
-        return null;
+        CourseDB courseDB = createFrom(secondary);
+        NoContentResult returnValue = this.dao.update(primaryId, courseDB);
+        secondary.setId(courseDB.getId());
+        return returnValue;
     }
 
     @Override

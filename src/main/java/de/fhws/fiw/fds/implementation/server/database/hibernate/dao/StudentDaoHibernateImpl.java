@@ -17,7 +17,6 @@ public class StudentDaoHibernateImpl implements StudentDaoHibernate {
 
     public StudentDaoHibernateImpl() {
         super();
-        populateDatabase();
     }
 
     @Override
@@ -49,13 +48,5 @@ public class StudentDaoHibernateImpl implements StudentDaoHibernate {
     @Override
     public NoContentResult delete(long id) {
         return new StudentDeleteOperation(emf, id).start();
-    }
-
-    private void populateDatabase() {
-        StudentDB student = new StudentDB();
-        student.setFirstName("David");
-        student.setLastName("Ruppert");
-
-        create(student);
     }
 }

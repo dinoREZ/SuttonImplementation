@@ -10,12 +10,10 @@ import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import jakarta.persistence.EntityManagerFactory;
 
 public class CourseDaoHibernateImpl implements CourseDaoHibernate {
-    private static final String PERSISTENCE_UNIT_NAME = "de.fhws.fiw.fds.sutton";
     private static final EntityManagerFactory emf = IDatabaseConnection.SUTTON_EMF;
 
     public CourseDaoHibernateImpl() {
         super();
-        populateDatabase();
     }
 
     @Override
@@ -47,12 +45,5 @@ public class CourseDaoHibernateImpl implements CourseDaoHibernate {
     @Override
     public NoContentResult delete(long id) {
         return new CourseDeleteOperation(emf, id).start();
-    }
-
-    private void populateDatabase() {
-        CourseDB courseDB = new CourseDB();
-        courseDB.setName("Test Course");
-
-        create(courseDB);
     }
 }

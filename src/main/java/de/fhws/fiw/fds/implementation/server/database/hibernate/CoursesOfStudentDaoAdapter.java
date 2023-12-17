@@ -19,7 +19,6 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
 
     public CoursesOfStudentDaoAdapter() {
         super();
-        populateDatabase();
     }
 
     @Override
@@ -104,19 +103,5 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
         courseDB.setId(course.getId());
         courseDB.setName(course.getName());
         return courseDB;
-    }
-
-    private void populateDatabase() {
-        StudentDaoHibernate studentDaoHibernate = new StudentDaoHibernateImpl();
-        CourseDaoHibernate courseDaoHibernate = new CourseDaoHibernateImpl();
-
-        StudentDB studentDB = new StudentDB();
-        studentDB.setFirstName("Max");
-        studentDB.setLastName("Mustermann");
-        studentDaoHibernate.create(studentDB);
-
-        CourseDB courseDB = new CourseDB();
-        courseDB.setName("Max Mustermann's Course");
-        this.dao.create(studentDB.getId(), courseDB);
     }
 }

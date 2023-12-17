@@ -20,6 +20,7 @@ public class CoursesOfStudentsDaoHibernateImpl implements CoursesOfStudentsDaoHi
 
     @Override
     public NoContentResult create(long primaryId, CourseDB secondaryModel) {
+        System.out.println(primaryId + " " + secondaryModel.getId());
         return new CoursesOfStudentsCreateOperation(emf, primaryId, secondaryModel).start();
     }
 

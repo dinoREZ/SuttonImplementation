@@ -7,6 +7,10 @@ import de.fhws.fiw.fds.sutton.server.api.states.delete.AbstractDeleteRelationSta
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;
 import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 
+import java.util.List;
+
+import static de.fhws.fiw.fds.sutton.server.AbstractDatabaseInstaller.RoleNames.GUEST_ROLES;
+
 public class DeleteCourseOfStudentState extends AbstractDeleteRelationState<Course> {
     public DeleteCourseOfStudentState(Builder builder) {
         super(builder);
@@ -30,6 +34,11 @@ public class DeleteCourseOfStudentState extends AbstractDeleteRelationState<Cour
     @Override
     protected void defineTransitionLinks() {
         addLink(CoursesOfStudentUri.REL_PATH, CoursesOfStudentRelTypes.GET_ALL_LINKED_COURSES, primaryId);
+    }
+
+    @Override
+    protected List<String> getAllowedRoles() {
+        return GUEST_ROLES;
     }
 
     public static class Builder extends AbstractDeleteRelationStateBuilder {

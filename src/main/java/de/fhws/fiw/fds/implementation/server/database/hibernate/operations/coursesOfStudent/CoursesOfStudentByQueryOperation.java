@@ -3,7 +3,7 @@ package de.fhws.fiw.fds.implementation.server.database.hibernate.operations.cour
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.CourseDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentCourseDB;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
-import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.AbstractDBRelation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.models.SuttonColumnConstants;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;

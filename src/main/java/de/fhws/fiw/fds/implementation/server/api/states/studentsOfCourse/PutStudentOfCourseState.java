@@ -10,6 +10,9 @@ import de.fhws.fiw.fds.sutton.server.database.results.SingleModelResult;
 import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 
 import javax.ws.rs.core.EntityTag;
+import java.util.List;
+
+import static de.fhws.fiw.fds.sutton.server.AbstractDatabaseInstaller.RoleNames.GUEST_ROLES;
 
 public class PutStudentOfCourseState extends AbstractPutRelationState<Student> {
     public PutStudentOfCourseState(Builder builder) {
@@ -40,6 +43,11 @@ public class PutStudentOfCourseState extends AbstractPutRelationState<Student> {
     protected boolean clientDoesNotKnowCurrentModelState(final AbstractModel modelFromDatabase) {
         EntityTag entityTag = EtagGenerator.createEntityTag(modelFromDatabase);
         return this.request.evaluatePreconditions(entityTag) == null;
+    }
+
+    @Override
+    protected List<String> getAllowedRoles() {
+        return GUEST_ROLES;
     }
 
     public static class Builder extends AbstractPutRelationStateBuilder<Student> {

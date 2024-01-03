@@ -5,7 +5,7 @@ import de.fhws.fiw.fds.implementation.server.database.StudentDao;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.StudentDaoHibernate;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.StudentDaoHibernateImpl;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
-import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;

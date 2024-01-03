@@ -11,6 +11,9 @@ import de.fhws.fiw.fds.sutton.server.models.AbstractModel;
 
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.EntityTag;
+import java.util.List;
+
+import static de.fhws.fiw.fds.sutton.server.AbstractDatabaseInstaller.RoleNames.GUEST_ROLES;
 
 public class GetStudentOfCourseState extends AbstractGetRelationState<Student> {
     public GetStudentOfCourseState(Builder builder) {
@@ -45,6 +48,11 @@ public class GetStudentOfCourseState extends AbstractGetRelationState<Student> {
         CacheControl cacheControl = CachingUtils.create60SecondsPublicCaching();
         this.responseBuilder.cacheControl(cacheControl);
         this.responseBuilder.tag(EtagGenerator.createEntityTag(this.requestedModel.getResult()));
+    }
+
+    @Override
+    protected List<String> getAllowedRoles() {
+        return GUEST_ROLES;
     }
 
     public static class Builder extends AbstractGetRelationStateBuilder {

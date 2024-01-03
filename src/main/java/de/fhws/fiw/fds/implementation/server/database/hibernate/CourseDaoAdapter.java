@@ -5,7 +5,7 @@ import de.fhws.fiw.fds.implementation.server.database.CourseDao;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.CourseDaoHibernate;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.dao.CourseDaoHibernateImpl;
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.CourseDB;
-import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.SingleModelHibernateResult;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;

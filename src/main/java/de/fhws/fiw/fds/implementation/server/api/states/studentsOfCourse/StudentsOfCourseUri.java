@@ -1,6 +1,6 @@
 package de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse;
 
-import de.fhws.fiw.fds.implementation.server.Start;
+import de.fhws.fiw.fds.implementation.Start;
 
 public interface StudentsOfCourseUri {
     String PATH_ELEMENT = "courses/{id}/students";

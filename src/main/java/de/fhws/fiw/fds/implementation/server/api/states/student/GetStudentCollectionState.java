@@ -5,6 +5,9 @@ import de.fhws.fiw.fds.sutton.server.api.states.AbstractState;
 import de.fhws.fiw.fds.sutton.server.api.states.get.AbstractGetCollectionState;
 
 import javax.ws.rs.core.GenericEntity;
+import java.util.List;
+
+import static de.fhws.fiw.fds.sutton.server.AbstractDatabaseInstaller.RoleNames.GUEST_ROLES;
 
 public class GetStudentCollectionState extends AbstractGetCollectionState<Student> {
 
@@ -27,6 +30,11 @@ public class GetStudentCollectionState extends AbstractGetCollectionState<Studen
     @Override
     protected void defineTransitionLinks() {
         addLink(StudentUri.REL_PATH, StudentRelTypes.CREATE_STUDENT);
+    }
+
+    @Override
+    protected List<String> getAllowedRoles() {
+        return GUEST_ROLES;
     }
 
     public static class Builder extends AbstractGetCollectionStateBuilder<Student> {

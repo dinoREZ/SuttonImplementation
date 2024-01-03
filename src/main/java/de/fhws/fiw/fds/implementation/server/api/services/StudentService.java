@@ -35,6 +35,7 @@ public class StudentService extends AbstractService {
                 .setHttpServletRequest(this.httpServletRequest)
                 .setContext(this.context)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -50,6 +51,7 @@ public class StudentService extends AbstractService {
                 .setContext(this.context)
                 .setHttpServletRequest(this.httpServletRequest)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -64,6 +66,7 @@ public class StudentService extends AbstractService {
                 .setContext(this.context)
                 .setHttpServletRequest(this.httpServletRequest)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -80,6 +83,7 @@ public class StudentService extends AbstractService {
                 .setContext(this.context)
                 .setHttpServletRequest(this.httpServletRequest)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -94,6 +98,7 @@ public class StudentService extends AbstractService {
                 .setContext(this.context)
                 .setHttpServletRequest(this.httpServletRequest)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -114,6 +119,7 @@ public class StudentService extends AbstractService {
                 .setHttpServletRequest(this.httpServletRequest)
                 .setContext(this.context)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -131,6 +137,7 @@ public class StudentService extends AbstractService {
                 .setHttpServletRequest(this.httpServletRequest)
                 .setContext(this.context)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -147,6 +154,7 @@ public class StudentService extends AbstractService {
                 .setHttpServletRequest(this.httpServletRequest)
                 .setContext(this.context)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -165,6 +173,7 @@ public class StudentService extends AbstractService {
                 .setHttpServletRequest(this.httpServletRequest)
                 .setContext(this.context)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }
@@ -181,6 +190,7 @@ public class StudentService extends AbstractService {
                 .setHttpServletRequest(this.httpServletRequest)
                 .setContext(this.context)
                 .setRateLimiter(new AnyApiKeyRateLimiter())
+                .setAuthProvider(this.authProvider)
                 .build()
                 .execute();
     }

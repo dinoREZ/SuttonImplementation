@@ -6,7 +6,7 @@ import de.fhws.fiw.fds.implementation.server.database.CoursesOfStudentDao;
 import de.fhws.fiw.fds.implementation.server.database.DaoFactory;
 import de.fhws.fiw.fds.implementation.server.database.StudentsOfCourseDao;
 import de.fhws.fiw.fds.sutton.server.database.DatabaseException;
-import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.inmemory.AbstractInMemoryManyToManyRelationStorage;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 import de.fhws.fiw.fds.sutton.server.database.results.NoContentResult;

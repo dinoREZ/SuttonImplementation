@@ -1,7 +1,7 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate.operations.student;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.StudentDB;
-import de.fhws.fiw.fds.sutton.server.database.SearchParameter;
+import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import jakarta.persistence.EntityManagerFactory;

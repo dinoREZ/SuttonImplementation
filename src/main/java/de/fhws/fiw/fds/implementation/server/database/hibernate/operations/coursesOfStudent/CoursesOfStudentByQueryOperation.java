@@ -48,7 +48,7 @@ public class CoursesOfStudentByQueryOperation extends AbstractDatabaseOperation<
         Root<StudentCourseDB> root = find.from(StudentCourseDB.class);
         Join<StudentCourseDB, CourseDB> join = root.join(SuttonColumnConstants.SECONDARY_MODEL);
 
-        find.where(primaryIdEquals(criteriaBuilder, root), nameMatcher(criteriaBuilder, root, join));
+        find.where(formulateConditions(criteriaBuilder, root, join));
 
         return this.em
                 .createQuery(find)
@@ -66,18 +66,17 @@ public class CoursesOfStudentByQueryOperation extends AbstractDatabaseOperation<
         Root<StudentCourseDB> root = find.from(StudentCourseDB.class);
         Join<StudentCourseDB, CourseDB> join = root.join(SuttonColumnConstants.SECONDARY_MODEL);
 
-        find.select(criteriaBuilder.count(root)).where(primaryIdEquals(criteriaBuilder, root), nameMatcher(criteriaBuilder, root, join));
+        find.select(criteriaBuilder.count(root)).where(formulateConditions(criteriaBuilder, root, join));
 
         return this.em
                 .createQuery(find)
                 .getSingleResult().intValue();
     }
 
-    private Predicate primaryIdEquals(CriteriaBuilder criteriaBuilder, Root<StudentCourseDB> root) {
-        return criteriaBuilder.equal(root.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.PRIMARY_ID), this.primaryId);
-    }
+    private Predicate formulateConditions(CriteriaBuilder criteriaBuilder, Root<StudentCourseDB> root, Join<StudentCourseDB, CourseDB> join) {
+        Predicate matchName = criteriaBuilder.like(join.get("name"), "%" + name + "%");
+        Predicate primaryIdEquals = criteriaBuilder.equal(root.get(SuttonColumnConstants.DB_RELATION_ID).get(SuttonColumnConstants.PRIMARY_ID), this.primaryId);
 
-    private Predicate nameMatcher(CriteriaBuilder criteriaBuilder, Root<StudentCourseDB> root, Join<StudentCourseDB, CourseDB> join) {
-        return criteriaBuilder.like(join.get("name"), "%" + name + "%");
+        return criteriaBuilder.and(primaryIdEquals, matchName);
     }
 }

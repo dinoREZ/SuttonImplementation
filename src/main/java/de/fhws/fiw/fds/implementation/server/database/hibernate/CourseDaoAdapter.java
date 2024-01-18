@@ -59,8 +59,17 @@ public class CourseDaoAdapter implements CourseDao {
 
     @Override
     public CollectionModelResult<Course> readAll(SearchParameter searchParameter) {
-        // TODO?
-        return null;
+        CollectionModelHibernateResult<CourseDB> result = dao.readAll(searchParameter);
+        CollectionModelResult<Course> returnValue;
+
+        if(result.hasError()) {
+            returnValue = new CollectionModelResult<>();
+            returnValue.setError();
+        } else {
+            returnValue = new CollectionModelResult<>(result.getResult().stream().map(this::createFrom).collect(Collectors.toList()));
+        }
+
+        return returnValue;
     }
 
     @Override

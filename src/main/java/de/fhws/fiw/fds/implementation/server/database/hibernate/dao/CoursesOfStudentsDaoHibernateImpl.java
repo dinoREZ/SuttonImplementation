@@ -50,6 +50,6 @@ public class CoursesOfStudentsDaoHibernateImpl implements CoursesOfStudentsDaoHi
 
     @Override
     public CollectionModelHibernateResult<CourseDB> readAll(long primaryId, SearchParameter searchParameter) {
-        return null;
+        return new CoursesOfStudentReadAllOperation(emf, primaryId, searchParameter).start();
     }
 }

@@ -87,7 +87,17 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
 
     @Override
     public CollectionModelResult<Course> readAll(long primaryId, SearchParameter searchParameter) {
-        return null;
+        CollectionModelHibernateResult<CourseDB> result = dao.readAll(primaryId, searchParameter);
+
+        CollectionModelResult<Course> returnValue;
+        if(result.hasError()) {
+            returnValue = new CollectionModelResult<>();
+            returnValue.setError();
+        }
+        else {
+            returnValue = new CollectionModelResult<>(result.getResult().stream().map(course -> createFrom(course, primaryId)).collect(Collectors.toList()));
+        }
+        return returnValue;
     }
 
     private Course createFrom(CourseDB courseDB, long studentId) {

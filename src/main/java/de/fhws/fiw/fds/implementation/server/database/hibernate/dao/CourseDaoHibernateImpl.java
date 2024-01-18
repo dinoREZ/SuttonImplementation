@@ -33,8 +33,7 @@ public class CourseDaoHibernateImpl implements CourseDaoHibernate {
 
     @Override
     public CollectionModelHibernateResult<CourseDB> readAll(SearchParameter searchParameter) {
-        // TODO?
-        return null;
+        return new CourseReadAllOperation(emf, searchParameter).start();
     }
 
     @Override

@@ -6,5 +6,5 @@ import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
 import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 public interface CoursesOfStudentDao extends IDatabaseRelationAccessObject<Course> {
-    CollectionModelResult<Course> readByQuery(long primaryId, String name, SearchParameter searchParameter);
+    CollectionModelResult<Course> readByQuery(long primaryId, String name, Integer roomNumber, SearchParameter searchParameter);
 }

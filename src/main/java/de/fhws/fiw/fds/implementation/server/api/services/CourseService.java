@@ -7,6 +7,7 @@ import de.fhws.fiw.fds.implementation.server.api.queries.StudentsOfCourseQuery;
 import de.fhws.fiw.fds.implementation.server.api.rateLimiting.AnyApiKeyRateLimiter;
 import de.fhws.fiw.fds.implementation.server.api.states.course.*;
 import de.fhws.fiw.fds.implementation.server.api.states.studentsOfCourse.*;
+import de.fhws.fiw.fds.sutton.server.api.queries.PagingBehaviorUsingOffsetSize;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
 import javax.ws.rs.*;
@@ -19,11 +20,12 @@ public class CourseService extends AbstractService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCourses(@DefaultValue("") @QueryParam("name") final String name,
+                                  @QueryParam("roomNumber") final Integer roomNumber,
+                                  @DefaultValue("") @QueryParam("orderBy") String orderBy,
                                   @DefaultValue("0") @QueryParam("offset") int offset,
                                   @DefaultValue("20") @QueryParam("size") int size) {
-        CourseQuery query = new CourseQuery(name, offset, size);
         return new GetCourseCollectionState.Builder()
-                .setQuery(query)
+                .setQuery(new CourseQuery(name, roomNumber).setPagingBehavior(new PagingBehaviorUsingOffsetSize(offset, size)).setOrderByAttributes(orderBy))
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setContext(this.context)

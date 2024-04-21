@@ -6,5 +6,5 @@ import de.fhws.fiw.fds.sutton.server.database.hibernate.dao.IDatabaseRelationAcc
 import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 
 public interface CoursesOfStudentsDaoHibernate extends IDatabaseRelationAccessObjectHibernate<CourseDB> {
-    CollectionModelHibernateResult<CourseDB> readByQuery(long primaryId, String name, SearchParameter searchParameter);
+    CollectionModelHibernateResult<CourseDB> readByQuery(long primaryId, String name, Integer roomNumber, SearchParameter searchParameter);
 }

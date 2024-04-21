@@ -1,70 +1,38 @@
 package de.fhws.fiw.fds.implementation.server.database.hibernate.operations.course;
 
 import de.fhws.fiw.fds.implementation.server.database.hibernate.models.CourseDB;
+import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.model.AbstractReadAllOperation;
 import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
-import de.fhws.fiw.fds.sutton.server.database.hibernate.operations.AbstractDatabaseOperation;
-import de.fhws.fiw.fds.sutton.server.database.hibernate.results.CollectionModelHibernateResult;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.From;
+import jakarta.persistence.criteria.Predicate;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class CourseByQueryOperation extends AbstractDatabaseOperation<CourseDB, CollectionModelHibernateResult<CourseDB>> {
+public class CourseByQueryOperation extends AbstractReadAllOperation<CourseDB> {
 
-    private String name;
-    private SearchParameter searchParameter;
+    private final String name;
+    private final Integer roomNumber;
 
-    public CourseByQueryOperation(EntityManagerFactory emf, String name, SearchParameter searchParameter) {
-        super(emf);
+    public CourseByQueryOperation(EntityManagerFactory emf,String name, Integer roomNumber, SearchParameter searchParameter) {
+        super(emf, CourseDB.class, searchParameter);
         this.name = name;
-        this.searchParameter = searchParameter;
+        this.roomNumber = roomNumber;
     }
 
-    private Predicate formulateConditions(CriteriaBuilder criteriaBuilder, Root<CourseDB> root) {
-        final Predicate matchName = criteriaBuilder.like(root.get("name"), "%" + name + "%");
-
-        return matchName;
-    }
 
     @Override
-    protected CollectionModelHibernateResult<CourseDB> run() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        CollectionModelHibernateResult<CourseDB> returnValue = new CollectionModelHibernateResult<>(readResult());
-        returnValue.setTotalNumberOfResult(getTotalResultCount());
-        return returnValue;
-    }
+    public List<Predicate> getAdditionalPredicates(CriteriaBuilder cb, From from) {
+        final Predicate matchName =  cb.like(from.get("name"), "%" + this.name + "%");
+        final Predicate matchRoomNumber =  cb.equal(from.get("roomNumber"), this.roomNumber);
 
-    private List<CourseDB> readResult() {
-        final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<CourseDB> criteriaQuery = criteriaBuilder.createQuery(CourseDB.class);
-        final Root<CourseDB> root = criteriaQuery.from(CourseDB.class);
-
-        final Order sorting = criteriaBuilder.asc(root.get("name"));
-
-        criteriaQuery = criteriaQuery.select(root).where(formulateConditions(criteriaBuilder, root)).orderBy(sorting);
-
-        return em.createQuery(criteriaQuery)
-                .setFirstResult(this.searchParameter.getOffset())
-                .setMaxResults(this.searchParameter.getSize())
-                .getResultList();
-    }
-
-    private int getTotalResultCount() {
-        final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        final CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-        final Root<CourseDB> root = countQuery.from(CourseDB.class);
-
-        countQuery.select(criteriaBuilder.count(root)).where(formulateConditions(criteriaBuilder, root));
-        return this.em.createQuery(countQuery)
-                .getSingleResult()
-                .intValue();
-    }
-
-    @Override
-    protected CollectionModelHibernateResult<CourseDB> errorResult() {
-        final CollectionModelHibernateResult<CourseDB> returnValue = new CollectionModelHibernateResult<>();
-        returnValue.setError();
-        return returnValue;
+        if(roomNumber == null) {
+            return List.of(matchName);
+        }
+        else {
+            return List.of(matchName, matchRoomNumber);
+        }
     }
 }
+

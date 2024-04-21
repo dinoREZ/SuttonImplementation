@@ -10,16 +10,16 @@ import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 public class CoursesOfStudentQuery extends AbstractRelationQuery<Course> {
     private String name;
-//
+    private Integer roomNumber;
 
-    public CoursesOfStudentQuery(long primaryId, String name, int offset, int size) {
+    public CoursesOfStudentQuery(long primaryId, String name, Integer roomNumber) {
         super(primaryId);
         this.name = name;
-        this.pagingBehavior = new PagingBehaviorUsingOffsetSize<Course>(offset, size);
+        this.roomNumber = roomNumber;
     }
 
     @Override
     protected CollectionModelResult<Course> doExecuteQuery(SearchParameter searchParameter) throws DatabaseException {
-        return DaoFactory.getInstance().getCoursesOfStudentDao().readByQuery(this.primaryId, this.name, searchParameter);
+        return DaoFactory.getInstance().getCoursesOfStudentDao().readByQuery(this.primaryId, this.name, this.roomNumber, searchParameter);
     }
 }

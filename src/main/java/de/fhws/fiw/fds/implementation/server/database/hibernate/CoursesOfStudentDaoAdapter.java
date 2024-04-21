@@ -22,8 +22,8 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
     }
 
     @Override
-    public CollectionModelResult<Course> readByQuery(long primaryId, String name, SearchParameter searchParameter) {
-        CollectionModelHibernateResult<CourseDB> result = this.dao.readByQuery(primaryId, name, searchParameter);
+    public CollectionModelResult<Course> readByQuery(long primaryId, String name, Integer roomNumber, SearchParameter searchParameter) {
+        CollectionModelHibernateResult<CourseDB> result = this.dao.readByQuery(primaryId, name, roomNumber, searchParameter);
 
         CollectionModelResult<Course> returnValue;
         if(result.hasError()) {
@@ -105,6 +105,7 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
         course.setPrimaryId(studentId);
         course.setId(courseDB.getId());
         course.setName(courseDB.getName());
+        course.setRoomNumber(courseDB.getRoomNumber());
         return course;
     }
 
@@ -112,6 +113,7 @@ public class CoursesOfStudentDaoAdapter implements CoursesOfStudentDao {
         final CourseDB courseDB = new CourseDB();
         courseDB.setId(course.getId());
         courseDB.setName(course.getName());
+        courseDB.setRoomNumber(course.getRoomNumber());
         return courseDB;
     }
 }

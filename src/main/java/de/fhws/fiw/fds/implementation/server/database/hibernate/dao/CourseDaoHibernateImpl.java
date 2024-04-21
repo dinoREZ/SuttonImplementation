@@ -17,8 +17,8 @@ public class CourseDaoHibernateImpl implements CourseDaoHibernate {
     }
 
     @Override
-    public CollectionModelHibernateResult<CourseDB> readByQuery(String name, SearchParameter searchParameter) {
-        return new CourseByQueryOperation(emf, name, searchParameter).start();
+    public CollectionModelHibernateResult<CourseDB> readByQuery(String name, Integer roomNumber, SearchParameter searchParameter) {
+        return new CourseByQueryOperation(emf, name, roomNumber, searchParameter).start();
     }
 
     @Override

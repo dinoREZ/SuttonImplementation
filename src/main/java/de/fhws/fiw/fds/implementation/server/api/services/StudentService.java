@@ -11,6 +11,7 @@ import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentCollec
 import de.fhws.fiw.fds.implementation.server.api.states.student.GetStudentState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.PostStudentState;
 import de.fhws.fiw.fds.implementation.server.api.states.student.PutStudentState;
+import de.fhws.fiw.fds.sutton.server.api.queries.PagingBehaviorUsingOffsetSize;
 import de.fhws.fiw.fds.sutton.server.api.services.AbstractService;
 
 import javax.ws.rs.*;
@@ -109,11 +110,13 @@ public class StudentService extends AbstractService {
     public Response getCoursesOfStudent(
             @PathParam("studentId") final long studentId,
             @DefaultValue("") @QueryParam("name") final String name,
+            @QueryParam("roomNumber") final Integer roomNumber,
+            @DefaultValue("") @QueryParam("orderBy") String orderBy,
             @DefaultValue("0") @QueryParam("offset") int offset,
             @DefaultValue("20") @QueryParam("size") int size) {
         return new GetCoursesOfStudentState.Builder()
                 .setParentId(studentId)
-                .setQuery(new CoursesOfStudentQuery(studentId, name, offset, size))
+                .setQuery(new CoursesOfStudentQuery(studentId, name, roomNumber).setPagingBehavior(new PagingBehaviorUsingOffsetSize(offset, size)).setOrderByAttributes(orderBy))
                 .setUriInfo(this.uriInfo)
                 .setRequest(this.request)
                 .setHttpServletRequest(this.httpServletRequest)

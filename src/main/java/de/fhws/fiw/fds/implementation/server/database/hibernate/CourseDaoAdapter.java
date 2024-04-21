@@ -18,8 +18,8 @@ public class CourseDaoAdapter implements CourseDao {
     private final CourseDaoHibernate dao = new CourseDaoHibernateImpl();
 
     @Override
-    public CollectionModelResult<Course> readByQuery(String name, SearchParameter searchParameter) {
-        CollectionModelHibernateResult<CourseDB> result = dao.readByQuery(name, searchParameter);
+    public CollectionModelResult<Course> readByQuery(String name, Integer roomNumber, SearchParameter searchParameter) {
+        CollectionModelHibernateResult<CourseDB> result = dao.readByQuery(name, roomNumber, searchParameter);
         CollectionModelResult<Course> returnValue;
 
         if(result.hasError()) {
@@ -86,6 +86,9 @@ public class CourseDaoAdapter implements CourseDao {
         final Course course = new Course();
         course.setId(courseDB.getId());
         course.setName(courseDB.getName());
+        course.setRoomNumber(courseDB.getRoomNumber());
+
+
 
         return course;
     }
@@ -94,6 +97,9 @@ public class CourseDaoAdapter implements CourseDao {
         final CourseDB courseDB = new CourseDB();
         courseDB.setId(course.getId());
         courseDB.setName(course.getName());
+        courseDB.setRoomNumber(course.getRoomNumber());
+
+        System.out.println("!!!!" + courseDB.getName() + " " + courseDB.getRoomNumber());
 
         return courseDB;
     }

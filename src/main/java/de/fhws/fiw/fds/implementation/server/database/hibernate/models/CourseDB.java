@@ -12,6 +12,9 @@ public class CourseDB extends AbstractDBModel {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "roomNumber")
+    private Integer roomNumber;
+
     public CourseDB() {
 
     }
@@ -22,5 +25,13 @@ public class CourseDB extends AbstractDBModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(Integer roomNumber) {
+        this.roomNumber = roomNumber;
     }
 }

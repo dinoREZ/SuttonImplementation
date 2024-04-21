@@ -8,10 +8,11 @@ import de.fhws.fiw.fds.sutton.server.database.results.CollectionModelResult;
 
 public class CourseDaoImpl extends AbstractInMemoryStorage<Course> implements CourseDao {
     @Override
-    public CollectionModelResult<Course> readByQuery(String name, SearchParameter searchParameter) {
+    public CollectionModelResult<Course> readByQuery(String name, Integer roomNumber, SearchParameter searchParameter) {
         return readByPredicate(
                 course -> (
-                        course.getName().toLowerCase().contains(name.toLowerCase())
+                        course.getName().toLowerCase().contains(name.toLowerCase()) &&
+                                (roomNumber == null || course.getRoomNumber() == roomNumber)
                 ),
                 searchParameter);
     }

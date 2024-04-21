@@ -36,9 +36,8 @@ public class DaoFactory {
         if(useInMemory) {
             this.studentDao = new StudentDaoImpl();
             this.courseDao = new CourseDaoImpl();
-            StudentsOfCourseDaoImpl studentsOfCourseDaoImpl = new StudentsOfCourseDaoImpl();
-            this.studentsOfCourseDao = studentsOfCourseDaoImpl;
-            this.coursesOfStudentDao = new CoursesOfStudentDaoImpl(studentsOfCourseDaoImpl);
+            this.studentsOfCourseDao = new StudentsOfCourseDaoImpl();
+            this.coursesOfStudentDao = new CoursesOfStudentDaoImpl();
         } else {
             this.studentDao = new StudentDaoAdapter();
             this.courseDao = new CourseDaoAdapter();
@@ -71,6 +70,7 @@ public class DaoFactory {
 
         Course course = new Course();
         course.setName("Test Course");
+        course.setRoomNumber(3);
         getCoursesOfStudentDao().create(student.getId(), course);
     }
 }

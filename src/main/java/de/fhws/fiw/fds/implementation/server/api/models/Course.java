@@ -10,6 +10,7 @@ import javax.ws.rs.core.Link;
 public class Course extends AbstractModel {
 
     private String Name;
+    private int roomNumber;
 
     public Course(String name) {
         Name = name;
@@ -51,6 +52,14 @@ public class Course extends AbstractModel {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
     @JsonConverter(JsonServerLinkConverter.class)

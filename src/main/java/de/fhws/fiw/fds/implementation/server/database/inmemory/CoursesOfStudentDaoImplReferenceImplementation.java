@@ -11,8 +11,11 @@ import de.fhws.fiw.fds.sutton.server.database.searchParameter.SearchParameter;
 public class CoursesOfStudentDaoImplReferenceImplementation extends AbstractInMemoryRelationStorage<Course> implements CoursesOfStudentDao {
 
     @Override
-    public CollectionModelResult<Course> readByQuery(long primaryId, String name, SearchParameter searchParameter) {
-        return readByPredicate(primaryId, course -> course.getName().contains(name));
+    public CollectionModelResult<Course> readByQuery(long primaryId, String name, Integer roomNumber, SearchParameter searchParameter) {
+        return readByPredicate(primaryId, course -> (
+            course.getName().contains(name) &&
+                    (roomNumber == null || course.getRoomNumber() == roomNumber)
+                ));
     }
 
     @Override
